@@ -1,4 +1,4 @@
-# BorderShield AI — SIH 2026, PS 26188
+# VerifAI — SIH 2026, PS 26188
 
 **AI-Based Fake Identity & Document Screening System**
 Ministry of Home Affairs · Sashastra Seema Bal (SSB) · Category: Software · Theme: Blockchain & Cybersecurity
