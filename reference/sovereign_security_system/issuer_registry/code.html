@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BorderShield AI - Demo Issuer Registry</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;family=Hanken+Grotesk:wght@400;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed-variant": "#38485f",
+                      "inverse-primary": "#bec7d9",
+                      "on-tertiary-fixed": "#261a00",
+                      "on-error-container": "#93000a",
+                      "on-secondary": "#ffffff",
+                      "surface-dim": "#d9dadb",
+                      "outline-variant": "#c5c6cc",
+                      "tertiary-fixed": "#ffdfa0",
+                      "surface-container": "#edeeef",
+                      "surface-bright": "#f8f9fa",
+                      "on-surface": "#191c1d",
+                      "on-error": "#ffffff",
+                      "outline": "#75777c",
+                      "primary": "#000000",
+                      "inverse-surface": "#2e3132",
+                      "surface-container-high": "#e7e8e9",
+                      "on-surface-variant": "#45474c",
+                      "blueprint-grid": "rgba(196, 198, 207, 0.15)",
+                      "on-primary": "#ffffff",
+                      "surface-container-low": "#f3f4f5",
+                      "secondary-fixed-dim": "#b7c7e4",
+                      "surface-variant": "#e1e3e4",
+                      "surface-tint": "#565f6f",
+                      "on-background": "#191c1d",
+                      "on-tertiary-container": "#a87d00",
+                      "inverse-on-surface": "#f0f1f2",
+                      "primary-fixed-dim": "#bec7d9",
+                      "on-primary-fixed": "#131c2a",
+                      "background": "#f8f9fa",
+                      "tertiary-fixed-dim": "#fbbc01",
+                      "on-tertiary-fixed-variant": "#5c4300",
+                      "error-container": "#ffdad6",
+                      "on-secondary-fixed": "#0a1c32",
+                      "on-primary-fixed-variant": "#3e4756",
+                      "secondary-container": "#d0e1fe",
+                      "secondary-fixed": "#d4e3ff",
+                      "success-pulse": "#003366",
+                      "on-primary-container": "#7b8495",
+                      "surface-container-lowest": "#ffffff",
+                      "error-alert": "#ba1a1a",
+                      "tertiary": "#000000",
+                      "surface-container-highest": "#e1e3e4",
+                      "tertiary-container": "#261a00",
+                      "on-tertiary": "#ffffff",
+                      "secondary": "#4f5f78",
+                      "primary-container": "#131c2a",
+                      "on-secondary-container": "#53637d",
+                      "error": "#ba1a1a",
+                      "surface": "#f8f9fa",
+                      "primary-fixed": "#dae3f6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "sm": "8px",
+                      "xl": "48px",
+                      "md": "16px",
+                      "container-max": "1440px",
+                      "xs": "4px",
+                      "gutter": "24px",
+                      "sidebar-expanded": "260px",
+                      "rail-width": "72px",
+                      "lg": "24px"
+              },
+              "fontFamily": {
+                      "headline-lg": [
+                              "Bricolage Grotesque"
+                      ],
+                      "display-lg": [
+                              "Bricolage Grotesque"
+                      ],
+                      "label-caps": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-md": [
+                              "Bricolage Grotesque"
+                      ],
+                      "body-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "technical-data": [
+                              "JetBrains Mono"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "technical-data": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Blueprint Grid Pattern */
+        .bg-blueprint {
+            background-image: linear-gradient(var(--tw-colors-outline-variant) 1px, transparent 1px),
+                              linear-gradient(90deg, var(--tw-colors-outline-variant) 1px, transparent 1px);
+            background-size: 24px 24px;
+            background-color: transparent;
+            opacity: 0.15;
+        }
+        
+        /* Custom Scrollbar for brutalist feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--tw-colors-surface-container);
+            border-left: 1px solid var(--tw-colors-outline-variant);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--tw-colors-outline);
+            border-radius: 0;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--tw-colors-primary);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased overflow-hidden flex h-screen">
+<!-- SideNavBar (Shared Component) -->
+<aside class="h-screen w-sidebar-expanded border-r border-outline-variant bg-surface-container-lowest flex flex-col fixed left-0 top-0 z-40">
+<!-- Header -->
+<div class="p-lg border-b border-outline-variant">
+<h1 class="font-headline-md text-headline-md font-black text-primary">BorderShield AI</h1>
+</div>
+<!-- Operator Info -->
+<div class="p-md border-b border-outline-variant flex items-center gap-md">
+<div class="w-10 h-10 bg-surface-container border border-outline-variant rounded-DEFAULT flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-outline" data-icon="person">person</span>
+</div>
+<div>
+<div class="font-label-caps text-label-caps uppercase tracking-wider text-primary">OPERATOR_042</div>
+<div class="font-technical-data text-technical-data text-on-surface-variant">Unit: Border Intelligence</div>
+</div>
+</div>
+<!-- Navigation -->
+<nav class="flex-1 overflow-y-auto py-sm">
+<ul class="flex flex-col">
+<!-- Overview -->
+<li>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Overview</span>
+</a>
+</li>
+<!-- Command Center -->
+<li>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Command Center</span>
+</a>
+</li>
+<!-- New Screening -->
+<li>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="person_search">person_search</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">New Screening</span>
+</a>
+</li>
+<!-- Active Case -->
+<li>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_late">assignment_late</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Active Case</span>
+</a>
+</li>
+<!-- Investigations -->
+<li>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="travel_explore">travel_explore</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Investigations</span>
+</a>
+</li>
+<!-- Audit Trail -->
+<li>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Audit Trail</span>
+</a>
+</li>
+<!-- System Status -->
+<li>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="dns">dns</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">System Status</span>
+</a>
+</li>
+<!-- Issuer Registry (ACTIVE) -->
+<li>
+<a class="flex items-center gap-md bg-surface-container-highest text-primary font-bold border-l-4 border-primary px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Issuer Registry</span>
+</a>
+</li>
+<!-- Emergency Alert -->
+<li class="mt-md px-sm">
+<a class="flex items-center gap-md bg-error-container text-on-error-container border border-error hover:bg-error hover:text-on-error px-md py-sm transition-all duration-150 active:scale-[0.98] rounded-DEFAULT" href="#">
+<span class="material-symbols-outlined" data-icon="error_outline">error_outline</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider font-bold">Emergency Alert</span>
+</a>
+</li>
+</ul>
+</nav>
+<!-- CTA Action -->
+<div class="p-md">
+<button class="w-full bg-primary text-on-primary font-label-caps text-label-caps uppercase tracking-wider py-md px-md rounded-DEFAULT hover:bg-on-surface transition-colors active:scale-[0.98]">
+                INITIATE SCREENING
+            </button>
+</div>
+<!-- Footer Links -->
+<div class="border-t border-outline-variant p-sm flex flex-col">
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">System Settings</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col ml-sidebar-expanded w-[calc(100%-260px)] h-screen overflow-hidden">
+<!-- TopNavBar (Shared Component) -->
+<header class="bg-surface border-b border-outline-variant flat no shadows flex justify-between items-center px-lg h-[64px] w-full shrink-0 z-30">
+<!-- Brand -->
+<div class="font-headline-md text-headline-md font-bold text-primary">
+                Demo Issuer Registry
+            </div>
+<!-- Right Actions -->
+<div class="flex items-center gap-md">
+<!-- Search -->
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="pl-xl pr-md py-sm bg-surface-container-low border border-outline-variant rounded-DEFAULT font-technical-data text-technical-data text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-64 placeholder-on-surface-variant" placeholder="Search registry via Hash or ID..." type="text"/>
+</div>
+<!-- Links (Inactive as we are on a sidebar driven page, mapping to TopNav spec for completeness) -->
+<nav class="hidden md:flex gap-lg mr-lg border-r border-outline-variant pr-lg h-8 items-center">
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors cursor-pointer active:opacity-80 px-sm py-xs font-label-caps text-label-caps uppercase tracking-wider" href="#">System Status</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors cursor-pointer active:opacity-80 px-sm py-xs font-label-caps text-label-caps uppercase tracking-wider" href="#">Notifications</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors cursor-pointer active:opacity-80 px-sm py-xs font-label-caps text-label-caps uppercase tracking-wider" href="#">Profile</a>
+</nav>
+<!-- Trailing Icons -->
+<button class="text-on-surface-variant hover:bg-surface-container-high transition-colors cursor-pointer active:opacity-80 p-xs rounded-DEFAULT">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-high transition-colors cursor-pointer active:opacity-80 p-xs rounded-DEFAULT">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+</div>
+</header>
+<!-- Canvas Body -->
+<main class="flex-1 overflow-y-auto bg-surface-bright relative">
+<!-- Blueprint structural background overlay -->
+<div class="absolute inset-0 bg-blueprint pointer-events-none"></div>
+<div class="max-w-[1440px] mx-auto p-gutter relative z-10 flex flex-col gap-lg">
+<!-- Page Header / Context -->
+<div class="mb-sm">
+<h2 class="font-display-lg text-display-lg text-primary tracking-tight">Canonical Registry Node</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mt-xs">
+                        Secure immutable ledger interface. Register structural documents or verify hashes against the central authority database. Uncompromising evidence tracking.
+                    </p>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-gutter items-start">
+<!-- LEFT COLUMN: Register Document Workflow -->
+<section class="bg-surface-container-lowest border border-outline-variant p-lg flex flex-col shadow-sm rounded-DEFAULT">
+<header class="border-b border-outline-variant pb-md mb-md flex justify-between items-center">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" data-icon="note_add">note_add</span>
+<h3 class="font-headline-md text-headline-md text-primary uppercase tracking-wide">Register Document</h3>
+</div>
+<div class="px-sm py-xs bg-surface-container border border-outline-variant rounded-DEFAULT flex items-center gap-xs">
+<div class="w-2 h-2 bg-primary rounded-full"></div>
+<span class="font-technical-data text-technical-data text-on-surface">NODE: ACTIVE</span>
+</div>
+</header>
+<!-- Workflow Pipeline Viz -->
+<div class="flex items-center gap-xs mb-lg overflow-x-auto pb-sm">
+<div class="px-md py-sm bg-surface-container-highest border-l-4 border-primary text-primary font-label-caps text-label-caps uppercase tracking-wider whitespace-nowrap">1. Upload</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="arrow_forward">arrow_forward</span>
+<div class="px-md py-sm bg-surface text-on-surface-variant border border-outline-variant font-label-caps text-label-caps uppercase tracking-wider whitespace-nowrap">2. Metadata</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="arrow_forward">arrow_forward</span>
+<div class="px-md py-sm bg-surface text-on-surface-variant border border-outline-variant font-label-caps text-label-caps uppercase tracking-wider whitespace-nowrap">3. Hash</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="arrow_forward">arrow_forward</span>
+<div class="px-md py-sm bg-surface text-on-surface-variant border border-outline-variant font-label-caps text-label-caps uppercase tracking-wider whitespace-nowrap">4. Signed Record</div>
+</div>
+<!-- Dropzone -->
+<div class="border-2 border-dashed border-outline-variant bg-surface hover:bg-surface-container transition-colors p-xl flex flex-col items-center justify-center text-center cursor-pointer rounded-DEFAULT mb-md min-h-[160px]">
+<span class="material-symbols-outlined text-primary text-4xl mb-sm" data-icon="upload_file" data-weight="fill">upload_file</span>
+<p class="font-body-md text-body-md text-on-surface font-bold">Drag structural blueprint or dossier here</p>
+<p class="font-technical-data text-technical-data text-on-surface-variant mt-xs">PDF, TIFF, RAW (Max 50MB)</p>
+</div>
+<!-- Metadata Form -->
+<div class="space-y-md">
+<div class="grid grid-cols-2 gap-md">
+<div>
+<label class="block font-label-caps text-label-caps uppercase tracking-wider text-on-surface-variant mb-xs">Document Type</label>
+<select class="w-full bg-surface-container-low border border-outline-variant rounded-DEFAULT p-sm font-technical-data text-technical-data text-on-surface focus:outline-none focus:border-primary">
+<option>Identity Dossier [ID-DOS-v2]</option>
+<option>Travel Manifest [TRV-MAN-99]</option>
+<option>Clearance Certificate [CLR-CERT]</option>
+</select>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps uppercase tracking-wider text-on-surface-variant mb-xs">Classification Level</label>
+<select class="w-full bg-surface-container-low border border-outline-variant rounded-DEFAULT p-sm font-technical-data text-technical-data text-on-surface focus:outline-none focus:border-primary">
+<option>RESTRICTED</option>
+<option>CONFIDENTIAL</option>
+<option>SECRET</option>
+</select>
+</div>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps uppercase tracking-wider text-on-surface-variant mb-xs">Issuer Authentication Key (Auto-filled)</label>
+<input class="w-full bg-surface-container-high border border-outline-variant rounded-DEFAULT p-sm font-technical-data text-technical-data text-on-surface-variant cursor-not-allowed" readonly="" type="text" value="AUTH-KEY-884-X91-BB"/>
+</div>
+<button class="w-full bg-primary text-on-primary font-label-caps text-label-caps uppercase tracking-wider py-md rounded-DEFAULT hover:bg-on-surface transition-colors active:scale-[0.99] mt-sm flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined text-sm" data-icon="lock">lock</span>
+                                GENERATE HASH &amp; SIGN RECORD
+                            </button>
+</div>
+</section>
+<!-- RIGHT COLUMN: Verify Document Workflow -->
+<section class="bg-surface-container-lowest border border-outline-variant p-lg flex flex-col shadow-sm rounded-DEFAULT h-full">
+<header class="border-b border-outline-variant pb-md mb-md flex justify-between items-center">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" data-icon="fact_check">fact_check</span>
+<h3 class="font-headline-md text-headline-md text-primary uppercase tracking-wide">Verify Document</h3>
+</div>
+</header>
+<!-- Workflow Pipeline Viz -->
+<div class="flex items-center gap-xs mb-lg overflow-x-auto pb-sm">
+<div class="px-md py-sm bg-surface text-on-surface-variant border border-outline-variant font-label-caps text-label-caps uppercase tracking-wider whitespace-nowrap">1. Upload</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="arrow_forward">arrow_forward</span>
+<div class="px-md py-sm bg-surface text-on-surface-variant border border-outline-variant font-label-caps text-label-caps uppercase tracking-wider whitespace-nowrap">2. Compute Hash</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="arrow_forward">arrow_forward</span>
+<div class="px-md py-sm bg-surface-container-highest border-l-4 border-success-pulse text-success-pulse font-label-caps text-label-caps uppercase tracking-wider whitespace-nowrap font-bold">3. Registry Lookup</div>
+</div>
+<!-- Mocked Active State: Verification Results (Terminal Style) -->
+<div class="flex-1 bg-on-primary-fixed border border-outline-variant rounded-DEFAULT p-md flex flex-col shadow-inner">
+<div class="flex items-center justify-between border-b border-on-surface-variant pb-sm mb-sm">
+<div class="font-technical-data text-technical-data text-outline flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="terminal">terminal</span>
+                                    verify_engine_v3.4.1
+                                </div>
+<div class="w-3 h-3 bg-success-pulse rounded-none"></div>
+</div>
+<div class="font-technical-data text-[13px] leading-relaxed text-inverse-primary flex-1 overflow-y-auto space-y-sm">
+<p><span class="text-on-surface-variant">&gt;</span> INITIATING HASH COMPUTATION...</p>
+<p><span class="text-on-surface-variant">&gt;</span> TARGET_FILE: <span class="text-surface">subject_manifest_049.pdf</span></p>
+<p><span class="text-on-surface-variant">&gt;</span> ALGORITHM: SHA-256</p>
+<p class="text-secondary-fixed-dim">&gt; COMPUTED_HASH: <br/><span class="break-all ml-4">e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</span></p>
+<p class="pt-sm border-t border-on-surface-variant border-dashed mt-sm"><span class="text-on-surface-variant">&gt;</span> QUERYING CANONICAL REGISTRY...</p>
+<!-- Success Block -->
+<div class="bg-surface-tint/20 border-l-4 border-secondary-fixed p-sm mt-sm">
+<div class="text-secondary-fixed font-bold mb-xs flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle" data-weight="fill">check_circle</span>
+                                        RECORD FOUND / HASH MATCH
+                                    </div>
+<p class="text-inverse-primary">&gt; ISSUER_ID: AUTH-KEY-112-X44-AA</p>
+<p class="text-inverse-primary">&gt; TIMESTAMP: 2023-10-27T08:42:11Z</p>
+<p class="text-inverse-primary">&gt; STATUS: <span class="bg-secondary-fixed text-on-secondary-fixed px-1 font-bold">VERIFIED_AUTHENTIC</span></p>
+</div>
+<!-- Example of Alert Block (Commented out in UI flow, but shown structurally for brutalism)
+                                <div class="bg-error-container/20 border-l-4 border-error p-sm mt-sm opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-crosshair">
+                                    <div class="text-error font-bold mb-xs flex items-center gap-xs">
+                                        <span class="material-symbols-outlined text-[16px]" data-icon="warning" data-weight="fill">warning</span>
+                                        RECORD NOT FOUND / ALERT
+                                    </div>
+                                    <p class="text-inverse-primary">> No matching hash in immutable ledger.</p>
+                                    <p class="text-inverse-primary">> ACTION_REQUIRED: Confiscate document.</p>
+                                </div>
+                                -->
+</div>
+<button class="w-full bg-surface-container text-on-surface font-label-caps text-label-caps uppercase tracking-wider py-sm mt-md border border-outline-variant hover:bg-surface-container-high transition-colors">
+                                RESET SCANNER
+                            </button>
+</div>
+</section>
+</div>
+<!-- Recent Ledger Activity (Data Table) -->
+<section class="bg-surface-container-lowest border border-outline-variant shadow-sm rounded-DEFAULT mt-md overflow-hidden flex flex-col">
+<header class="p-md border-b border-outline-variant bg-surface flex justify-between items-center">
+<h3 class="font-label-caps text-label-caps text-primary uppercase tracking-wider font-bold">Recent Ledger Activity</h3>
+<div class="flex gap-sm">
+<button class="p-xs text-on-surface-variant hover:text-primary border border-transparent hover:border-outline-variant rounded-DEFAULT transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_list">filter_list</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-primary border border-transparent hover:border-outline-variant rounded-DEFAULT transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+</button>
+</div>
+</header>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant bg-surface-container-low font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">
+<th class="p-sm font-normal">Timestamp (UTC)</th>
+<th class="p-sm font-normal">Action</th>
+<th class="p-sm font-normal">Document Hash (SHA-256)</th>
+<th class="p-sm font-normal">Issuer / Agent</th>
+<th class="p-sm font-normal text-right">Result</th>
+</tr>
+</thead>
+<tbody class="font-technical-data text-technical-data text-on-surface">
+<!-- Row 1 -->
+<tr class="border-b border-outline-variant hover:bg-surface-container transition-colors cursor-default">
+<td class="p-sm whitespace-nowrap">2023-10-27 09:15:02</td>
+<td class="p-sm text-on-surface-variant">VERIFY</td>
+<td class="p-sm truncate max-w-[200px]" title="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855">e3b0c44298fc1c14...</td>
+<td class="p-sm">AGENT_042</td>
+<td class="p-sm text-right">
+<span class="inline-flex items-center gap-xs bg-surface-container-highest border border-outline-variant px-2 py-0.5 rounded-none text-success-pulse text-[11px]">
+<span class="w-1.5 h-1.5 bg-success-pulse rounded-none"></span> MATCH
+                                        </span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="border-b border-outline-variant hover:bg-surface-container transition-colors cursor-default bg-error-container/10">
+<td class="p-sm whitespace-nowrap">2023-10-27 09:12:44</td>
+<td class="p-sm text-on-surface-variant">VERIFY</td>
+<td class="p-sm truncate max-w-[200px]" title="8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92">8d969eef6ecad3c2...</td>
+<td class="p-sm">PORT_AUTH_NW</td>
+<td class="p-sm text-right">
+<span class="inline-flex items-center gap-xs bg-error-container border border-error px-2 py-0.5 rounded-none text-on-error-container text-[11px] font-bold">
+<span class="material-symbols-outlined text-[12px]" data-icon="close">close</span> ALERT
+                                        </span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="border-b border-outline-variant hover:bg-surface-container transition-colors cursor-default">
+<td class="p-sm whitespace-nowrap">2023-10-27 08:55:10</td>
+<td class="p-sm text-on-surface-variant">REGISTER</td>
+<td class="p-sm truncate max-w-[200px]" title="b42a98fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855e3">b42a98fc1c149afb...</td>
+<td class="p-sm">AUTH-KEY-884</td>
+<td class="p-sm text-right">
+<span class="inline-flex items-center gap-xs bg-surface border border-outline-variant px-2 py-0.5 rounded-none text-on-surface text-[11px]">
+<span class="material-symbols-outlined text-[12px]" data-icon="history_edu">history_edu</span> SIGNED
+                                        </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+</div>
+</body></html>

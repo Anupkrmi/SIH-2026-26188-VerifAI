@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "bordershield",
+      "runtimeExecutable": "D:/Projects/SIH-2026/venv/Scripts/python.exe",
+      "runtimeArgs": ["-m", "streamlit", "run", "D:/Projects/SIH-2026/app.py", "--server.headless", "true"],
+      "port": 8501
+    }
+  ]
+}

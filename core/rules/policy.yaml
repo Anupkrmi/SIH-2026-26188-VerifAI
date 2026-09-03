@@ -1,0 +1,71 @@
+# Policy-as-code: MHA/SSB staff should be able to change a weight or
+# threshold here without touching Python. Every value the risk engine uses
+# is configurable from this one file -- see core/rules/engine.py and
+# core/risk.py, which read it rather than hardcoding any of these numbers.
+
+risk_weights:
+  mrz_checksum_fail: 30
+  cross_field_mismatch: 25
+  photo_anomaly: 25
+  face_mismatch: 25
+  capture_anomaly: 15
+  expired_document: 10
+
+risk_bands:
+  # [min, max, band, recommended_action] -- action text is never an
+  # accusation, even at CRITICAL. See core/risk.py.
+  #
+  # LOW is exactly zero, deliberately: any fired signal at all -- even one
+  # weight-light advisory (forensics/biometric) FAIL -- must escape LOW.
+  # An earlier version used [0, 25] here, so a single 25-point photo
+  # anomaly landed on the LOW/MEDIUM boundary and reported "no action
+  # required" despite a real, fired signal. Found by running every attack
+  # through the actual pipeline, not just the isolated detector scripts.
+  - [0, 0, LOW, "No action required"]
+  - [1, 50, MEDIUM, "Routine review"]
+  - [51, 75, HIGH, "Secondary inspection recommended"]
+  - [76, 100, CRITICAL, "Secondary inspection recommended"]
+
+rules:
+  expiry_in_past:
+    enabled: true
+    weight_key: expired_document
+    message: "Document expiry date ({expiry}) is in the past"
+
+  issue_after_expiry:
+    enabled: true
+    weight_key: cross_field_mismatch
+    message: "Date of issue ({issue}) is after date of expiry ({expiry})"
+
+  dob_in_future:
+    enabled: true
+    weight_key: cross_field_mismatch
+    message: "Date of birth ({dob}) is in the future"
+
+  dob_implies_age_over_max:
+    enabled: true
+    weight_key: cross_field_mismatch
+    max_age_years: 120
+    message: "Date of birth ({dob}) implies an age over {max_age_years} years"
+
+  document_number_format:
+    enabled: true
+    weight_key: cross_field_mismatch
+    # UTO issuer convention: exactly 9 digits. See core/mrz.py's
+    # _ISSUER_DIGIT_ONLY comment -- this is our own generator's rule, not
+    # an ICAO mandate; a real deployment would load the issuing state's
+    # actual document-number format here instead.
+    pattern: "^[0-9]{9}$"
+    message: "Passport number ({passport_number}) does not match the UTO issuer format"
+
+  six_month_validity:
+    # OFF BY DEFAULT, DELIBERATELY. Any "passport must be valid 6 months
+    # beyond travel" rule is a DESTINATION entry-policy choice, not a
+    # universal document-validity rule -- asserting it unconditionally
+    # would be a claim this system cannot actually verify (we don't know
+    # the destination). Kept here, disabled, so a deployment that DOES
+    # know the destination policy can turn it on per-checkpoint.
+    enabled: false
+    weight_key: expired_document
+    min_months_remaining: 6
+    message: "Less than {min_months_remaining} months of validity remain"

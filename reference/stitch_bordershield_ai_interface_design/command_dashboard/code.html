@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BorderShield AI Command Dashboard</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#c7c6c9",
+                        "on-primary-fixed-variant": "#464749",
+                        "surface-variant": "#2d363e",
+                        "on-error": "#690005",
+                        "on-background": "#dae3ee",
+                        "surface-dim": "#0b141c",
+                        "tertiary-fixed": "#ebe0dc",
+                        "on-surface": "#dae3ee",
+                        "surface-container-low": "#141c24",
+                        "on-primary-fixed": "#1b1c1e",
+                        "primary-fixed": "#e3e2e5",
+                        "on-tertiary": "#352f2d",
+                        "outline": "#909094",
+                        "inverse-surface": "#dae3ee",
+                        "secondary-fixed-dim": "#c2c7d0",
+                        "on-primary-container": "#7a7a7c",
+                        "on-tertiary-fixed": "#1f1b18",
+                        "on-secondary": "#2c3138",
+                        "on-primary": "#303033",
+                        "outline-variant": "#45474a",
+                        "surface-container-high": "#222b33",
+                        "tertiary": "#cec4c1",
+                        "secondary-container": "#42474f",
+                        "background": "#0b141c",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-container": "#b1b5bf",
+                        "secondary-fixed": "#dee2ec",
+                        "on-tertiary-container": "#807975",
+                        "secondary": "#c2c7d0",
+                        "on-surface-variant": "#c6c6ca",
+                        "surface": "#0b141c",
+                        "error": "#ffb4ab",
+                        "surface-tint": "#c7c6c9",
+                        "primary-container": "#0b0c0e",
+                        "error-container": "#93000a",
+                        "tertiary-fixed-dim": "#cec4c1",
+                        "surface-bright": "#313a43",
+                        "tertiary-container": "#0f0b09",
+                        "surface-container-highest": "#2d363e",
+                        "primary": "#c7c6c9",
+                        "inverse-primary": "#5e5e61",
+                        "surface-container": "#182028",
+                        "on-tertiary-fixed-variant": "#4c4543",
+                        "inverse-on-surface": "#29313a",
+                        "surface-container-lowest": "#060f16",
+                        "on-secondary-fixed-variant": "#42474f",
+                        "on-secondary-fixed": "#171c23"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "sidebar-width": "240px",
+                        "stack-lg": "32px",
+                        "margin-page": "24px",
+                        "gutter": "16px",
+                        "stack-md": "16px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "status-pill": ["Inter"],
+                        "headline-lg": ["IBM Plex Sans"],
+                        "body-lg": ["Inter"],
+                        "technical-data": ["JetBrains Mono"],
+                        "headline-md": ["IBM Plex Sans"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "status-pill": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "technical-data": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.06em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #0B0C0E; color: #dae3ee; }
+        .grid-main { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
+        .col-span-8 { grid-column: span 8 / span 8; }
+        .col-span-4 { grid-column: span 4 / span 4; }
+        .col-span-12 { grid-column: span 12 / span 12; }
+        .card-container { background-color: #161B22; border: 1px solid #30363D; }
+        .ghost-border { border: 1px solid #30363D; }
+        .divider { border-bottom: 1px solid #30363D; }
+        .btn-primary { background-color: #c7c6c9; color: #303033; transition: all 0.2s; }
+        .btn-primary:hover { background-color: #dae3ee; }
+        .btn-secondary { background-color: transparent; border: 1px solid #30363D; color: #dae3ee; transition: all 0.2s; }
+        .btn-secondary:hover { background-color: #222b33; }
+        .status-glow-green { background-color: rgba(34, 197, 94, 0.1); border-color: rgb(34, 197, 94); color: rgb(74, 222, 128); }
+        .status-glow-red { background-color: rgba(239, 68, 68, 0.1); border-color: rgb(239, 68, 68); color: rgb(248, 113, 113); }
+        .status-glow-amber { background-color: rgba(245, 158, 11, 0.1); border-color: rgb(245, 158, 11); color: rgb(251, 191, 36); }
+        
+        /* Table Styling */
+        table th { border-bottom: 1px solid #45474a; padding: 12px 16px; text-align: left; background-color: rgba(0,0,0,0.2); }
+        table td { border-bottom: 1px solid #30363D; padding: 12px 16px; text-align: left; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden antialiased font-body-md text-body-md">
+<!-- SideNavBar (Shared Component) -->
+<nav class="fixed left-0 top-0 h-full w-[240px] bg-surface-container-lowest border-r border-outline-variant flex flex-col py-stack-md z-20">
+<div class="px-margin-page mb-stack-lg flex items-center gap-3">
+<img alt="BorderShield AI Logo" class="w-8 h-8 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGnOGUvWeGcT6D-peCUcJdnwTe8nCOdSLapc0fLEIOj4Kv9nI82Ph44nV4dVPSZvJRuJcV0T6BNlzLmgV215rs8tBF2Pj9r4a-egAa6qePm5YjaXz1RXJGfNmMYOP8yll5oVjZt2tEYzZ6nd7OdRLsVSr261JoU6ESv0PTO3bXILKLTHVq-f3WSst_NBqRJgPVuOtKKIT8djDDewiR29kMb0DvKqk4B8y2wxcSUSet6Sf6tKJKPVPB"/>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface">BorderShield AI</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Screening Console</p>
+</div>
+</div>
+<div class="px-margin-page mb-stack-lg">
+<button class="w-full btn-primary font-label-caps text-label-caps py-2 rounded flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 16px;">add</span>
+                New Entry Scan
+            </button>
+</div>
+<ul class="flex-1 px-3 space-y-1">
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded bg-secondary-container text-on-secondary-container font-semibold transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Command Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">person_search</span>
+<span>New Screening</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">assignment_ind</span>
+<span>Active Case</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">qr_code_2</span>
+<span>Investigations</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">history</span>
+<span>Audit Trail</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto px-3 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">settings_heart</span>
+<span>System Health</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col ml-[240px] bg-background w-full h-full">
+<!-- TopAppBar (Shared Component) -->
+<header class="flex justify-between items-center h-16 px-margin-page border-b border-outline-variant bg-background z-10 shrink-0">
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 transform -translate-y-1/2 text-on-surface-variant" style="font-size: 18px;">search</span>
+<input class="bg-surface-container-lowest border border-outline-variant rounded pl-10 pr-4 py-1.5 text-body-md font-body-md focus:outline-none focus:border-secondary-container w-64" placeholder="Search case ID or subject..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined">security</span>
+</button>
+<button class="btn-secondary font-label-caps text-label-caps px-4 py-1.5 rounded ml-2">
+                    End Shift
+                </button>
+<div class="w-8 h-8 rounded bg-surface-variant overflow-hidden border border-outline-variant">
+<img alt="Operator Profile" class="w-full h-full object-cover" data-alt="A close-up portrait of a professional border security operator in a dimly lit, high-tech control room setting. The operator is wearing a dark uniform, illuminated slightly by the cool blue light of monitors. The style is hyper-realistic and cinematic, emphasizing authority and technical proficiency. Neutral background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMxx6MRVmq_1kPKrk9yMchhNe5wJPt4JvxscnPUFBCcMsEMzpXhzgg8OGJlE0JbFuVSxIqvV9TKBYRSGAc7y7GIpkcMw-ZqBCp_I4h-pyrcnkIExyAmhdANFU7m_L96iURM8DW2pta11G1FztQtRQHw0LEYnRk6y8E2JLVCn2JyDpv102hFh62dbqdkxueHRnbitAxzomIhpBG0GWk-qCljZskcdN0bJOFqiWnsW4j7wVKvDXYzIHb"/>
+</div>
+</div>
+</header>
+<!-- Scrollable Dashboard Content -->
+<main class="flex-1 overflow-y-auto p-margin-page">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-stack-lg">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Border Screening Command</h2>
+<p class="text-on-surface-variant mt-1">Identity verification and document integrity monitoring.</p>
+</div>
+<button class="btn-primary font-label-caps text-label-caps px-6 py-2 rounded flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 18px;">play_arrow</span>
+                    START NEW SCREENING
+                </button>
+</div>
+<div class="grid-main mb-stack-lg">
+<!-- System Health Strip (Top Level Modules) -->
+<div class="col-span-4 card-container rounded-lg p-4 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-caps text-label-caps text-on-surface-variant">ACTIVE CASES</span>
+<span class="material-symbols-outlined text-on-surface-variant">monitoring</span>
+</div>
+<div class="flex items-end gap-3">
+<span class="text-4xl font-headline-lg text-on-surface leading-none">14</span>
+<span class="text-on-surface-variant text-sm mb-1">In progress</span>
+</div>
+</div>
+<div class="col-span-4 card-container rounded-lg p-4 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-caps text-label-caps text-on-surface-variant">REQUIRES REVIEW</span>
+<span class="material-symbols-outlined text-error">warning</span>
+</div>
+<div class="flex items-end gap-3">
+<span class="text-4xl font-headline-lg text-error leading-none">3</span>
+<span class="status-pill status-glow-red rounded px-2 py-0.5 border">High Priority</span>
+</div>
+</div>
+<div class="col-span-4 card-container rounded-lg p-4 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-caps text-label-caps text-on-surface-variant">SYSTEM STATUS</span>
+<span class="material-symbols-outlined text-primary">dns</span>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+<span class="font-technical-data text-technical-data text-on-surface">NODE_ALPHA: ONLINE</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+<span class="font-technical-data text-technical-data text-on-surface">VERIFICATION_API: READY</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Controlled Attack Simulation Section -->
+<div class="col-span-12 card-container rounded-lg mb-stack-lg overflow-hidden">
+<div class="p-4 border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">bug_report</span>
+<h3 class="font-headline-md text-headline-md">CONTROLLED ATTACK SIMULATION</h3>
+</div>
+<span class="status-pill rounded px-2 py-0.5 border border-outline text-on-surface-variant">Demo Environment</span>
+</div>
+<div class="p-4">
+<p class="text-on-surface-variant mb-4">Select an attack vector to simulate document fraud and observe AI detection response.</p>
+<div class="flex flex-wrap gap-3">
+<button class="btn-secondary px-4 py-2 rounded font-label-caps text-label-caps flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 16px;">verified</span>
+                            GENUINE
+                        </button>
+<button class="btn-secondary px-4 py-2 rounded font-label-caps text-label-caps flex items-center gap-2 border-amber-500/50 hover:bg-amber-500/10">
+<span class="material-symbols-outlined" style="font-size: 16px;">edit_calendar</span>
+                            CHANGE DOB
+                        </button>
+<button class="btn-secondary px-4 py-2 rounded font-label-caps text-label-caps flex items-center gap-2 border-amber-500/50 hover:bg-amber-500/10">
+<span class="material-symbols-outlined" style="font-size: 16px;">add_photo_alternate</span>
+                            REPLACE PHOTO
+                        </button>
+<button class="btn-secondary px-4 py-2 rounded font-label-caps text-label-caps flex items-center gap-2 border-red-500/50 hover:bg-red-500/10 text-red-400">
+<span class="material-symbols-outlined" style="font-size: 16px;">screenshot_monitor</span>
+                            SCREEN RECAPTURE
+                        </button>
+<button class="btn-secondary px-4 py-2 rounded font-label-caps text-label-caps flex items-center gap-2 border-red-500/50 hover:bg-red-500/10 text-red-400">
+<span class="material-symbols-outlined" style="font-size: 16px;">face_retouching_off</span>
+                            FACE MISMATCH
+                        </button>
+<button class="btn-secondary px-4 py-2 rounded font-label-caps text-label-caps flex items-center gap-2 border-amber-500/50 hover:bg-amber-500/10">
+<span class="material-symbols-outlined" style="font-size: 16px;">draw</span>
+                            BREAK SIGNATURE
+                        </button>
+</div>
+</div>
+</div>
+<!-- Recent Cases Table -->
+<div class="col-span-12 card-container rounded-lg overflow-hidden">
+<div class="p-4 border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+<h3 class="font-headline-md text-headline-md">Recent Cases</h3>
+<button class="text-primary hover:text-on-surface font-label-caps text-label-caps">VIEW ALL</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr>
+<th class="font-label-caps text-label-caps text-on-surface-variant w-1/6">Case</th>
+<th class="font-label-caps text-label-caps text-on-surface-variant w-1/6">Document</th>
+<th class="font-label-caps text-label-caps text-on-surface-variant w-1/6">Risk</th>
+<th class="font-label-caps text-label-caps text-on-surface-variant w-2/6">Finding</th>
+<th class="font-label-caps text-label-caps text-on-surface-variant w-1/6">Time</th>
+<th class="font-label-caps text-label-caps text-on-surface-variant w-1/6">Status</th>
+</tr>
+</thead>
+<tbody class="font-technical-data text-technical-data">
+<tr class="hover:bg-surface-container-highest transition-colors">
+<td>CS-8892-A</td>
+<td>ePassport (USA)</td>
+<td>
+<div class="w-full bg-surface-variant h-1 rounded mt-1">
+<div class="bg-red-500 h-1 rounded" style="width: 85%"></div>
+</div>
+<span class="text-xs text-on-surface-variant mt-1 block">85% HIGH</span>
+</td>
+<td class="text-error">Face Mismatch Detected (0.23 SIM)</td>
+<td>10:42:01 UTC</td>
+<td><span class="status-pill status-glow-red rounded px-2 py-0.5 border">BLOCKED</span></td>
+</tr>
+<tr class="hover:bg-surface-container-highest transition-colors">
+<td>CS-8891-B</td>
+<td>ID Card (DEU)</td>
+<td>
+<div class="w-full bg-surface-variant h-1 rounded mt-1">
+<div class="bg-green-500 h-1 rounded" style="width: 12%"></div>
+</div>
+<span class="text-xs text-on-surface-variant mt-1 block">12% LOW</span>
+</td>
+<td class="text-on-surface">Genuine Document</td>
+<td>10:38:15 UTC</td>
+<td><span class="status-pill status-glow-green rounded px-2 py-0.5 border">CLEARED</span></td>
+</tr>
+<tr class="hover:bg-surface-container-highest transition-colors">
+<td>CS-8890-C</td>
+<td>ePassport (GBR)</td>
+<td>
+<div class="w-full bg-surface-variant h-1 rounded mt-1">
+<div class="bg-amber-500 h-1 rounded" style="width: 65%"></div>
+</div>
+<span class="text-xs text-on-surface-variant mt-1 block">65% MED</span>
+</td>
+<td class="text-amber-400">DOB Anomaly / Font Inconsistency</td>
+<td>10:31:44 UTC</td>
+<td><span class="status-pill status-glow-amber rounded px-2 py-0.5 border">REVIEW</span></td>
+</tr>
+<tr class="hover:bg-surface-container-highest transition-colors">
+<td>CS-8889-A</td>
+<td>Visa (CAN)</td>
+<td>
+<div class="w-full bg-surface-variant h-1 rounded mt-1">
+<div class="bg-red-500 h-1 rounded" style="width: 92%"></div>
+</div>
+<span class="text-xs text-on-surface-variant mt-1 block">92% HIGH</span>
+</td>
+<td class="text-error">Screen Recapture (Moire Pattern)</td>
+<td>10:15:22 UTC</td>
+<td><span class="status-pill status-glow-red rounded px-2 py-0.5 border">BLOCKED</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+</div>
+</body></html>

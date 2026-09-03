@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BorderShield AI - Capture Screen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&amp;family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#c7c6c9",
+                        "on-primary-fixed-variant": "#464749",
+                        "surface-variant": "#2d363e",
+                        "on-error": "#690005",
+                        "on-background": "#dae3ee",
+                        "surface-dim": "#0b141c",
+                        "tertiary-fixed": "#ebe0dc",
+                        "on-surface": "#dae3ee",
+                        "surface-container-low": "#141c24",
+                        "on-primary-fixed": "#1b1c1e",
+                        "primary-fixed": "#e3e2e5",
+                        "on-tertiary": "#352f2d",
+                        "outline": "#909094",
+                        "inverse-surface": "#dae3ee",
+                        "secondary-fixed-dim": "#c2c7d0",
+                        "on-primary-container": "#7a7a7c",
+                        "on-tertiary-fixed": "#1f1b18",
+                        "on-secondary": "#2c3138",
+                        "on-primary": "#303033",
+                        "outline-variant": "#45474a",
+                        "surface-container-high": "#222b33",
+                        "tertiary": "#cec4c1",
+                        "secondary-container": "#42474f",
+                        "background": "#0b141c",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-container": "#b1b5bf",
+                        "secondary-fixed": "#dee2ec",
+                        "on-tertiary-container": "#807975",
+                        "secondary": "#c2c7d0",
+                        "on-surface-variant": "#c6c6ca",
+                        "surface": "#0b141c",
+                        "error": "#ffb4ab",
+                        "surface-tint": "#c7c6c9",
+                        "primary-container": "#0b0c0e",
+                        "error-container": "#93000a",
+                        "tertiary-fixed-dim": "#cec4c1",
+                        "surface-bright": "#313a43",
+                        "tertiary-container": "#0f0b09",
+                        "surface-container-highest": "#2d363e",
+                        "primary": "#c7c6c9",
+                        "inverse-primary": "#5e5e61",
+                        "surface-container": "#182028",
+                        "on-tertiary-fixed-variant": "#4c4543",
+                        "inverse-on-surface": "#29313a",
+                        "surface-container-lowest": "#060f16",
+                        "on-secondary-fixed-variant": "#42474f",
+                        "on-secondary-fixed": "#171c23"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "sidebar-width": "240px",
+                        "stack-lg": "32px",
+                        "margin-page": "24px",
+                        "gutter": "16px",
+                        "stack-md": "16px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "status-pill": ["Inter"],
+                        "headline-lg": ["IBM Plex Sans"],
+                        "body-lg": ["Inter"],
+                        "technical-data": ["JetBrains Mono"],
+                        "headline-md": ["IBM Plex Sans"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "status-pill": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "technical-data": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.06em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .split-grid {
+            display: grid;
+            grid-template-columns: 8fr 4fr;
+            gap: 16px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col md:flex-row">
+<!-- SideNavBar -->
+<nav class="hidden md:flex bg-surface-container-lowest dark:bg-surface-container-lowest text-primary dark:text-primary fixed left-0 top-0 h-full w-[240px] border-r border-outline-variant flat no shadows flex-col h-full py-stack-md z-20">
+<div class="px-gutter mb-stack-lg">
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface">BorderShield AI</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant mt-1">Screening Console</p>
+</div>
+<button class="mx-gutter mb-stack-lg bg-surface-container-highest text-on-surface hover:bg-surface-bright border border-outline-variant font-status-pill text-status-pill py-2 px-4 rounded transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">add_circle</span>
+            New Entry Scan
+        </button>
+<ul class="flex-grow space-y-1">
+<li><a class="flex items-center gap-3 px-gutter py-2 text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#"><span class="material-symbols-outlined">dashboard</span> <span class="font-body-md text-body-md">Command Dashboard</span></a></li>
+<li><a class="flex items-center gap-3 px-gutter py-2 bg-secondary-container text-on-secondary-container font-semibold active:scale-[0.98] transition-transform" href="#"><span class="material-symbols-outlined">person_search</span> <span class="font-body-md text-body-md">New Screening</span></a></li>
+<li><a class="flex items-center gap-3 px-gutter py-2 text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#"><span class="material-symbols-outlined">assignment_ind</span> <span class="font-body-md text-body-md">Active Case</span></a></li>
+<li><a class="flex items-center gap-3 px-gutter py-2 text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#"><span class="material-symbols-outlined">qr_code_2</span> <span class="font-body-md text-body-md">Investigations</span></a></li>
+<li><a class="flex items-center gap-3 px-gutter py-2 text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#"><span class="material-symbols-outlined">history</span> <span class="font-body-md text-body-md">Audit Trail</span></a></li>
+</ul>
+<div class="mt-auto border-t border-outline-variant pt-stack-sm space-y-1">
+<a class="flex items-center gap-3 px-gutter py-2 text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#"><span class="material-symbols-outlined">settings_heart</span> <span class="font-body-md text-body-md">System Health</span></a>
+<a class="flex items-center gap-3 px-gutter py-2 text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#"><span class="material-symbols-outlined">settings</span> <span class="font-body-md text-body-md">Settings</span></a>
+</div>
+</nav>
+<div class="flex-1 flex flex-col md:ml-[240px] min-h-screen bg-background">
+<!-- TopAppBar -->
+<header class="bg-background dark:bg-background text-primary dark:text-primary docked full-width top-0 border-b border-outline-variant flat no shadows flex justify-between items-center h-16 px-margin-page sticky z-10">
+<div class="flex items-center gap-4">
+<h2 class="font-headline-md text-headline-md font-bold text-on-surface">New Screening</h2>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-on-surface transition-colors active:opacity-80"><span class="material-symbols-outlined">notifications</span></button>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors active:opacity-80"><span class="material-symbols-outlined">security</span></button>
+<div class="w-px h-6 bg-outline-variant mx-2"></div>
+<button class="border border-outline-variant text-on-surface px-4 py-1.5 rounded font-status-pill text-status-pill hover:bg-surface-container-low transition-colors">End Shift</button>
+<img class="w-8 h-8 rounded-full border border-outline-variant object-cover ml-2" data-alt="A stylized, high-contrast operator profile avatar for a futuristic government screening system. The avatar features a minimal, geometric depiction of a human silhouette against a dark, technical background. The color palette utilizes deep grays, crisp white, and subtle cyber-blue accents to reflect the secure, institutional tech aesthetic of the BorderShield AI platform. The mood is professional and austere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6j7qcOSWP3S_-WD-uLU3xKBI3_PJVXp3_J4Y5s9Uu-1XjGOrVxskrNXQEEYQf6Rg7603dF0dHL5AXAqvj-qp9bhbzvxmUYeAfLp0khn2HLZAw7quXG_sgrciqfJ19RcmjdXMF7PIL5oSCjIeucPofeLnzibBBOEPt_5Hfesglc3M71Y60WIWeg0QzU1FDoOoP0CTVivMqn0lhOSh_yfEn0LRfJodupMIFlqWWVjv0ZPq6lrmk-_Hz"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 p-margin-page flex flex-col gap-gutter">
+<div class="split-grid flex-1">
+<!-- Left: Document Capture -->
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-gutter flex flex-col h-full">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant mb-4">DOCUMENT CAPTURE</h3>
+<div class="flex-1 border-2 border-dashed border-outline-variant rounded bg-surface-container-highest flex flex-col items-center justify-center relative overflow-hidden group">
+<img class="absolute inset-0 w-full h-full object-contain p-8 opacity-40 group-hover:opacity-60 transition-opacity" data-alt="A synthetic, high-resolution rendering of a generic international passport ID page. The document is presented flat against a dark, technical background with subtle scanning gridlines overlaying the surface. The aesthetic is extremely detailed and realistic, featuring micro-text patterns, a ghost image portrait area, and machine-readable zones (MRZ) at the bottom. The lighting simulates a sterile, high-end document scanner environment, emphasizing security features and institutional authority within the dark-mode tech platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfyURBCjd2-EXdr81a0WTEwIBqO4w46tEITrAeZSPZF9wpR81RrLPPny7vfKVkb_096ng2HTXUgTeGLioXemytbNrFeLoPRYfCXxeQtHodQi55ZOCl0tda43fy5sXijecbb29_b5hdM46eoaZ6T4aOc_gEk7g6Wl-nxrMJCDRL07vaNG0K7H7mJ05fv6gnVX66r_FtQnwqsJzOuQyBGF8X6Rq5kJWh2KA2py39Rvsp3ZpMiT7-wkhn"/>
+<div class="z-10 flex flex-col items-center gap-stack-sm bg-surface-container-low/80 backdrop-blur-sm p-4 rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-4xl text-primary">document_scanner</span>
+<p class="font-body-md text-body-md text-on-surface">Position document within frame</p>
+<div class="flex gap-4 mt-2">
+<button class="bg-primary text-on-primary font-status-pill text-status-pill px-4 py-2 rounded hover:bg-primary-fixed transition-colors">Use Camera</button>
+<button class="bg-transparent border border-outline-variant text-on-surface font-status-pill text-status-pill px-4 py-2 rounded hover:bg-surface-container-highest transition-colors">Drag / Upload</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Live Identity Capture -->
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-gutter flex flex-col h-full">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant mb-4">LIVE IDENTITY CAPTURE</h3>
+<div class="flex-1 bg-surface-container-highest border border-outline-variant rounded relative flex flex-col items-center justify-center overflow-hidden mb-4">
+<!-- Face Guide Overlay -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+<div class="w-48 h-64 border-2 border-primary-fixed-dim/50 rounded-[40px] shadow-[0_0_0_9999px_rgba(11,20,28,0.7)]">
+<div class="absolute top-1/3 left-0 w-full h-px bg-primary-fixed-dim/30"></div>
+</div>
+</div>
+<div class="z-20 text-center flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-3xl text-on-surface-variant mb-2">face</span>
+<p class="font-body-md text-body-md text-on-surface max-w-[200px]">Look directly at camera, keep centered.</p>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<button class="bg-primary text-on-primary font-status-pill text-status-pill px-4 py-3 rounded hover:bg-primary-fixed transition-colors w-full flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">camera_alt</span> CAPTURE LIVE
+                        </button>
+<button class="bg-transparent border border-outline-variant text-on-surface font-status-pill text-status-pill px-4 py-3 rounded hover:bg-surface-container-highest transition-colors w-full">UPLOAD IMAGE</button>
+</div>
+</div>
+</div>
+<!-- Bottom: Status Indicators -->
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-3 flex gap-6 items-center">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-secondary-fixed-dim"></div>
+<span class="font-technical-data text-technical-data text-on-surface-variant">Capture Quality: Awaiting</span>
+</div>
+<div class="w-px h-4 bg-outline-variant"></div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-secondary-fixed-dim"></div>
+<span class="font-technical-data text-technical-data text-on-surface-variant">Document: None</span>
+</div>
+<div class="w-px h-4 bg-outline-variant"></div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-secondary-fixed-dim"></div>
+<span class="font-technical-data text-technical-data text-on-surface-variant">Face Detected: False</span>
+</div>
+</div>
+</main>
+</div>
+</body></html>

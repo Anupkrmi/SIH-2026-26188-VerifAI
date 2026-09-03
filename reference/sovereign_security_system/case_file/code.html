@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Case Deep-Dive - BorderShield AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800;900&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#38485f",
+                    "inverse-primary": "#bec7d9",
+                    "on-tertiary-fixed": "#261a00",
+                    "on-error-container": "#93000a",
+                    "on-secondary": "#ffffff",
+                    "surface-dim": "#d9dadb",
+                    "outline-variant": "#c5c6cc",
+                    "tertiary-fixed": "#ffdfa0",
+                    "surface-container": "#edeeef",
+                    "surface-bright": "#f8f9fa",
+                    "on-surface": "#191c1d",
+                    "on-error": "#ffffff",
+                    "outline": "#75777c",
+                    "primary": "#000000",
+                    "inverse-surface": "#2e3132",
+                    "surface-container-high": "#e7e8e9",
+                    "on-surface-variant": "#45474c",
+                    "blueprint-grid": "rgba(196, 198, 207, 0.15)",
+                    "on-primary": "#ffffff",
+                    "surface-container-low": "#f3f4f5",
+                    "secondary-fixed-dim": "#b7c7e4",
+                    "surface-variant": "#e1e3e4",
+                    "surface-tint": "#565f6f",
+                    "on-background": "#191c1d",
+                    "on-tertiary-container": "#a87d00",
+                    "inverse-on-surface": "#f0f1f2",
+                    "primary-fixed-dim": "#bec7d9",
+                    "on-primary-fixed": "#131c2a",
+                    "background": "#f8f9fa",
+                    "tertiary-fixed-dim": "#fbbc01",
+                    "on-tertiary-fixed-variant": "#5c4300",
+                    "error-container": "#ffdad6",
+                    "on-secondary-fixed": "#0a1c32",
+                    "on-primary-fixed-variant": "#3e4756",
+                    "secondary-container": "#d0e1fe",
+                    "secondary-fixed": "#d4e3ff",
+                    "success-pulse": "#003366",
+                    "on-primary-container": "#7b8495",
+                    "surface-container-lowest": "#ffffff",
+                    "error-alert": "#ba1a1a",
+                    "tertiary": "#000000",
+                    "surface-container-highest": "#e1e3e4",
+                    "tertiary-container": "#261a00",
+                    "on-tertiary": "#ffffff",
+                    "secondary": "#4f5f78",
+                    "primary-container": "#131c2a",
+                    "on-secondary-container": "#53637d",
+                    "error": "#ba1a1a",
+                    "surface": "#f8f9fa",
+                    "primary-fixed": "#dae3f6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "xl": "48px",
+                    "md": "16px",
+                    "container-max": "1440px",
+                    "xs": "4px",
+                    "gutter": "24px",
+                    "sidebar-expanded": "260px",
+                    "rail-width": "72px",
+                    "lg": "24px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Bricolage Grotesque", "sans-serif"],
+                    "display-lg": ["Bricolage Grotesque", "sans-serif"],
+                    "label-caps": ["Hanken Grotesk", "sans-serif"],
+                    "body-lg": ["Hanken Grotesk", "sans-serif"],
+                    "headline-md": ["Bricolage Grotesque", "sans-serif"],
+                    "body-md": ["Hanken Grotesk", "sans-serif"],
+                    "technical-data": ["JetBrains Mono", "monospace"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "technical-data": ["13px", {"lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "500"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .blueprint-bg {
+            background-image: linear-gradient(rgba(196, 198, 207, 0.15) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(196, 198, 207, 0.15) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        
+        /* Utility class to execute JSON structural commands easily */
+        .case-card {
+            background-color: theme('colors.surface-container-lowest');
+            border: 1px solid theme('colors.outline-variant');
+            border-radius: theme('borderRadius.DEFAULT');
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md overflow-hidden flex">
+<!-- JSON Component: SideNavBar -->
+<aside class="flex flex-col h-full fixed left-0 top-0 z-40 h-screen w-sidebar-expanded border-r border-outline-variant bg-surface-container-lowest dark:bg-inverse-surface border-r border-outline-variant bg-surface-container-lowest">
+<!-- Header Area -->
+<div class="p-lg border-b border-outline-variant flex flex-col gap-sm">
+<div class="font-headline-md text-headline-md font-black text-primary">BorderShield AI</div>
+<div class="flex items-center gap-sm mt-md">
+<img class="w-10 h-10 rounded-full border border-outline-variant object-cover" data-alt="A small, professional avatar of a security operator in a dimly lit command center, highly detailed, sharp focus, wearing an earpiece, light mode corporate aesthetic, high contrast." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFKBxy25EzMs68-o1gRZ3WJniV26jlY1S3dMyv_dH0eGN-IyWdXq6PYIS2pxz3hC88dHNF-ve5unFpWUdCBwzriIt9AVQM3xIk8vaVxfv9g0Z9PErzcnewL6ZZrScjuSbm5jLc3Pmqm5_qFgp6nVqapn6bpGN7bLu3eOLIcJ4T93U17BltIP1lscG2DLaxn4HyC5FUQvb-6fsk3XmGaQu7UwBPZR2WREu8rd7XV_Lh35NYKX9oukmg"/>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-primary">OPERATOR_042</span>
+<span class="font-technical-data text-technical-data text-on-surface-variant text-[10px]">Unit: Border Intelligence</span>
+</div>
+</div>
+<button class="mt-md bg-primary text-on-primary font-label-caps text-label-caps uppercase tracking-wider py-sm px-md rounded hover:bg-surface-tint transition-colors w-full border border-primary text-center">INITIATE SCREENING</button>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 overflow-y-auto py-sm">
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98] transition-transform font-label-caps text-label-caps uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Overview
+            </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98] transition-transform font-label-caps text-label-caps uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">security</span>
+                Command Center
+            </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98] transition-transform font-label-caps text-label-caps uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">person_search</span>
+                New Screening
+            </a>
+<a class="flex items-center gap-md bg-surface-container-highest text-primary font-bold border-l-4 border-primary px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98] transition-transform font-label-caps text-label-caps uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">assignment_late</span>
+                Active Case
+            </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98] transition-transform font-label-caps text-label-caps uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">travel_explore</span>
+                Investigations
+            </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98] transition-transform font-label-caps text-label-caps uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">history_edu</span>
+                Audit Trail
+            </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98] transition-transform font-label-caps text-label-caps uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">dns</span>
+                System Status
+            </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98] transition-transform font-label-caps text-label-caps uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">verified_user</span>
+                Issuer Registry
+            </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98] transition-transform font-label-caps text-label-caps uppercase tracking-wider text-error-alert font-bold" href="#">
+<span class="material-symbols-outlined text-error-alert">error_outline</span>
+                Emergency Alert
+            </a>
+</nav>
+<!-- Footer Links -->
+<div class="border-t border-outline-variant p-sm">
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98] transition-transform font-label-caps text-label-caps uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">settings</span>
+                System Settings
+            </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98] transition-transform font-label-caps text-label-caps uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined">logout</span>
+                Logout
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-sidebar-expanded flex-1 h-screen overflow-y-auto blueprint-bg relative">
+<!-- Sticky Case Header -->
+<header class="sticky top-0 z-30 bg-surface-container-lowest/90 backdrop-blur-sm border-b border-outline-variant px-lg py-md flex justify-between items-end shadow-sm">
+<div class="flex flex-col gap-xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Case Deep-Dive</span>
+<div class="flex items-center gap-md">
+<h1 class="font-headline-lg text-headline-lg text-primary m-0">FILE: X-8924-OMEGA</h1>
+<div class="flex gap-sm">
+<span class="bg-error-container text-on-error-container border border-error px-sm py-[2px] font-technical-data text-technical-data rounded-sm flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+                            RISK: HIGH
+                        </span>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed border border-on-tertiary-fixed-variant px-sm py-[2px] font-technical-data text-technical-data rounded-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+                            REC: SECONDARY INSPECTION
+                        </span>
+</div>
+</div>
+</div>
+<div class="flex gap-sm">
+<button class="border border-outline-variant bg-surface-container hover:bg-surface-container-high text-on-surface px-md py-sm font-label-caps text-label-caps rounded flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">print</span>
+                    Print Dossier
+                </button>
+<button class="bg-primary text-on-primary px-md py-sm font-label-caps text-label-caps rounded flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">gavel</span>
+                    Adjudicate
+                </button>
+</div>
+</header>
+<!-- Main Grid Layout -->
+<div class="max-w-container-max mx-auto p-lg grid grid-cols-12 gap-gutter">
+<!-- Left Column: Vertical Timeline -->
+<div class="col-span-3 flex flex-col gap-md sticky top-[100px] self-start h-[calc(100vh-140px)] overflow-y-auto pr-sm pb-xl">
+<h2 class="font-label-caps text-label-caps text-on-surface-variant uppercase border-b border-outline-variant pb-xs">Investigation Timeline</h2>
+<div class="relative pl-lg border-l-2 border-outline-variant ml-sm space-y-lg mt-sm">
+<!-- Step 1 -->
+<div class="relative">
+<div class="absolute -left-[25px] w-4 h-4 bg-primary rounded-full border-4 border-surface-container-lowest"></div>
+<div class="case-card p-sm">
+<div class="font-technical-data text-[11px] text-on-surface-variant">08:42:11 Z</div>
+<div class="font-bold text-primary text-sm mt-xs">Screening Initiated</div>
+<div class="text-xs text-on-surface-variant mt-xs">Primary booth scan complete.</div>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="relative">
+<div class="absolute -left-[25px] w-4 h-4 bg-primary rounded-full border-4 border-surface-container-lowest"></div>
+<div class="case-card p-sm">
+<div class="font-technical-data text-[11px] text-on-surface-variant">08:43:05 Z</div>
+<div class="font-bold text-primary text-sm mt-xs">Document Verification</div>
+<div class="text-xs text-on-surface-variant mt-xs">MRZ mismatch detected. OCR flagged anomalies.</div>
+</div>
+</div>
+<!-- Step 3 Active -->
+<div class="relative">
+<div class="absolute -left-[26px] w-5 h-5 bg-tertiary-fixed rounded-full border-4 border-surface-container-lowest flex items-center justify-center">
+<div class="w-2 h-2 bg-on-tertiary-fixed rounded-full animate-pulse"></div>
+</div>
+<div class="case-card p-sm border-l-4 border-tertiary-fixed-dim bg-surface-container">
+<div class="font-technical-data text-[11px] text-on-surface-variant">08:45:22 Z</div>
+<div class="font-bold text-primary text-sm mt-xs">Secondary Flag Raised</div>
+<div class="text-xs text-on-surface-variant mt-xs">Subject moved to holding area B. Awaiting interview.</div>
+</div>
+</div>
+<!-- Step 4 Pending -->
+<div class="relative opacity-50">
+<div class="absolute -left-[25px] w-4 h-4 bg-surface-variant rounded-full border-4 border-surface-container-lowest"></div>
+<div class="case-card p-sm border-dashed">
+<div class="font-technical-data text-[11px] text-on-surface-variant">PENDING</div>
+<div class="font-bold text-primary text-sm mt-xs">Case Sealed</div>
+<div class="text-xs text-on-surface-variant mt-xs">Awaiting final adjudication.</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Content Area: Bento Layout -->
+<div class="col-span-9 flex flex-col gap-lg pb-xl">
+<!-- Row 1: Person & Risk -->
+<div class="grid grid-cols-2 gap-lg">
+<!-- Person Section -->
+<section class="case-card flex flex-col">
+<div class="border-b border-outline-variant p-sm bg-surface-container-low font-label-caps text-label-caps flex items-center gap-xs text-primary">
+<span class="material-symbols-outlined text-[16px]">person</span>
+                            Subject Identity
+                        </div>
+<div class="p-md flex gap-md">
+<img class="w-32 h-40 object-cover border border-outline-variant grayscale" data-alt="A stark, frontal mugshot-style photograph of an adult male, neutral expression, high-contrast industrial lighting, harsh shadows, corporate surveillance aesthetic, clinical." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqMshzx_2_EOFptyz1Ad_OyOKMBuN0OaGnPGRjHsbWvb0vFBEbgCCP_B8jXoBDvukHxI7FAUjVzTFl0XqhTtvhJEnuji1xFQfuqljgGdkephuh-Bta8KyP2YRUj3qaFThHtmdSucTUyT54mPSME79ug1kAIyZVA8s5G_dvcZPb_lKJGwcwp5ux0kYT7hZC1UKqLjYegRHv_oO7xSoCe8Xt0UC-WsW1M2LT-bxa39ZFGh9LNtxNR35e"/>
+<div class="flex-1 flex flex-col gap-sm">
+<div class="flex justify-between border-b border-outline-variant pb-xs">
+<span class="text-on-surface-variant text-sm">Last Name</span>
+<span class="font-technical-data text-primary">DOE / OVSKY</span>
+</div>
+<div class="flex justify-between border-b border-outline-variant pb-xs">
+<span class="text-on-surface-variant text-sm">First Name</span>
+<span class="font-technical-data text-primary">JOHN (ALIAS)</span>
+</div>
+<div class="flex justify-between border-b border-outline-variant pb-xs">
+<span class="text-on-surface-variant text-sm">DOB</span>
+<span class="font-technical-data text-primary">1984-11-23</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant text-sm">Nationality</span>
+<span class="font-technical-data text-primary">UNKNOWN (CLAIMED: US)</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Risk Section -->
+<section class="case-card flex flex-col border-l-4 border-error">
+<div class="border-b border-outline-variant p-sm bg-surface-container-low font-label-caps text-label-caps flex items-center justify-between text-primary">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">troubleshoot</span>
+                                Risk Assessment Score
+                            </div>
+<span class="font-headline-md text-error-alert font-bold">89/100</span>
+</div>
+<div class="p-md flex flex-col gap-sm">
+<div class="flex items-center justify-between text-sm">
+<span class="text-on-surface-variant">Document Integrity</span>
+<div class="w-32 h-2 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-error w-[90%]"></div></div>
+</div>
+<div class="flex items-center justify-between text-sm">
+<span class="text-on-surface-variant">Biometric Match</span>
+<div class="w-32 h-2 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-tertiary-fixed-dim w-[65%]"></div></div>
+</div>
+<div class="flex items-center justify-between text-sm">
+<span class="text-on-surface-variant">Watchlist Proximity</span>
+<div class="w-32 h-2 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-error w-[95%]"></div></div>
+</div>
+<div class="mt-sm p-sm bg-error-container/20 border border-error-container text-on-error-container text-xs font-technical-data">
+                                ALERT: Subject biometrics map 94% to Interpol Red Notice #IRN-2019-88X.
+                            </div>
+</div>
+</section>
+</div>
+<!-- Row 2: Document Evidence -->
+<section class="case-card">
+<div class="border-b border-outline-variant p-sm bg-surface-container-low font-label-caps text-label-caps flex items-center gap-xs text-primary">
+<span class="material-symbols-outlined text-[16px]">badge</span>
+                        Document Evidence (Forensic Scan)
+                    </div>
+<div class="p-0 grid grid-cols-2">
+<div class="border-r border-outline-variant p-md bg-surface-bright flex items-center justify-center">
+<img class="w-full max-w-[300px] border border-outline-variant shadow-sm rotate-[-1deg]" data-alt="A highly detailed close-up scan of a passport data page under UV light, revealing security threads and watermarks, industrial brutalist layout, high resolution, evidence marker visible." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOxnDTACR2zFDrtxyC2yV_0flbfIUTQFi2kzJZDnMQoxe5_U1Rmra3Mt0bkxZ4TID7_AsKGBSFrC5Vcf13Cv1u_v_vDcKlvZWYKqJbCKSeVBILuYO44zZFe504Mz2P_gsZW2rK1Kq8dn9WkILUY91MyTB0cokWvO2heDJtoeMwOx90oYwsYjpPCq9xUJyz_FuZSfdL1o6WYAlZED0ipKzPqd_9hRatBdX3UVMMWKO_4zd9zRDKZhqk"/>
+</div>
+<div class="p-md flex flex-col gap-xs font-technical-data text-technical-data bg-surface-container-lowest">
+<div class="text-on-surface-variant mb-xs border-b border-outline-variant pb-xs">OCR EXTRACTION RAW:</div>
+<div class="text-error-alert font-bold">&gt; MRZ LINE 1 MISMATCH</div>
+<div class="text-xs break-all">P<usaovsky<<john<<<<<<<<<<<<<<<<<<<<<<<<<< div="">
+<div class="text-xs break-all">3921849281USA841123M291031&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;08</div>
+<div class="mt-md text-on-surface-variant border-b border-outline-variant pb-xs">FORENSIC ANOMALIES:</div>
+<ul class="list-none p-0 m-0 space-y-xs text-xs text-primary">
+<li>[+] Micro-printing bleed detected on photo edge.</li>
+<li>[+] UV fluorescent threads non-standard density.</li>
+<li>[+] RFID chip read failure (Error: 0x8F9A).</li>
+</ul>
+</usaovsky<<john<<<<<<<<<<<<<<<<<<<<<<<<<<></div>
+</div>
+</div></section>
+<!-- Row 3: System Audit Logs -->
+<section class="case-card flex flex-col">
+<div class="border-b border-outline-variant p-sm bg-surface-container-low font-label-caps text-label-caps flex items-center justify-between text-primary">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">terminal</span>
+                            System Audit Trail
+                        </div>
+<span class="font-technical-data text-[10px] text-on-surface-variant">AUTO-REFRESH: ON</span>
+</div>
+<div class="p-md bg-inverse-surface text-inverse-on-surface font-technical-data text-[11px] h-48 overflow-y-auto space-y-[2px] leading-tight">
+<div class="opacity-70">[08:42:11] SYS: Ingestion pipeline started for node BTH-04.</div>
+<div class="opacity-70">[08:42:12] IMG: Captured primary facial map. Hash: a9f8e7c6...</div>
+<div class="opacity-70">[08:42:13] DOC: Scanning document on platen A.</div>
+<div class="text-tertiary-fixed-dim">[08:42:15] WARN: OCR confidence low on MRZ line 1 (72%).</div>
+<div class="text-error-container font-bold">[08:43:05] ERR: Document integrity check failed. Code: MRZ_CHKSUM_ERR.</div>
+<div class="opacity-70">[08:43:10] BIO: Querying central biometric database...</div>
+<div class="text-error-container font-bold">[08:43:22] ALERT: High probability match found on watchlist DB_INTERPOL.</div>
+<div class="opacity-70">[08:44:00] SYS: Elevating case status to HIGH RISK.</div>
+<div class="opacity-70">[08:45:22] CMD: Operator_042 acknowledged flag. Secondary inspection ordered.</div>
+<div class="opacity-70 animate-pulse mt-sm">&gt; Awaiting input...</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+</body></html>

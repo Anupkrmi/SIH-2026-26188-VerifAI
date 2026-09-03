@@ -1,0 +1,17 @@
+{
+  "attack": "A",
+  "name": "dob_modification",
+  "field": "date_of_birth",
+  "original_value": "1977-01-24",
+  "forged_value": "1974-01-24",
+  "bbox": [
+    520,
+    334,
+    685,
+    360
+  ],
+  "mrz_untouched": true,
+  "expected_detection_tier": "rules (cross-zone consistency)",
+  "crypto_mode": "self",
+  "source_doc": "demo_0001"
+}

@@ -1,0 +1,431 @@
+<title>BorderShield Dossier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#f8f9fa; --surface-lowest:#ffffff; --surface-low:#f3f4f5; --surface:#edeeef;
+  --line:#c4c6cf; --line-soft:#e1e3e4;
+  --text:#191c1d; --text-2:#45474c; --text-3:#75777c;
+  --primary:#000000; --on-primary:#ffffff;
+  --accent:#c2410c; --accent-bg:rgba(194,65,12,.08); --accent-line:rgba(194,65,12,.30);
+  --green:#166534; --green-bg:rgba(22,101,52,.08); --green-line:rgba(22,101,52,.28);
+  --amber:#92400e; --amber-bg:rgba(146,64,14,.08); --amber-line:rgba(146,64,14,.28);
+  --red:#ba1a1a; --red-bg:rgba(186,26,26,.08); --red-line:rgba(186,26,26,.30);
+  --font-head:'Bricolage Grotesque', system-ui, sans-serif;
+  --font-body:'Hanken Grotesk', system-ui, sans-serif;
+  --font-mono:'JetBrains Mono', ui-monospace, monospace;
+  --radius:2px; --radius-lg:4px;
+  --grid:rgba(196,198,207,.35); --grid-size:24px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b0f14; --surface-lowest:#12161c; --surface-low:#171c23; --surface:#1c222a;
+    --line:#2b323c; --line-soft:#232932;
+    --text:#dfe3ea; --text-2:#b7bfc9; --text-3:#8a93a3;
+    --primary:#e7eaf0; --on-primary:#0b0f14;
+    --accent:#e8672f; --accent-bg:rgba(232,103,47,.12); --accent-line:rgba(232,103,47,.35);
+    --green:#4ade80; --green-bg:rgba(74,222,128,.10); --green-line:rgba(74,222,128,.30);
+    --amber:#fbbf24; --amber-bg:rgba(251,191,36,.10); --amber-line:rgba(251,191,36,.30);
+    --red:#f87171; --red-bg:rgba(248,113,113,.10); --red-line:rgba(248,113,113,.30);
+    --grid:rgba(140,150,170,.12);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0b0f14; --surface-lowest:#12161c; --surface-low:#171c23; --surface:#1c222a;
+  --line:#2b323c; --line-soft:#232932;
+  --text:#dfe3ea; --text-2:#b7bfc9; --text-3:#8a93a3;
+  --primary:#e7eaf0; --on-primary:#0b0f14;
+  --accent:#e8672f; --accent-bg:rgba(232,103,47,.12); --accent-line:rgba(232,103,47,.35);
+  --green:#4ade80; --green-bg:rgba(74,222,128,.10); --green-line:rgba(74,222,128,.30);
+  --amber:#fbbf24; --amber-bg:rgba(251,191,36,.10); --amber-line:rgba(251,191,36,.30);
+  --red:#f87171; --red-bg:rgba(248,113,113,.10); --red-line:rgba(248,113,113,.30);
+  --grid:rgba(140,150,170,.12);
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--bg); color:var(--text); font-family:var(--font-body);
+  font-size:16px; line-height:1.65;
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size:var(--grid-size) var(--grid-size);
+}
+h1,h2,h3,h4{font-family:var(--font-head); color:var(--text); letter-spacing:-0.02em; text-wrap:balance; margin:0;}
+code, .mono{font-family:var(--font-mono);}
+a{color:var(--accent);}
+p{margin:0 0 .8rem;}
+p:last-child{margin-bottom:0;}
+
+.shell{max-width:1180px; margin:0 auto; display:grid; grid-template-columns:250px 1fr; gap:0; min-height:100vh;}
+@media (max-width:900px){ .shell{grid-template-columns:1fr;} }
+
+.rail{border-right:1px solid var(--line); padding:2.2rem 1.3rem 3rem; position:sticky; top:0; align-self:start; max-height:100vh; overflow-y:auto;}
+@media (max-width:900px){ .rail{position:static; max-height:none; border-right:none; border-bottom:1px solid var(--line); padding-bottom:1.4rem;} }
+.rail-brand{font-family:var(--font-mono); font-size:.7rem; letter-spacing:.16em; text-transform:uppercase; color:var(--text-3); margin-bottom:.3rem;}
+.rail-title{font-family:var(--font-head); font-weight:800; font-size:1.24rem; letter-spacing:-0.02em; margin-bottom:1.6rem;}
+.rail nav{display:flex; flex-direction:column; gap:.12rem;}
+.rail a{display:block; font-size:.84rem; color:var(--text-2); text-decoration:none; padding:.38rem .55rem; border-left:2px solid transparent; border-radius:0 var(--radius) var(--radius) 0; transition:border-color .15s ease, color .15s ease, background-color .15s ease;}
+.rail a:hover{color:var(--text); background:var(--surface-low); border-left-color:var(--accent-line);}
+.rail .grp{font-family:var(--font-mono); font-size:.66rem; letter-spacing:.13em; text-transform:uppercase; color:var(--text-3); margin:1rem 0 .3rem .55rem;}
+.rail .grp:first-child{margin-top:0;}
+
+main{padding:2.6rem clamp(1.2rem,4vw,3.2rem) 6rem;}
+.hero-block{margin-bottom:2.4rem; padding-bottom:1.8rem; border-bottom:1px solid var(--line);}
+.eyebrow{font-family:var(--font-mono); font-size:.76rem; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); margin-bottom:.9rem;}
+.hero-block h1{font-size:clamp(1.9rem,4vw,2.5rem); font-weight:800; margin-bottom:.9rem;}
+.hero-block .lede{font-size:1.06rem; color:var(--text-2); max-width:66ch; margin-bottom:1rem;}
+.hero-block .meta{font-family:var(--font-mono); font-size:.76rem; color:var(--text-3);}
+
+section{margin-bottom:2.8rem; scroll-margin-top:1.5rem;}
+.sec-head{display:flex; align-items:baseline; gap:.7rem; margin-bottom:.5rem;}
+.sec-num{font-family:var(--font-mono); color:var(--accent); font-size:.86rem; font-weight:700;}
+h2.sec-title{font-size:1.4rem; font-weight:700;}
+.sec-sub{color:var(--text-3); font-size:.94rem; margin:.3rem 0 1.2rem; max-width:70ch;}
+
+.card{border:1px solid var(--line); border-radius:var(--radius-lg); background:var(--surface-lowest); padding:1.2rem 1.4rem; margin-bottom:.9rem;}
+
+/* analogy box */
+.analogy{border:1px solid var(--accent-line); border-radius:var(--radius-lg); background:var(--accent-bg); padding:1.2rem 1.4rem; margin-bottom:1.3rem;}
+.analogy .k{font-family:var(--font-mono); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin-bottom:.5rem;}
+.analogy p{color:var(--text-2); font-size:.97rem;}
+
+/* Q&A */
+.qa{border:1px solid var(--line); border-radius:var(--radius-lg); background:var(--surface-lowest); padding:1.1rem 1.3rem; margin-bottom:.75rem;}
+.qa .q{font-family:var(--font-head); font-weight:700; font-size:1rem; margin-bottom:.5rem; display:flex; gap:.6rem;}
+.qa .q::before{content:"Q"; font-family:var(--font-mono); font-size:.75rem; font-weight:700; color:var(--accent); border:1px solid var(--accent-line); background:var(--accent-bg); border-radius:var(--radius); width:1.4em; height:1.4em; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;}
+.qa .a{color:var(--text-2); font-size:.94rem; line-height:1.65; padding-left:2rem;}
+.qa .a code{background:var(--surface); border:1px solid var(--line-soft); border-radius:3px; padding:.05rem .35rem; font-size:.86em;}
+.qa .a b{color:var(--text);}
+
+/* level badges on hard questions */
+.lvl{display:inline-block; font-family:var(--font-mono); font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; padding:.12rem .45rem; border-radius:3px; border:1px solid; margin-left:.5rem; vertical-align:middle;}
+.lvl.easy{color:var(--green); border-color:var(--green-line); background:var(--green-bg);}
+.lvl.hard{color:var(--red); border-color:var(--red-line); background:var(--red-bg);}
+
+/* module grid */
+.mod-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:1.3rem;}
+.mod-card{background:var(--surface-lowest); padding:1.1rem 1.25rem;}
+.mod-card .ps{font-family:var(--font-mono); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3);}
+.mod-card .name{font-family:var(--font-head); font-weight:700; font-size:1.02rem; margin:.35rem 0 .5rem;}
+.mod-card .real{font-size:.87rem; color:var(--text-2); line-height:1.55;}
+
+/* ladder */
+.ladder{border:1px solid var(--line); border-radius:var(--radius-lg); background:var(--surface-lowest); padding:.3rem 1.4rem;}
+.lrow{display:grid; grid-template-columns:46px 1fr; column-gap:1.2rem; padding:1.1rem 0; position:relative;}
+.lrow:not(:last-child){border-bottom:1px solid var(--line-soft);}
+.lrow .node{width:46px; height:46px; border-radius:50%; border:1.5px solid var(--tc,var(--text-3)); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-weight:700; font-size:.76rem; color:var(--tc,var(--text-3)); background:var(--surface-lowest); align-self:start;}
+.lrow .name{font-family:var(--font-head); font-weight:700; font-size:1.03rem;}
+.lrow .plain{font-size:.9rem; color:var(--text-2); margin-top:.3rem; line-height:1.55;}
+.lrow .role{display:inline-block; font-family:var(--font-mono); font-size:.66rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--tc,var(--text-3)); border:1px solid var(--tc,var(--line)); border-radius:3px; padding:.14rem .4rem; margin-top:.5rem;}
+
+/* tables */
+.twrap{overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius-lg); margin-bottom:1.2rem;}
+table{border-collapse:collapse; width:100%; font-size:.88rem; min-width:460px;}
+th{font-family:var(--font-mono); font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--text-3); text-align:left; padding:.65rem .85rem; background:var(--surface-low); border-bottom:1px solid var(--line);}
+td{padding:.6rem .85rem; border-bottom:1px solid var(--line-soft); color:var(--text-2); vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+td.num{font-family:var(--font-mono); font-variant-numeric:tabular-nums; color:var(--text);}
+.rebuttal td:first-child{color:var(--red); font-weight:600;}
+.rebuttal td:last-child{color:var(--green);}
+
+/* callouts */
+.note{border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:var(--radius-lg); background:var(--accent-bg); padding:1rem 1.2rem; margin-bottom:1.2rem; font-size:.92rem; color:var(--text-2);}
+.note strong{color:var(--text);}
+.warn{border:1px solid var(--amber-line); border-left:3px solid var(--amber); border-radius:var(--radius-lg); background:var(--amber-bg); padding:1rem 1.2rem; margin-bottom:1.2rem; font-size:.92rem; color:var(--text-2);}
+.warn strong{color:var(--amber);}
+.ok{border:1px solid var(--green-line); border-left:3px solid var(--green); border-radius:var(--radius-lg); background:var(--green-bg); padding:1rem 1.2rem; margin-bottom:1.2rem; font-size:.92rem; color:var(--text-2);}
+.ok strong{color:var(--green);}
+
+.pill{display:inline-flex; align-items:center; gap:.35rem; font-family:var(--font-mono); font-size:.7rem; font-weight:600; letter-spacing:.07em; text-transform:uppercase; padding:.18rem .5rem; border-radius:3px; border:1px solid;}
+
+.stat-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:1.5rem;}
+.stat{background:var(--surface-lowest); padding:.9rem 1rem;}
+.stat .v{font-family:var(--font-head); font-weight:800; font-size:1.45rem; color:var(--text);}
+.stat .l{font-family:var(--font-mono); font-size:.64rem; letter-spacing:.07em; text-transform:uppercase; color:var(--text-3); margin-top:.25rem;}
+
+/* glossary */
+.gloss{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:.8rem;}
+.gterm{border:1px solid var(--line); border-radius:var(--radius-lg); background:var(--surface-lowest); padding:.9rem 1.1rem;}
+.gterm .w{font-family:var(--font-mono); font-weight:700; font-size:.86rem; color:var(--accent); margin-bottom:.3rem;}
+.gterm .d{font-size:.86rem; color:var(--text-2); line-height:1.5;}
+
+.footer-note{border-top:1px solid var(--line); margin-top:3rem; padding-top:1.5rem; font-size:.85rem; color:var(--text-3);}
+::selection{background:var(--accent-line); color:var(--text);}
+@media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
+</style>
+
+<div class="shell">
+  <aside class="rail">
+    <div class="rail-brand">BorderShield AI · PS 26188</div>
+    <div class="rail-title">The Dossier</div>
+    <nav>
+      <a href="#pitch">What this project is</a>
+      <a href="#idea">The big idea, simply</a>
+      <a href="#threeq">Three different questions</a>
+      <a href="#mapping">The four modules</a>
+      <a href="#ladder">How a decision is made</a>
+      <a href="#screens">What each screen shows</a>
+      <div class="grp">Question bank</div>
+      <a href="#easyq">Easy questions</a>
+      <a href="#hardq">Tough questions</a>
+      <div class="grp">Reference</div>
+      <a href="#different">Why we're different</a>
+      <a href="#limits">What we're honest about</a>
+      <a href="#numbers">Numbers to remember</a>
+      <a href="#glossary">Glossary — plain English</a>
+    </nav>
+  </aside>
+
+  <main>
+    <div class="hero-block">
+      <div class="eyebrow">Internal · read this before Round 2</div>
+      <h1>Everything you need to explain BorderShield AI to a judge — in plain language</h1>
+      <p class="lede">This is the "answer anything" document. Every teammate should read it once, top to bottom. It's written in plain English first, with the technical term given alongside — so you can explain it simply, and still sound like you know exactly what you built if someone pushes further.</p>
+      <div class="meta">github.com/Rajveer-code/sih-2026-bordershield · 108/108 automated tests passing</div>
+    </div>
+
+    <!-- WHAT IS THIS -->
+    <section id="pitch">
+      <div class="sec-head"><span class="sec-num">1</span><h2 class="sec-title">What this project actually is</h2></div>
+      <div class="card">
+        <p><b>In one sentence:</b> we built a web app that a border officer opens on a screen, uploads or scans an ID document into, and within seconds it tells them — with reasons, not just a red/green light — whether anything about the document counts against it, whether it shows signs of tampering, or whether it needs a human to double-check. (Note the careful wording: we report <em>problems found</em>, never "this document is genuine" — see section 3 for why that distinction wins arguments.)</p>
+        <p><b>Why it's needed:</b> right now, an officer checks a passport by eye, in a few seconds, under pressure, with a queue behind them. Forged photos, changed birth dates, fake stamps and expired documents can slip through. Our app does the same check, faster and more consistently, and explains exactly <em>why</em> it flagged something — so the officer isn't just trusting a black box.</p>
+        <p><b>What makes ours different from a typical "AI checks your ID" app:</b> most such tools just run one AI model and print a confidence percentage. Ours never lets AI have the final word — see the next section.</p>
+      </div>
+    </section>
+
+    <!-- BIG IDEA -->
+    <section id="idea">
+      <div class="sec-head"><span class="sec-num">2</span><h2 class="sec-title">The big idea, in one analogy</h2></div>
+      <div class="analogy">
+        <div class="k">Think of airport security</div>
+        <p>You don't get through security because one friendly guard waves you on. You pass a passport scan, then a boarding-pass check, then sometimes a manual search — <b>several independent checks, each one able to stop you, and none of them alone able to fully clear you.</b> Our system checks a document the same way.</p>
+      </div>
+      <p>We call our version of this the <b>Trust Ladder</b> — three layers of checking, run in a fixed order, where each layer has a different amount of "power":</p>
+      <ul style="padding-left:1.3rem; color:var(--text-2); font-size:.96rem; margin:0 0 1rem;">
+        <li style="margin-bottom:.5rem;"><b>Cryptography</b> (unbreakable math, like a digital wax seal) — this layer can both <b>fully clear</b> a document and <b>fully reject</b> one.</li>
+        <li style="margin-bottom:.5rem;"><b>Rule checks</b> (does the math on the document add up — check digits, matching fields) — this layer can <b>reject</b> a document, but can never by itself say "definitely genuine."</li>
+        <li><b>AI / pattern-matching</b> (forgery detection, face matching) — this layer can only ever say "something looks off, a human should look" — it can <b>never</b> be the reason a document is rejected outright.</li>
+      </ul>
+      <div class="note"><strong>The one sentence to memorise:</strong> "Our AI can raise a hand and ask a human to look closer. It can never, by itself, get a document rejected." That single rule is what makes the whole system safe to trust, and it's true because we wrote the code so it's <em>impossible</em> for it to work any other way — not just a promise.</div>
+    </section>
+
+    <!-- THREE QUESTIONS -->
+    <section id="threeq">
+      <div class="sec-head"><span class="sec-num">3</span><h2 class="sec-title">Three different questions people keep mixing up</h2></div>
+      <p class="sec-sub">If you learn one thing from this document, learn this. Almost every confusing question a judge asks is really asking about one of these three, and they have three different answers.</p>
+      <div class="twrap">
+        <table>
+          <thead><tr><th>The question</th><th>Plain meaning</th><th>Can we answer it?</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><b style="color:var(--text);">Document consistency</b></td>
+              <td>Does this document make sense on its own terms? Do the printed details match the machine-readable strip? Do the check-digits add up? Are the dates possible?</td>
+              <td><span class="pill" style="color:var(--green);border-color:var(--green-line);background:var(--green-bg);">YES</span></td>
+            </tr>
+            <tr>
+              <td><b style="color:var(--text);">Document integrity</b></td>
+              <td>Has this document been changed since it was signed? This is the digital-seal question.</td>
+              <td><span class="pill" style="color:var(--green);border-color:var(--green-line);background:var(--green-bg);">YES</span> — where a signature exists</td>
+            </tr>
+            <tr>
+              <td><b style="color:var(--text);">Document authenticity</b></td>
+              <td>Was this document genuinely issued by the government in the first place?</td>
+              <td><span class="pill" style="color:var(--text-3);border-color:var(--line);background:var(--surface-low);">NO</span> — needs an issuer registry we cannot access</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note"><strong>Why this matters more than anything else in Q&amp;A:</strong> when a judge asks "so can it tell me if this passport is real?", they are asking the third question. The honest answer is: <em>"We can tell you the document is internally consistent and has not been tampered with. We cannot tell you it was genuinely issued — no system can, without a connection to the issuing authority's own records, which no one outside government has."</em> Say that clearly and you sound like you understand the problem. Claim otherwise and one follow-up question exposes it.</div>
+      <div class="ok"><strong>This is also why our app says "No adverse signals", never "genuine".</strong> On a real uploaded document our score of 0 means "nothing we measured counted against it" — it is deliberately <em>not</em> a claim that the document is authentic. The screen shows both halves side by side: what we established, and what we could not.</div>
+    </section>
+
+    <!-- PS MAPPING -->
+    <section id="mapping">
+      <div class="sec-head"><span class="sec-num">4</span><h2 class="sec-title">The four things the problem statement asked for</h2></div>
+      <p class="sec-sub">SIH's problem statement (PS 26188) names four required parts. Here's what each one means in plain English, and what we actually built for it.</p>
+      <div class="mod-grid">
+        <div class="mod-card">
+          <div class="ps">Ask 1</div>
+          <div class="name">OCR Extraction</div>
+          <div class="real"><b>Plain English:</b> read the text off the document automatically, the way your phone reads a business card. <b>What we built:</b> reads name, passport number, nationality, date of birth, and expiry — and for any random document you throw at it (marksheet, ID card), it figures out what it's looking at and pulls out what it can.</div>
+        </div>
+        <div class="mod-card">
+          <div class="ps">Ask 2</div>
+          <div class="name">Document Validation</div>
+          <div class="real"><b>Plain English:</b> check the document follows the rules a real one should — right format, dates that make sense, numbers that check out mathematically. <b>What we built:</b> the same check-digit maths real passports use, plus checks that the printed text matches the machine-readable strip at the bottom.</div>
+        </div>
+        <div class="mod-card">
+          <div class="ps">Ask 3</div>
+          <div class="name">Tampering Detection</div>
+          <div class="real"><b>Plain English:</b> spot if a photo's been swapped, text edited, or a stamp faked. <b>What we built:</b> two ways — a cryptographic seal that instantly proves if a single pixel changed since we first saw the document, plus four independent visual checks for the cases the seal can't cover.</div>
+        </div>
+        <div class="mod-card">
+          <div class="ps">Ask 4</div>
+          <div class="name">Face Verification</div>
+          <div class="real"><b>Plain English:</b> does the photo on the document match the person standing there? <b>What we built:</b> detect the face, check the photo is actually good enough to judge fairly, then compare it to a live camera capture — real, tested, working end to end.</div>
+        </div>
+      </div>
+      <div class="ok"><strong>One thing extra, not asked for:</strong> a tamper-proof logbook of every check we've ever run — so if there's ever an investigation later, there's a trail that can't be quietly edited. That's our answer to the problem statement's "digital trail for investigations" line.</div>
+    </section>
+
+    <!-- LADDER (technical-ish, kept short) -->
+    <section id="ladder">
+      <div class="sec-head"><span class="sec-num">5</span><h2 class="sec-title">How a final decision actually gets made</h2></div>
+      <p class="sec-sub">The four checks that run, and — this is the important part — the order of authority between them.</p>
+      <div class="ladder">
+        <div class="lrow" style="--tc:#166534;">
+          <div class="node">1</div>
+          <div><div class="name">The digital seal (cryptography)</div><div class="role">Can fully clear OR fully reject</div>
+          <div class="plain">We sign the document's photo and text with a digital signature the moment we first see it. If anything changes afterward — even one pixel — the signature breaks and we know instantly. No AI is involved in this check at all.</div></div>
+        </div>
+        <div class="lrow" style="--tc:#000000;">
+          <div class="node">2</div>
+          <div><div class="name">The rule checks</div><div class="role">Can only reject, never clear</div>
+          <div class="plain">Do the numbers add up? Does the printed date match the machine-readable code? If a rule is broken, that's an instant reject — no partial credit for "the photo looked fine."</div></div>
+        </div>
+        <div class="lrow" style="--tc:#92400e;">
+          <div class="node">3</div>
+          <div><div class="name">Forgery-pattern AI</div><div class="role">Can only raise a flag</div>
+          <div class="plain">Looks for pasted photos, edited regions, and screen-recaptured images. Can push a document up to "needs a second look" — never straight to "reject."</div></div>
+        </div>
+        <div class="lrow" style="--tc:#92400e;">
+          <div class="node">4</div>
+          <div><div class="name">Face match</div><div class="role">Can only raise a flag</div>
+          <div class="plain">Compares the document photo to a live camera capture. If the camera photo is too blurry or dark to judge fairly, it says so honestly instead of guessing.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREENS -->
+    <section id="screens">
+      <div class="sec-head"><span class="sec-num">6</span><h2 class="sec-title">What each screen shows</h2></div>
+      <p class="sec-sub">Six screens. If someone asks "what am I looking at?", this is the answer for each one.</p>
+      <div class="twrap">
+        <table>
+          <thead><tr><th>Screen</th><th>What it is for</th></tr></thead>
+          <tbody>
+            <tr><td><b style="color:var(--text);">Overview</b></td><td>The idea, explained before any live data. The Trust Ladder drawn as a connected chain, plus an honest "what this is not" section.</td></tr>
+            <tr><td><b style="color:var(--text);">Command Center</b></td><td>Four live status readouts, then six one-click test scenarios. The screen says it plainly: <em>six controlled experiments, not six travellers.</em> Each builds a synthetic document with one specific thing wrong, runs it through the real pipeline, and writes a real case record.</td></tr>
+            <tr><td><b style="color:var(--text);">New Screening</b></td><td>Where you bring your own document — either our demo passport, or any real document (Aadhaar, marksheet, licence) in Real Document mode.</td></tr>
+            <tr><td><b style="color:var(--text);">Case File</b></td><td>One case, in full. Every check shows <b>two separate lines</b>: "Checks:" (the question that layer always asks) and "This case:" (what it actually found). Technical wording is kept but tucked behind a "Technical detail" toggle.</td></tr>
+            <tr><td><b style="color:var(--text);">Audit Trail</b></td><td>Every case as a tamper-evident chain, with a live demo that hand-edits a past record and catches it. States plainly that it proves our <em>records</em> weren't altered — <b>not</b> that any document is authentic.</td></tr>
+            <tr><td><b style="color:var(--text);">System Status</b></td><td>Proof nothing is faked: Biometric engine, Cryptographic engine, Ledger chain and Test suite, every number read live off the running machine.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note"><strong>The one UI detail worth pointing out to a judge:</strong> on Case File, every layer separates <em>what the check does</em> from <em>what happened here</em>. Most tools blur those together, which is how "this is what we look for" gets misread as "this is what we found."</div>
+    </section>
+
+    <!-- EASY QUESTIONS -->
+    <section id="easyq">
+      <div class="sec-head"><span class="sec-num">7</span><h2 class="sec-title">Questions almost anyone might ask <span class="lvl easy">easy</span></h2></div>
+      <p class="sec-sub">Simple, common-sense questions — you should be able to answer every one of these without thinking hard.</p>
+
+      <div class="qa"><div class="q">What is OCR?</div><div class="a">Short for "Optical Character Recognition" — software that reads printed or handwritten text out of an image, the same tech that lets your phone scan a document into text.</div></div>
+
+      <div class="qa"><div class="q">What does "risk score" mean here?</div><div class="a">A number from 0 to 100 that sums up how suspicious a document looks, sorted into four bands — Low, Medium, High, Critical — each with a suggested action, like "no action needed" or "send for a closer look."</div></div>
+
+      <div class="qa"><div class="q">Why use AI instead of just checking manually?</div><div class="a">Speed and consistency. A human check takes a few minutes and gets tired after the hundredth passport of the day. Ours takes seconds and applies the exact same standard every single time — and it never lets AI overrule the parts that are provably certain.</div></div>
+
+      <div class="qa"><div class="q">Is this using ChatGPT or a big AI model like that?</div><div class="a">No. We use small, specialised, purpose-built models for specific jobs — reading text, detecting a face, spotting a pasted photo. A general chatbot-style model isn't designed for this kind of precise, provable work, and we didn't want a black box we can't fully explain.</div></div>
+
+      <div class="qa"><div class="q">What happens if the system makes a mistake?</div><div class="a">The worst a mistake can do is send a genuine document for an unnecessary human review, or (much rarer) miss something a human then has to catch. It can never, by design, get an innocent document flat-out rejected by AI alone, and it can never silently wave through a document that failed a rule or a digital-signature check.</div></div>
+
+      <div class="qa"><div class="q">Can this replace the border officer?</div><div class="a">No, and it's not meant to. It's a tool that does the tedious, error-prone first pass and hands the officer a clear, evidenced summary — the officer still makes the actual call, especially anything flagged as suspicious.</div></div>
+
+      <div class="qa"><div class="q">Does it work on Aadhaar cards / driving licences / not just passports?</div><div class="a">Yes — we built a second mode specifically for that: upload any identity document, and the system figures out what type it is and runs whatever checks make sense for it. It's honest when a check doesn't apply — e.g. a marksheet has no photo, so it won't pretend to compare a face.</div></div>
+
+      <div class="qa"><div class="q">How is this "cybersecurity", not just AI?</div><div class="a">Real digital-signature cryptography (the same category of maths banks and passports use) plus a tamper-evident logbook of every decision. That's the security half of the brief, alongside the AI half.</div></div>
+
+      <div class="qa"><div class="q">Where does it run — does it need the internet?</div><div class="a">It's a web app today, hosted online for this demo. Everything it needs — the AI models, the document templates — runs on the machine itself once loaded; only the initial page load needs a connection.</div></div>
+
+      <div class="qa"><div class="q">Did you build all of this yourselves?</div><div class="a">Yes, the logic, the checks, and the app are ours. We use well-known, freely available building blocks for the pieces that don't need reinventing — a face-detection model, an OCR engine, a cryptography library — the same way nobody hand-writes their own version of well-tested public tools. What's ours is how they're combined and governed.</div></div>
+    </section>
+
+    <!-- HARD QUESTIONS -->
+    <section id="hardq">
+      <div class="sec-head"><span class="sec-num">8</span><h2 class="sec-title">Tougher questions <span class="lvl hard">hard</span></h2></div>
+      <p class="sec-sub">The kind of question a more technical or skeptical judge asks to test if you actually understand your own system. Plain-English answer first, technical detail after.</p>
+
+      <div class="qa"><div class="q">What happens when your AI is wrong?</div><div class="a">Nothing dangerous happens — that's the actual design goal. The AI-based checks (forgery pattern, face match) are capped: however confident they are, they can only push a document up to "needs review," never to "reject." <b>Technical:</b> this is enforced in code (<code>core/risk.py</code>), not just policy — a failing AI signal alone cannot cross into the CRITICAL band.</div></div>
+
+      <div class="qa"><div class="q">What's your actual accuracy percentage?</div><div class="a">We deliberately don't lead with one. A self-reported accuracy number on data we generated ourselves would be close to meaningless — and published research shows even the best real-world systems get roughly one in four unseen forged documents wrong. A confident-sounding accuracy number is usually a red flag, not a strength. <b>Technical:</b> the best team in a 2026 international forgery-detection competition scored 26.5% EER (error rate) on unseen documents — cited in our research notes.</div></div>
+
+      <div class="qa"><div class="q">Isn't "Error Level Analysis" (one of your forgery checks) a discredited technique?</div><div class="a">You're right, and we say so ourselves in our own code comments — it's unreliable on its own. We include it anyway, but it never affects the score or the decision by itself; it's shown for completeness, clearly labelled as weak.</div></div>
+
+      <div class="qa"><div class="q">Your digital signature isn't the real government passport system — so what does it actually prove?</div><div class="a">It proves the exact same mathematical property real passport chips use — that nothing has changed since a trusted authority first signed off on it — we just used our own "trusted authority" for the demo instead of the government's official one. Swap in the real one, and none of our code changes, only whose signature we trust.</div></div>
+
+      <div class="qa"><div class="q">Can someone tamper with your audit logbook?</div><div class="a">Editing any past entry is instantly detectable — every entry is cryptographically linked to the one before it, so changing one breaks the chain and we can point to exactly where. Being fully honest: if someone deletes the most recent few entries entirely (rather than editing one), that specific attack isn't caught yet — we know this, and it's a clearly written next step, not something we're hiding.</div></div>
+
+      <div class="qa"><div class="q">Why not just use one big AI model for everything?</div><div class="a">Because a single model gives you a single number and no way to challenge it. Ours breaks the decision into independent, explainable pieces — you can see exactly which check failed and why, and a mistake in one piece can't silently overrule a mathematically certain result from another.</div></div>
+
+      <div class="qa"><div class="q">Have you actually tested this, or is it just a demo?</div><div class="a">108 automated checks (tests) run automatically before we accept any change to the code — covering the ID-check logic, the cryptography, the tamper-proof log, and the forgery detectors. That's not a slide claim, it's a command anyone can run.</div></div>
+    </section>
+
+    <!-- WHY DIFFERENT -->
+    <section id="different">
+      <div class="sec-head"><span class="sec-num">9</span><h2 class="sec-title">Why we're different from most other teams</h2></div>
+      <p class="sec-sub">Almost every team at a hackathon like this builds roughly the same thing. Here's the honest comparison.</p>
+      <div class="twrap">
+        <table class="rebuttal">
+          <thead><tr><th>What most teams show</th><th>What we do instead</th></tr></thead>
+          <tbody>
+            <tr><td>One AI model, one confidence score</td><td>Layered checks, each with a different amount of power, AI never final</td></tr>
+            <tr><td>A claimed "99% accuracy" on a slide</td><td>No invented accuracy number — real published research is the honest baseline instead</td></tr>
+            <tr><td>All signals just added together into one score</td><td>Certain proof (digital signature, rule failure) can override the score outright</td></tr>
+            <tr><td>"We'll store IDs on the blockchain"</td><td>A private, tamper-evident logbook — no personal data ever goes on any chain</td></tr>
+            <tr><td>No answer for "what if the AI is wrong?"</td><td>Architected so a wrong AI guess is never dangerous, by construction</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- LIMITS -->
+    <section id="limits">
+      <div class="sec-head"><span class="sec-num">10</span><h2 class="sec-title">What we're upfront and honest about</h2></div>
+      <p class="sec-sub">Say these before you're asked — it reads as confidence, not weakness.</p>
+      <div class="card"><b style="color:var(--text);">Our demo passport is made up.</b> It's a fictional country's specimen document we generated ourselves, clearly watermarked "not a travel document" — no real government ID is used anywhere.</div>
+      <div class="card"><b style="color:var(--text);">Our digital signature authority is our own, for the demo</b> — not plugged into the real government passport registry. The cryptography itself is fully real.</div>
+      <div class="card"><b style="color:var(--text);">Our tamper-proof logbook isn't a blockchain</b>, and doesn't yet catch someone deleting recent entries outright — only editing old ones.</div>
+      <div class="card"><b style="color:var(--text);">Our fake-document generator only mimics one country's layout.</b> The general-purpose mode (any real document) is separate, and honest when a check doesn't apply.</div>
+    </section>
+
+    <!-- NUMBERS -->
+    <section id="numbers">
+      <div class="sec-head"><span class="sec-num">11</span><h2 class="sec-title">Numbers to have ready</h2></div>
+      <div class="stat-grid">
+        <div class="stat"><div class="v">108</div><div class="l">Automated tests</div></div>
+        <div class="stat"><div class="v">4</div><div class="l">Forgery checks</div></div>
+        <div class="stat"><div class="v">6</div><div class="l">App screens</div></div>
+        <div class="stat"><div class="v">2</div><div class="l">Override rules</div></div>
+        <div class="stat"><div class="v">4</div><div class="l">Risk bands</div></div>
+        <div class="stat"><div class="v">~26%</div><div class="l">Best-in-world error rate (cited)</div></div>
+      </div>
+    </section>
+
+    <!-- GLOSSARY -->
+    <section id="glossary">
+      <div class="sec-head"><span class="sec-num">12</span><h2 class="sec-title">Glossary — plain English for every term you'll hear</h2></div>
+      <div class="gloss">
+        <div class="gterm"><div class="w">OCR</div><div class="d">Software that reads printed text out of an image.</div></div>
+        <div class="gterm"><div class="w">MRZ</div><div class="d">The two lines of odd-looking capital letters and numbers at the bottom of a passport photo page — a machine-readable version of your details.</div></div>
+        <div class="gterm"><div class="w">Check digit / checksum</div><div class="d">A number that's mathematically derived from the other numbers around it — like a built-in "does this add up?" test.</div></div>
+        <div class="gterm"><div class="w">Cryptographic signature</div><div class="d">A digital, unforgeable "wax seal" — mathematical proof that a specific person or system approved a specific piece of data, and that it hasn't changed since.</div></div>
+        <div class="gterm"><div class="w">Hash</div><div class="d">A short fingerprint calculated from a file or piece of data — even one changed pixel produces a completely different fingerprint.</div></div>
+        <div class="gterm"><div class="w">Hash chain</div><div class="d">A logbook where each new entry includes the fingerprint of the entry before it — edit an old entry, and every entry after it stops matching.</div></div>
+        <div class="gterm"><div class="w">Forensic detection</div><div class="d">Looking for physical clues of tampering in the image itself — blur mismatches, pasted-photo edges, screen-glare patterns.</div></div>
+        <div class="gterm"><div class="w">Biometric match</div><div class="d">Comparing two faces mathematically and producing a similarity score — not a human eyeballing two photos.</div></div>
+        <div class="gterm"><div class="w">Quality gate</div><div class="d">A check that runs before the face match, to make sure the camera photo is even good enough to judge fairly.</div></div>
+        <div class="gterm"><div class="w">Risk band</div><div class="d">One of four buckets a document's final score falls into — Low, Medium, High, or Critical.</div></div>
+        <div class="gterm"><div class="w">False positive / false negative</div><div class="d">A genuine document wrongly flagged as fake (false positive), or a fake document wrongly passed as genuine (false negative).</div></div>
+        <div class="gterm"><div class="w">Model</div><div class="d">A trained piece of software that's learned to recognise a pattern — a face, a piece of text, a forged edge — from lots of examples.</div></div>
+      </div>
+    </section>
+
+    <div class="footer-note">This document covers what's actually built and tested. A few bigger future ideas (an offline mobile version, checks for specific Indian/Nepali scripts, matching one person across multiple past visits) are on our roadmap but not built — if asked, say exactly that: "that's on our roadmap, not in the current build." Never imply something exists that doesn't.</div>
+  </main>
+</div>

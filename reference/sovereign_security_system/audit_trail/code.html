@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BorderShield AI - Hash-Chained Audit Log</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800;900&amp;family=Hanken+Grotesk:wght@400;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed-variant": "#38485f",
+                      "inverse-primary": "#bec7d9",
+                      "on-tertiary-fixed": "#261a00",
+                      "on-error-container": "#93000a",
+                      "on-secondary": "#ffffff",
+                      "surface-dim": "#d9dadb",
+                      "outline-variant": "#c5c6cc",
+                      "tertiary-fixed": "#ffdfa0",
+                      "surface-container": "#edeeef",
+                      "surface-bright": "#f8f9fa",
+                      "on-surface": "#191c1d",
+                      "on-error": "#ffffff",
+                      "outline": "#75777c",
+                      "primary": "#000000",
+                      "inverse-surface": "#2e3132",
+                      "surface-container-high": "#e7e8e9",
+                      "on-surface-variant": "#45474c",
+                      "blueprint-grid": "rgba(196, 198, 207, 0.15)",
+                      "on-primary": "#ffffff",
+                      "surface-container-low": "#f3f4f5",
+                      "secondary-fixed-dim": "#b7c7e4",
+                      "surface-variant": "#e1e3e4",
+                      "surface-tint": "#565f6f",
+                      "on-background": "#191c1d",
+                      "on-tertiary-container": "#a87d00",
+                      "inverse-on-surface": "#f0f1f2",
+                      "primary-fixed-dim": "#bec7d9",
+                      "on-primary-fixed": "#131c2a",
+                      "background": "#f8f9fa",
+                      "tertiary-fixed-dim": "#fbbc01",
+                      "on-tertiary-fixed-variant": "#5c4300",
+                      "error-container": "#ffdad6",
+                      "on-secondary-fixed": "#0a1c32",
+                      "on-primary-fixed-variant": "#3e4756",
+                      "secondary-container": "#d0e1fe",
+                      "secondary-fixed": "#d4e3ff",
+                      "success-pulse": "#003366",
+                      "on-primary-container": "#7b8495",
+                      "surface-container-lowest": "#ffffff",
+                      "error-alert": "#ba1a1a",
+                      "tertiary": "#000000",
+                      "surface-container-highest": "#e1e3e4",
+                      "tertiary-container": "#261a00",
+                      "on-tertiary": "#ffffff",
+                      "secondary": "#4f5f78",
+                      "primary-container": "#131c2a",
+                      "on-secondary-container": "#53637d",
+                      "error": "#ba1a1a",
+                      "surface": "#f8f9fa",
+                      "primary-fixed": "#dae3f6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "sm": "8px",
+                      "xl": "48px",
+                      "md": "16px",
+                      "container-max": "1440px",
+                      "xs": "4px",
+                      "gutter": "24px",
+                      "sidebar-expanded": "260px",
+                      "rail-width": "72px",
+                      "lg": "24px"
+              },
+              "fontFamily": {
+                      "headline-lg": [
+                              "Bricolage Grotesque"
+                      ],
+                      "display-lg": [
+                              "Bricolage Grotesque"
+                      ],
+                      "label-caps": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-md": [
+                              "Bricolage Grotesque"
+                      ],
+                      "body-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "technical-data": [
+                              "JetBrains Mono"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "technical-data": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .blueprint-bg {
+            background-image: linear-gradient(var(--blueprint-grid) 1px, transparent 1px),
+            linear-gradient(90deg, var(--blueprint-grid) 1px, transparent 1px);
+            background-size: 24px 24px;
+            background-position: center top;
+        }
+        
+        .hash-chain-line {
+            position: absolute;
+            left: 24px;
+            top: 24px;
+            bottom: -24px;
+            width: 2px;
+            background-color: var(--outline-variant);
+            z-index: 0;
+        }
+        
+        .log-entry:last-child .hash-chain-line {
+            display: none;
+        }
+        
+        .node-indicator {
+            position: relative;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col md:flex-row antialiased">
+<!-- SideNavBar (Desktop/Tablet) -->
+<nav class="hidden md:flex flex-col h-screen w-sidebar-expanded border-r border-outline-variant bg-surface-container-lowest fixed left-0 top-0 z-40 shrink-0">
+<!-- Brand/Header -->
+<div class="p-lg border-b border-outline-variant">
+<div class="flex items-center gap-md mb-md">
+<div class="w-8 h-8 bg-primary text-on-primary flex items-center justify-center rounded-sm font-headline-md font-bold">
+                    B
+                </div>
+<h1 class="font-headline-md text-headline-md font-black text-primary uppercase tracking-tight">BorderShield</h1>
+</div>
+<div class="flex items-center gap-sm mt-lg p-sm bg-surface-container rounded-sm border border-outline-variant">
+<img alt="Agency Operator Avatar" class="w-10 h-10 object-cover rounded-sm border border-outline-variant" data-alt="A small, grayscale, high-contrast avatar portrait of an intelligence agency operator in tactical gear. Clean, stark background. Corporate brutalist style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9S12JGCI-4Ql_XzBKjBqZmyTDzakZFB0DIzYSHTJsQOl1xPYF3OGRJe7eSRRZ1dU6EeNqorRQSM9ftG5FwkWtweDY6HtbQu7-I2jffAEYdscPesDfsN-H6zxEB5_zbd8ed64c5cCtdYMa7n--xjLfqYv8zBKCVZXg02lrGa94JdtJjgO6BnIx4tP3WHNht6-NoXhHNg35W_SYP9_zV1wYoo37ShzxixcxFhirpL2afTuXbtU5-Mws"/>
+<div>
+<div class="font-label-caps text-label-caps uppercase text-primary">OPERATOR_042</div>
+<div class="font-technical-data text-technical-data text-on-surface-variant text-[10px]">Unit: Border Intelligence</div>
+</div>
+</div>
+<button class="w-full mt-md bg-primary text-on-primary font-label-caps text-label-caps uppercase tracking-wider py-md px-md rounded-sm hover:bg-surface-tint transition-colors active:scale-[0.98] border border-primary flex justify-center items-center gap-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+                INITIATE SCREENING
+            </button>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 overflow-y-auto py-md">
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-lg py-sm hover:bg-surface-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Overview</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-lg py-sm hover:bg-surface-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined">security</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Command Center</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-lg py-sm hover:bg-surface-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined">person_search</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">New Screening</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-lg py-sm hover:bg-surface-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined">assignment_late</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Active Case</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-lg py-sm hover:bg-surface-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined">travel_explore</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Investigations</span>
+</a>
+<a class="flex items-center gap-md bg-surface-container-highest text-primary font-bold border-l-4 border-primary px-md py-sm ml-[2px] transition-all duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">history_edu</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Audit Trail</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-lg py-sm hover:bg-surface-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined">dns</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">System Status</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-lg py-sm hover:bg-surface-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined">verified_user</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Issuer Registry</span>
+</a>
+<div class="mt-lg px-lg">
+<a class="flex items-center gap-md text-error-alert hover:text-on-error-container hover:bg-error-container p-sm border border-transparent hover:border-error-alert transition-all duration-150 rounded-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">error_outline</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Emergency Alert</span>
+</a>
+</div>
+</div>
+<!-- Footer Links -->
+<div class="p-lg border-t border-outline-variant">
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface py-sm transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">System Settings</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface py-sm transition-colors mt-sm" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Logout</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 md:ml-[260px] flex flex-col min-h-screen relative">
+<!-- TopNavBar (Mobile only fallback, otherwise contextual header) -->
+<header class="bg-surface dark:bg-on-background flex justify-between items-center px-lg h-16 w-full border-b border-outline-variant shrink-0 z-30 sticky top-0 md:hidden">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 bg-primary text-on-primary flex items-center justify-center rounded-sm font-headline-md font-bold">
+                    B
+                </div>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-on-primary tracking-tight">BorderShield</span>
+</div>
+<button class="text-on-surface-variant p-sm">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<!-- Canvas / Content Area -->
+<main class="flex-1 w-full max-w-[1440px] mx-auto blueprint-bg relative">
+<!-- Content Header -->
+<div class="px-lg py-xl border-b border-outline-variant bg-surface-container-lowest/90 backdrop-blur-sm sticky top-0 md:top-0 z-20">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-md max-w-4xl mx-auto">
+<div>
+<div class="flex items-center gap-sm mb-sm">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant tracking-wider">Case ID: BS-9942-X</span>
+<span class="px-sm py-xs bg-surface-container border border-outline-variant text-[10px] font-technical-data flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-success-pulse animate-pulse"></span>
+                                LEDGER INTACT
+                            </span>
+</div>
+<h2 class="font-display-lg text-display-lg text-primary">Hash-Chained Audit Log</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-xs max-w-2xl">Tamper-evident chronological sequence of evidentiary records. Cryptographically secured via SHA-256 cascading hashes.</p>
+</div>
+<div class="flex gap-md shrink-0">
+<button class="bg-surface-container-lowest text-primary font-label-caps text-label-caps uppercase tracking-wider py-sm px-md rounded-sm border border-outline-variant hover:border-primary hover:bg-surface-container transition-colors flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                            EXPORT LOG
+                        </button>
+<button class="bg-primary text-on-primary font-label-caps text-label-caps uppercase tracking-wider py-sm px-md rounded-sm border border-primary hover:bg-surface-tint transition-colors flex items-center gap-sm shadow-sm">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">fact_check</span>
+                            VERIFY CHAIN
+                        </button>
+</div>
+</div>
+</div>
+<!-- Ledger View -->
+<div class="p-lg max-w-4xl mx-auto pb-xl">
+<!-- Security Context Notice -->
+<div class="mb-xl bg-surface-container-low border-l-4 border-primary p-md flex items-start gap-md">
+<span class="material-symbols-outlined text-primary mt-[2px]">gavel</span>
+<div>
+<h4 class="font-headline-md text-[16px] leading-[24px] font-bold text-primary">Forensic Credibility Established</h4>
+<p class="font-body-md text-on-surface-variant text-[14px]">This log relies on cascading cryptographic hashes. Any modification to an historical entry will invalidate all subsequent hashes in the chain, immediately revealing tampering attempts.</p>
+</div>
+</div>
+<!-- Timeline / Log Container -->
+<div class="relative pl-sm">
+<!-- Entry 4 (Latest) -->
+<div class="log-entry relative pb-xl">
+<div class="hash-chain-line"></div>
+<div class="flex gap-lg">
+<div class="node-indicator w-12 h-12 rounded-sm bg-surface-container-lowest border-2 border-primary flex items-center justify-center shrink-0 mt-sm shadow-sm">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">add_task</span>
+</div>
+<div class="flex-1 bg-surface-container-lowest border border-outline-variant p-md hover:border-primary transition-colors">
+<div class="flex justify-between items-start mb-sm border-b border-outline-variant pb-sm">
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase">Record #0004 • 14:02:45 UTC</div>
+<h3 class="font-headline-md text-[18px] leading-[28px] font-bold text-primary mt-xs">Clearance Granted</h3>
+</div>
+<div class="text-right">
+<span class="bg-surface-container px-sm py-xs text-[10px] font-technical-data border border-outline-variant text-on-surface-variant">OPERATOR_042</span>
+</div>
+</div>
+<div class="py-sm">
+<p class="font-body-md text-[14px] text-on-surface">Final review completed. No derogatory information found in primary or secondary intelligence databases. Subject cleared for border crossing.</p>
+</div>
+<div class="mt-md bg-surface-container-low p-sm border border-outline-variant font-technical-data text-technical-data overflow-x-auto text-on-surface-variant text-[11px] leading-tight flex flex-col gap-xs">
+<div class="flex items-center gap-sm">
+<span class="text-primary w-24 shrink-0 uppercase">Prev Hash:</span>
+<span class="opacity-80 font-mono tracking-tighter">e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</span>
+</div>
+<div class="flex items-center gap-sm mt-xs pt-xs border-t border-outline-variant/50">
+<span class="text-primary font-bold w-24 shrink-0 uppercase">Curr Hash:</span>
+<span class="font-mono tracking-tighter text-primary">8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Entry 3 -->
+<div class="log-entry relative pb-xl">
+<div class="hash-chain-line"></div>
+<div class="flex gap-lg">
+<div class="node-indicator w-12 h-12 rounded-sm bg-surface-container border border-outline-variant flex items-center justify-center shrink-0 mt-sm">
+<span class="material-symbols-outlined text-on-surface-variant">biotech</span>
+</div>
+<div class="flex-1 bg-surface-container-lowest border border-outline-variant p-md opacity-90">
+<div class="flex justify-between items-start mb-sm border-b border-outline-variant pb-sm">
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase">Record #0003 • 13:45:12 UTC</div>
+<h3 class="font-headline-md text-[18px] leading-[28px] font-bold text-primary mt-xs">Biometric Match Verified</h3>
+</div>
+<div class="text-right">
+<span class="bg-surface-container px-sm py-xs text-[10px] font-technical-data border border-outline-variant text-on-surface-variant">SYSTEM_AUTO</span>
+</div>
+</div>
+<div class="py-sm flex gap-md items-start">
+<div class="w-16 h-16 bg-surface-container border border-outline-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-outline">fingerprint</span>
+</div>
+<p class="font-body-md text-[14px] text-on-surface">Facial recognition and ten-print scan matched against INTERPOL database. Confidence score: 99.8%. No alert flags triggered.</p>
+</div>
+<div class="mt-md bg-surface-container-low p-sm border border-outline-variant font-technical-data text-technical-data overflow-x-auto text-on-surface-variant text-[11px] leading-tight flex flex-col gap-xs">
+<div class="flex items-center gap-sm">
+<span class="text-primary w-24 shrink-0 uppercase">Prev Hash:</span>
+<span class="opacity-80 font-mono tracking-tighter">7a38d8cbd20d9932ba948efaa364bb62651d5ad4ec1db6822a9446d3f28328dc</span>
+</div>
+<div class="flex items-center gap-sm mt-xs pt-xs border-t border-outline-variant/50">
+<span class="text-primary font-bold w-24 shrink-0 uppercase">Curr Hash:</span>
+<span class="font-mono tracking-tighter text-primary">e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Entry 2 -->
+<div class="log-entry relative pb-xl">
+<div class="hash-chain-line"></div>
+<div class="flex gap-lg">
+<div class="node-indicator w-12 h-12 rounded-sm bg-surface-container border border-outline-variant flex items-center justify-center shrink-0 mt-sm">
+<span class="material-symbols-outlined text-on-surface-variant">description</span>
+</div>
+<div class="flex-1 bg-surface-container-lowest border border-outline-variant p-md opacity-80">
+<div class="flex justify-between items-start mb-sm border-b border-outline-variant pb-sm">
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase">Record #0002 • 13:22:05 UTC</div>
+<h3 class="font-headline-md text-[18px] leading-[28px] font-bold text-primary mt-xs">Document Scan Complete</h3>
+</div>
+<div class="text-right">
+<span class="bg-surface-container px-sm py-xs text-[10px] font-technical-data border border-outline-variant text-on-surface-variant">SCANNER_TX_09</span>
+</div>
+</div>
+<div class="py-sm">
+<p class="font-body-md text-[14px] text-on-surface">Passport (MRZ) scanned and decoded. RFID chip signature validated against issuer registry public key.</p>
+</div>
+<div class="mt-md bg-surface-container-low p-sm border border-outline-variant font-technical-data text-technical-data overflow-x-auto text-on-surface-variant text-[11px] leading-tight flex flex-col gap-xs">
+<div class="flex items-center gap-sm">
+<span class="text-primary w-24 shrink-0 uppercase">Prev Hash:</span>
+<span class="opacity-80 font-mono tracking-tighter">Genesis_Block_0000000000000000000000000000000000000000000000000</span>
+</div>
+<div class="flex items-center gap-sm mt-xs pt-xs border-t border-outline-variant/50">
+<span class="text-primary font-bold w-24 shrink-0 uppercase">Curr Hash:</span>
+<span class="font-mono tracking-tighter text-primary">7a38d8cbd20d9932ba948efaa364bb62651d5ad4ec1db6822a9446d3f28328dc</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Entry 1 (Genesis) -->
+<div class="log-entry relative pb-lg">
+<div class="hash-chain-line"></div>
+<div class="flex gap-lg">
+<div class="node-indicator w-12 h-12 rounded-sm bg-surface-container border-2 border-outline flex items-center justify-center shrink-0 mt-sm">
+<span class="material-symbols-outlined text-outline">flag</span>
+</div>
+<div class="flex-1 bg-surface-container-lowest border border-outline-variant p-md opacity-70">
+<div class="flex justify-between items-start mb-sm border-b border-outline-variant pb-sm">
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase">Record #0001 • 13:20:00 UTC</div>
+<h3 class="font-headline-md text-[18px] leading-[28px] font-bold text-primary mt-xs">Case Instantiation</h3>
+</div>
+<div class="text-right">
+<span class="bg-surface-container px-sm py-xs text-[10px] font-technical-data border border-outline-variant text-on-surface-variant">OPERATOR_042</span>
+</div>
+</div>
+<div class="py-sm">
+<p class="font-body-md text-[14px] text-on-surface">Initial contact. Subject presented at Point of Entry Alpha. Case file created.</p>
+</div>
+<div class="mt-md bg-surface-container-low p-sm border border-outline-variant font-technical-data text-technical-data overflow-x-auto text-on-surface-variant text-[11px] leading-tight flex flex-col gap-xs">
+<div class="flex items-center gap-sm">
+<span class="text-primary font-bold w-24 shrink-0 uppercase">Init Hash:</span>
+<span class="font-mono tracking-tighter text-primary">Genesis_Block_0000000000000000000000000000000000000000000000000</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Demonstration Tools -->
+<div class="mt-xl border border-dashed border-outline-variant bg-surface-container-lowest p-md relative">
+<div class="absolute -top-3 left-4 bg-surface-container-lowest px-sm font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">
+                        Tamper Simulation (Demonstration Only)
+                    </div>
+<p class="font-body-md text-[13px] text-on-surface-variant mb-md">Use the tools below to simulate a malicious alteration of historical data to observe the resulting hash collision and chain breakage.</p>
+<div class="flex flex-col sm:flex-row gap-md">
+<div class="flex-1">
+<label class="block font-technical-data text-[11px] text-primary mb-xs uppercase">Target Record</label>
+<select class="w-full bg-surface border border-outline-variant text-on-surface text-[14px] p-xs font-technical-data rounded-none focus:ring-1 focus:ring-primary focus:border-primary">
+<option>Record #0002 (Document Scan)</option>
+<option>Record #0003 (Biometric Match)</option>
+</select>
+</div>
+<div class="flex-1">
+<label class="block font-technical-data text-[11px] text-primary mb-xs uppercase">Inject Alteration</label>
+<input class="w-full bg-surface border border-outline-variant text-on-surface text-[14px] p-xs font-technical-data rounded-none focus:ring-1 focus:ring-primary focus:border-primary" placeholder="e.g., Modify timestamp or payload" type="text"/>
+</div>
+<div class="flex items-end">
+<button class="bg-surface-container-low text-error-alert border border-error-alert font-label-caps text-label-caps uppercase py-[7px] px-md hover:bg-error-container transition-colors w-full sm:w-auto h-[34px]">
+                                EXECUTE INJECTION
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

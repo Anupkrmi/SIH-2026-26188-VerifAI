@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BorderShield AI - New Screening</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&amp;family=Barlow:wght@400;500&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "background": "#f8f9ff",
+                        "primary": "#000000",
+                        "verification-green": "#166534",
+                        "on-primary": "#ffffff",
+                        "border-slate": "#CBD5E1",
+                        "inverse-surface": "#233144",
+                        "on-secondary-fixed-variant": "#004491",
+                        "surface-base": "#FDFCFB",
+                        "inverse-primary": "#b2c6f7",
+                        "tertiary-fixed": "#ffdbcd",
+                        "tertiary-container": "#360f00",
+                        "surface-dim": "#ccdbf3",
+                        "tertiary": "#000000",
+                        "secondary-fixed": "#d7e2ff",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "surface": "#f8f9ff",
+                        "on-tertiary": "#ffffff",
+                        "surface-variant": "#d5e3fc",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-primary-fixed": "#001a41",
+                        "on-tertiary-fixed-variant": "#6c3921",
+                        "primary-container": "#001a41",
+                        "surface-tint": "#4a5e88",
+                        "review-amber": "#92400E",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#001a40",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#f8f9ff",
+                        "on-tertiary-container": "#b47458",
+                        "on-secondary-container": "#003370",
+                        "surface-container": "#e6eeff",
+                        "outline": "#75777f",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "surface-container-low": "#eff4ff",
+                        "secondary": "#115cb9",
+                        "primary-fixed": "#d8e2ff",
+                        "outline-variant": "#c5c6cf",
+                        "secondary-fixed-dim": "#acc7ff",
+                        "surface-container-high": "#dce9ff",
+                        "on-tertiary-fixed": "#360f00",
+                        "on-surface": "#0d1c2e",
+                        "integrity-red": "#991B1B",
+                        "on-background": "#0d1c2e",
+                        "on-primary-fixed-variant": "#32466f",
+                        "surface-container-highest": "#d5e3fc",
+                        "secondary-container": "#659dfe",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#b2c6f7",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#6f84b0",
+                        "on-surface-variant": "#44474e"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    spacing: {
+                        "unit": "4px",
+                        "margin-desktop": "32px",
+                        "spine-width": "4px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px"
+                    },
+                    fontFamily: {
+                        "body-sm": ["Barlow"],
+                        "headline-lg": ["Barlow Condensed"],
+                        "display-title": ["Barlow Condensed"],
+                        "data-mono": ["JetBrains Mono"],
+                        "label-caps": ["Barlow Condensed"],
+                        "headline-lg-mobile": ["Barlow Condensed"],
+                        "body-md": ["Barlow"]
+                    },
+                    fontSize: {
+                        "body-sm": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+                        "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "0.01em", fontWeight: "600" }],
+                        "display-title": ["40px", { lineHeight: "48px", letterSpacing: "0.02em", fontWeight: "700" }],
+                        "data-mono": ["13px", { lineHeight: "18px", letterSpacing: "0.03em", fontWeight: "500" }],
+                        "label-caps": ["12px", { lineHeight: "16px", letterSpacing: "0.06em", fontWeight: "700" }],
+                        "headline-lg-mobile": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Hide scrollbar for clean institutional look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f8f9ff;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #75777f;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-sm flex h-screen overflow-hidden antialiased">
+<!-- SideNavBar (Shared Component) -->
+<nav class="hidden md:flex w-[260px] h-screen border-r border-border-slate bg-surface-container-lowest flex-col overflow-y-auto flex-shrink-0">
+<!-- Header -->
+<div class="p-6 border-b border-border-slate">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-sm">shield</span>
+</div>
+<h1 class="font-display-title text-display-title text-primary leading-none mt-1">BorderShield AI</h1>
+</div>
+<p class="font-data-mono text-data-mono text-on-surface-variant">Vigilance Protocol v4.2</p>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 py-4 flex flex-col gap-1 px-3">
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-caps text-label-caps uppercase mt-0.5">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined">security_update_good</span>
+<span class="font-label-caps text-label-caps uppercase mt-0.5">Command Center</span>
+</a>
+<!-- Active Navigation Item: New Screening -->
+<a class="flex items-center gap-3 px-3 py-2 rounded text-primary font-bold border-l-4 border-primary bg-surface-container-high transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined filled-icon">person_add</span>
+<span class="font-label-caps text-label-caps uppercase mt-0.5">New Screening</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-caps text-label-caps uppercase mt-0.5">Active Case</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined">search_check</span>
+<span class="font-label-caps text-label-caps uppercase mt-0.5">Investigations</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined">history_edu</span>
+<span class="font-label-caps text-label-caps uppercase mt-0.5">Audit Trail</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined">dvr</span>
+<span class="font-label-caps text-label-caps uppercase mt-0.5">System Status</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined">verified_user</span>
+<span class="font-label-caps text-label-caps uppercase mt-0.5">Issuer Registry</span>
+</a>
+</div>
+<!-- CTA & Footer -->
+<div class="p-4 border-t border-border-slate flex flex-col gap-4">
+<button class="w-full bg-integrity-red text-on-primary font-label-caps text-label-caps uppercase py-2 px-4 rounded border border-integrity-red flex items-center justify-center gap-2 hover:bg-red-900 transition-colors">
+<span class="material-symbols-outlined text-sm">emergency</span>
+<span class="mt-0.5">Emergency Alert</span>
+</button>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined text-sm">settings</span>
+<span class="font-label-caps text-label-caps uppercase mt-0.5">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined text-sm">help_outline</span>
+<span class="font-label-caps text-label-caps uppercase mt-0.5">Support</span>
+</a>
+</div>
+</div>
+</nav>
+<!-- Main Workspace -->
+<div class="flex-1 flex flex-col h-screen overflow-hidden">
+<!-- TopAppBar (Shared Component) -->
+<header class="flex justify-between items-center px-margin-desktop h-16 w-full bg-surface-bright border-b border-border-slate flex-shrink-0">
+<div class="flex items-center gap-4 hidden md:flex">
+<span class="font-label-caps text-label-caps tracking-widest text-primary uppercase mt-1">BorderShield AI</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<div class="bg-surface-container px-3 py-1 rounded border border-border-slate flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-data-mono text-data-mono text-primary">Case ID: B-9921-FX</span>
+</div>
+<div class="bg-surface-container px-3 py-1 rounded border border-border-slate flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-verification-green"></span>
+<span class="font-data-mono text-data-mono text-primary">System State: NOMINAL</span>
+</div>
+</div>
+<div class="flex items-center gap-3 border-l border-border-slate pl-6">
+<button class="text-on-surface-variant hover:text-primary transition-colors scale-95 active:scale-90">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors scale-95 active:scale-90">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Canvas Area -->
+<main class="flex-1 overflow-y-auto p-margin-desktop relative">
+<!-- Structural Grid with Verification Spine -->
+<div class="max-w-7xl mx-auto flex h-full">
+<!-- The Verification Spine -->
+<div class="w-spine-width bg-border-slate mr-8 flex-shrink-0 relative rounded-full hidden md:block">
+<!-- Spine Indicator (Active) -->
+<div class="absolute top-0 left-0 w-full h-1/3 bg-primary rounded-full transition-all duration-500"></div>
+</div>
+<!-- Intake Content Grid -->
+<div class="flex-1 flex flex-col gap-8">
+<!-- Page Header -->
+<div class="flex justify-between items-end border-b border-border-slate pb-4">
+<div>
+<h2 class="font-display-title text-display-title text-primary leading-none uppercase">Operational Intake</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-2 max-w-2xl">Initiate new biometric and document screening cycle. Verify source materials before executing analysis pipeline.</p>
+</div>
+<div class="font-data-mono text-data-mono text-on-surface-variant flex flex-col items-end">
+<span>INTAKE_PORT: 994-A</span>
+<span>TS: <script>document.write(new Date().toISOString().split('T')[0] + ' ' + new Date().toISOString().split('T')[1].substring(0,8))</script></span>
+</div>
+</div>
+<!-- 3-Step Workflow Container -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+<!-- Step 01: Document Upload -->
+<div class="bg-surface-base border border-border-slate rounded p-6 flex flex-col gap-6 relative">
+<div class="absolute top-0 right-0 bg-primary text-on-primary font-data-mono text-data-mono px-2 py-1 rounded-bl">STEP 01</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl">document_scanner</span>
+<h3 class="font-headline-lg text-headline-lg text-primary uppercase">Identity Document</h3>
+</div>
+<!-- Upload Zone -->
+<div class="border border-dashed border-outline-variant bg-surface-container-lowest h-48 rounded flex flex-col items-center justify-center cursor-pointer hover:bg-surface-container-low transition-colors group">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl group-hover:text-primary transition-colors mb-2">upload_file</span>
+<span class="font-label-caps text-label-caps text-primary uppercase">Select or Drop File</span>
+<span class="font-data-mono text-data-mono text-on-surface-variant text-xs mt-1">PNG, JPG, PDF (Max 15MB)</span>
+</div>
+<!-- Quality Status (Mock Data) -->
+<div class="bg-surface-container border border-border-slate rounded p-4 flex justify-between items-center">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-verification-green">check_circle</span>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-primary uppercase mt-1">Ready for parsing</span>
+<span class="font-data-mono text-data-mono text-on-surface-variant text-[11px]">No file loaded</span>
+</div>
+</div>
+<div class="font-data-mono text-data-mono text-primary text-right text-xs">
+                                    DPI: --<br/>
+                                    BLUR: --
+                                </div>
+</div>
+</div>
+<!-- Step 02: Person Verification -->
+<div class="bg-surface-base border border-border-slate rounded p-6 flex flex-col gap-6 relative">
+<div class="absolute top-0 right-0 bg-surface-container-highest text-primary font-data-mono text-data-mono px-2 py-1 border-l border-b border-border-slate rounded-bl">STEP 02 (OPTIONAL)</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl">face</span>
+<h3 class="font-headline-lg text-headline-lg text-primary uppercase">Subject Verification</h3>
+</div>
+<!-- Actions -->
+<div class="grid grid-cols-2 gap-4 h-48">
+<div class="border border-border-slate bg-surface-container-lowest rounded flex flex-col items-center justify-center cursor-pointer hover:bg-surface-container-low transition-colors group">
+<span class="material-symbols-outlined text-on-surface-variant text-2xl group-hover:text-primary mb-2">upload_file</span>
+<span class="font-label-caps text-label-caps text-primary uppercase">Upload Portrait</span>
+</div>
+<div class="border border-border-slate bg-surface-container-lowest rounded flex flex-col items-center justify-center cursor-pointer hover:bg-surface-container-low transition-colors group">
+<span class="material-symbols-outlined text-on-surface-variant text-2xl group-hover:text-primary mb-2">photo_camera</span>
+<span class="font-label-caps text-label-caps text-primary uppercase">Capture Camera</span>
+</div>
+</div>
+<!-- Quality Status (Empty) -->
+<div class="bg-surface-bright border border-border-slate rounded p-4 flex justify-between items-center opacity-50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-outline">do_not_disturb</span>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-primary uppercase mt-1">Awaiting Input</span>
+<span class="font-data-mono text-data-mono text-on-surface-variant text-[11px]">Optional face matching</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 03: Analysis Staging & Capabilities -->
+<div class="bg-surface-base border border-border-slate rounded p-6 flex flex-col gap-6 relative mt-4">
+<div class="absolute top-0 right-0 bg-primary text-on-primary font-data-mono text-data-mono px-2 py-1 rounded-bl">STEP 03</div>
+<div class="flex items-center justify-between border-b border-border-slate pb-4">
+<h3 class="font-headline-lg text-headline-lg text-primary uppercase">Execution Pipeline</h3>
+<button class="bg-primary text-on-primary font-label-caps text-label-caps uppercase px-6 py-2 rounded hover:bg-primary-container transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">play_arrow</span>
+<span class="mt-0.5">Commence Screening</span>
+</button>
+</div>
+<!-- Analysis Staging Steps -->
+<div class="flex flex-col gap-2">
+<span class="font-data-mono text-data-mono text-on-surface-variant text-xs uppercase mb-1">Proposed Staging Sequence</span>
+<div class="flex flex-wrap gap-2 items-center">
+<div class="border border-primary bg-surface-container px-3 py-1 rounded font-label-caps text-label-caps text-primary uppercase flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span> Detection
+                                </div>
+<span class="material-symbols-outlined text-outline text-sm">chevron_right</span>
+<div class="border border-border-slate bg-surface-container-lowest px-3 py-1 rounded font-label-caps text-label-caps text-on-surface-variant uppercase flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-border-slate rounded-full"></span> Extraction
+                                </div>
+<span class="material-symbols-outlined text-outline text-sm">chevron_right</span>
+<div class="border border-border-slate bg-surface-container-lowest px-3 py-1 rounded font-label-caps text-label-caps text-on-surface-variant uppercase flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-border-slate rounded-full"></span> Rules
+                                </div>
+<span class="material-symbols-outlined text-outline text-sm">chevron_right</span>
+<div class="border border-border-slate bg-surface-container-lowest px-3 py-1 rounded font-label-caps text-label-caps text-on-surface-variant uppercase flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-border-slate rounded-full"></span> Forensics
+                                </div>
+<span class="material-symbols-outlined text-outline text-sm">chevron_right</span>
+<div class="border border-border-slate bg-surface-container-lowest px-3 py-1 rounded font-label-caps text-label-caps text-on-surface-variant uppercase flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-border-slate rounded-full"></span> Biometrics
+                                </div>
+<span class="material-symbols-outlined text-outline text-sm">chevron_right</span>
+<div class="border border-border-slate bg-surface-container-lowest px-3 py-1 rounded font-label-caps text-label-caps text-on-surface-variant uppercase flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-border-slate rounded-full"></span> Integrity
+                                </div>
+<span class="material-symbols-outlined text-outline text-sm">chevron_right</span>
+<div class="border border-border-slate bg-surface-container-lowest px-3 py-1 rounded font-label-caps text-label-caps text-on-surface-variant uppercase flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-border-slate rounded-full"></span> Risk
+                                </div>
+</div>
+</div>
+<!-- Capability Status Chips -->
+<div class="bg-surface-bright border border-border-slate rounded p-4">
+<span class="font-data-mono text-data-mono text-on-surface-variant text-xs uppercase block mb-3">Service Capabilities</span>
+<div class="flex flex-wrap gap-3">
+<!-- Available -->
+<div class="border border-border-slate bg-surface-container-lowest px-2 py-1 rounded flex items-center gap-2">
+<span class="font-label-caps text-label-caps text-primary uppercase mt-0.5">OCR Engine</span>
+<span class="bg-verification-green text-on-primary font-data-mono text-[10px] px-1.5 py-0.5 rounded leading-none">AVAILABLE</span>
+</div>
+<!-- Available -->
+<div class="border border-border-slate bg-surface-container-lowest px-2 py-1 rounded flex items-center gap-2">
+<span class="font-label-caps text-label-caps text-primary uppercase mt-0.5">MRZ Decoder</span>
+<span class="bg-verification-green text-on-primary font-data-mono text-[10px] px-1.5 py-0.5 rounded leading-none">AVAILABLE</span>
+</div>
+<!-- Review -->
+<div class="border border-border-slate bg-surface-container-lowest px-2 py-1 rounded flex items-center gap-2">
+<span class="font-label-caps text-label-caps text-primary uppercase mt-0.5">Crypto Auth</span>
+<span class="bg-review-amber text-on-primary font-data-mono text-[10px] px-1.5 py-0.5 rounded leading-none">REVIEW</span>
+</div>
+<!-- N/A (Logic: No Face Failed if no photo provided) -->
+<div class="border border-border-slate bg-surface-container-lowest px-2 py-1 rounded flex items-center gap-2 opacity-60">
+<span class="font-label-caps text-label-caps text-primary uppercase mt-0.5">Portrait Match</span>
+<span class="bg-outline text-on-primary font-data-mono text-[10px] px-1.5 py-0.5 rounded leading-none">N/A</span>
+</div>
+<div class="border border-border-slate bg-surface-container-lowest px-2 py-1 rounded flex items-center gap-2 opacity-60">
+<span class="font-label-caps text-label-caps text-primary uppercase mt-0.5">Face Liveness</span>
+<span class="bg-outline text-on-primary font-data-mono text-[10px] px-1.5 py-0.5 rounded leading-none">N/A</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Spacing -->
+<div class="h-8"></div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

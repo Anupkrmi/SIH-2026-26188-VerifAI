@@ -1,0 +1,19 @@
+[theme]
+base = "light"
+
+# Sovereign design system — must agree with the tokens in ui/style.py.
+# This governs the parts of the chrome that CSS injection cannot reach:
+# st.file_uploader internals, st.code, st.camera_input, native scrollbars,
+# form focus rings, etc. Keep in sync if the :root tokens ever change.
+
+primaryColor = "#000000"            # --primary
+backgroundColor = "#f8f9fa"         # --bg
+secondaryBackgroundColor = "#edeeef"  # --surface
+textColor = "#191c1d"               # --text
+font = "sans serif"
+
+[server]
+headless = true
+
+[client]
+toolbarMode = "minimal"

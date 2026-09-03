@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Incident Response Workstation - BorderShield AI</title>
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700&amp;family=Hanken+Grotesk:wght@400;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed-variant": "#38485f",
+                      "inverse-primary": "#bec7d9",
+                      "on-tertiary-fixed": "#261a00",
+                      "on-error-container": "#93000a",
+                      "on-secondary": "#ffffff",
+                      "surface-dim": "#d9dadb",
+                      "outline-variant": "#c5c6cc",
+                      "tertiary-fixed": "#ffdfa0",
+                      "surface-container": "#edeeef",
+                      "surface-bright": "#f8f9fa",
+                      "on-surface": "#191c1d",
+                      "on-error": "#ffffff",
+                      "outline": "#75777c",
+                      "primary": "#000000",
+                      "inverse-surface": "#2e3132",
+                      "surface-container-high": "#e7e8e9",
+                      "on-surface-variant": "#45474c",
+                      "blueprint-grid": "rgba(196, 198, 207, 0.15)",
+                      "on-primary": "#ffffff",
+                      "surface-container-low": "#f3f4f5",
+                      "secondary-fixed-dim": "#b7c7e4",
+                      "surface-variant": "#e1e3e4",
+                      "surface-tint": "#565f6f",
+                      "on-background": "#191c1d",
+                      "on-tertiary-container": "#a87d00",
+                      "inverse-on-surface": "#f0f1f2",
+                      "primary-fixed-dim": "#bec7d9",
+                      "on-primary-fixed": "#131c2a",
+                      "background": "#f8f9fa",
+                      "tertiary-fixed-dim": "#fbbc01",
+                      "on-tertiary-fixed-variant": "#5c4300",
+                      "error-container": "#ffdad6",
+                      "on-secondary-fixed": "#0a1c32",
+                      "on-primary-fixed-variant": "#3e4756",
+                      "secondary-container": "#d0e1fe",
+                      "secondary-fixed": "#d4e3ff",
+                      "success-pulse": "#003366",
+                      "on-primary-container": "#7b8495",
+                      "surface-container-lowest": "#ffffff",
+                      "error-alert": "#ba1a1a",
+                      "tertiary": "#000000",
+                      "surface-container-highest": "#e1e3e4",
+                      "tertiary-container": "#261a00",
+                      "on-tertiary": "#ffffff",
+                      "secondary": "#4f5f78",
+                      "primary-container": "#131c2a",
+                      "on-secondary-container": "#53637d",
+                      "error": "#ba1a1a",
+                      "surface": "#f8f9fa",
+                      "primary-fixed": "#dae3f6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "sm": "8px",
+                      "xl": "48px",
+                      "md": "16px",
+                      "container-max": "1440px",
+                      "xs": "4px",
+                      "gutter": "24px",
+                      "sidebar-expanded": "260px",
+                      "rail-width": "72px",
+                      "lg": "24px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Bricolage Grotesque"],
+                      "display-lg": ["Bricolage Grotesque"],
+                      "label-caps": ["Hanken Grotesk"],
+                      "body-lg": ["Hanken Grotesk"],
+                      "headline-md": ["Bricolage Grotesque"],
+                      "body-md": ["Hanken Grotesk"],
+                      "technical-data": ["JetBrains Mono"]
+              },
+              "fontSize": {
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "technical-data": ["13px", {"lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "500"}]
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col md:flex-row">
+<!-- TopNavBar -->
+<header class="bg-surface text-primary font-body-md docked full-width top-0 border-b border-outline-variant flat no shadows flex justify-between items-center px-lg h-md w-full sticky z-50 py-sm">
+<div class="flex items-center gap-md">
+<span class="font-headline-md text-headline-md font-bold text-primary">BorderShield AI</span>
+</div>
+<nav class="hidden md:flex gap-md h-full items-end">
+<!-- Universal TopNav Tabs - None inherently active for this specific page intent as it maps to SideNav -->
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors cursor-pointer active:opacity-80 px-sm py-xs" href="#">System Status</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors cursor-pointer active:opacity-80 px-sm py-xs" href="#">Notifications</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors cursor-pointer active:opacity-80 px-sm py-xs" href="#">Profile</a>
+</nav>
+<div class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-high transition-colors p-xs" data-icon="settings">settings</span>
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-high transition-colors p-xs" data-icon="help_outline">help_outline</span>
+</div>
+</header>
+<div class="flex flex-1 relative w-full">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col bg-surface-container-lowest text-primary font-label-caps text-label-caps uppercase tracking-wider h-screen w-sidebar-expanded border-r border-outline-variant flat no shadows fixed left-0 top-0 z-40 pt-xl pb-md border-r border-outline-variant bg-surface-container-lowest">
+<div class="px-md mb-xl flex flex-col gap-sm">
+<div class="font-headline-md text-headline-md font-black text-primary truncate">OPERATOR_042</div>
+<div class="text-on-surface-variant font-technical-data text-technical-data normal-case opacity-70">Unit: Border Intelligence</div>
+</div>
+<nav class="flex-1 flex flex-col gap-xs overflow-y-auto w-full">
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span> Overview
+                </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span> Command Center
+                </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="person_search">person_search</span> New Screening
+                </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_late">assignment_late</span> Active Case
+                </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="travel_explore">travel_explore</span> Investigations
+                </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span> Audit Trail
+                </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="dns">dns</span> System Status
+                </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span> Issuer Registry
+                </a>
+<!-- ACTIVE TAB -->
+<a class="flex items-center gap-md bg-surface-container-highest text-primary font-bold border-l-4 border-primary px-md py-sm active:scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined text-error" data-icon="error_outline" data-weight="fill">error_outline</span> Emergency Alert
+                </a>
+</nav>
+<div class="px-md mt-auto pt-md border-t border-outline-variant flex flex-col gap-sm w-full">
+<button class="w-full bg-primary text-on-primary font-label-caps text-label-caps py-sm px-md rounded-none border border-primary hover:bg-surface-tint transition-colors active:scale-[0.98]">
+                    INITIATE SCREENING
+                </button>
+<div class="flex flex-col gap-xs w-full mt-sm">
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span> System Settings
+                    </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span> Logout
+                    </a>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 md:ml-[260px] min-h-screen relative p-md md:p-lg bg-surface">
+<!-- Structural Blueprint Background Overlay -->
+<div class="absolute inset-0 pointer-events-none" style="background-image: radial-gradient(var(--tw-colors-blueprint-grid) 1px, transparent 1px); background-size: 24px 24px; opacity: 0.5;"></div>
+<div class="max-w-container-max mx-auto relative z-10 flex flex-col gap-lg">
+<!-- Page Header -->
+<div class="flex flex-col gap-xs pb-sm border-b border-outline-variant">
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight uppercase">Incident Response Protocol</h1>
+<p class="font-technical-data text-technical-data text-on-surface-variant">WORKSTATION ID: IR-WKS-8894 | OPERATIONAL STATUS: ONLINE</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Configuration Forms -->
+<div class="lg:col-span-8 flex flex-col gap-lg">
+<!-- Severity Selection -->
+<div class="bg-surface-container-lowest border border-outline-variant p-md">
+<h2 class="font-label-caps text-label-caps text-primary border-b border-outline-variant pb-xs mb-sm">1. Severity Classification</h2>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-sm">
+<label class="cursor-pointer">
+<input class="peer sr-only" name="severity" type="radio" value="advisory"/>
+<div class="h-full border border-outline-variant bg-surface-container p-sm text-center peer-checked:border-primary peer-checked:bg-surface-container-highest transition-colors">
+<span class="font-label-caps text-label-caps text-on-surface-variant peer-checked:text-primary">ADVISORY</span>
+</div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="severity" type="radio" value="elevated"/>
+<div class="h-full border border-outline-variant bg-surface-container p-sm text-center peer-checked:border-primary peer-checked:bg-secondary-container transition-colors">
+<span class="font-label-caps text-label-caps text-on-surface-variant peer-checked:text-primary">ELEVATED</span>
+</div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="severity" type="radio" value="severe"/>
+<div class="h-full border border-outline-variant bg-surface-container p-sm text-center peer-checked:border-error peer-checked:bg-error-container transition-colors">
+<span class="font-label-caps text-label-caps text-on-surface-variant peer-checked:text-on-error-container">SEVERE</span>
+</div>
+</label>
+<label class="cursor-pointer">
+<input checked="" class="peer sr-only" name="severity" type="radio" value="critical"/>
+<div class="h-full border border-error bg-surface-container p-sm text-center peer-checked:bg-error peer-checked:text-on-error transition-colors ring-2 ring-error ring-offset-2 ring-offset-surface">
+<span class="font-label-caps text-label-caps">CRITICAL</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Incident Details -->
+<div class="bg-surface-container-lowest border border-outline-variant p-md flex flex-col gap-md">
+<h2 class="font-label-caps text-label-caps text-primary border-b border-outline-variant pb-xs">2. Incident Parameters</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="flex flex-col gap-xs">
+<label class="font-technical-data text-technical-data text-on-surface-variant">Incident Type</label>
+<select class="bg-surface border border-outline-variant font-technical-data text-technical-data text-primary p-xs rounded-none focus:ring-1 focus:ring-primary focus:border-primary">
+<option>Document Integrity Failure</option>
+<option>Multiple Identity Match</option>
+<option>Biometric Anomaly</option>
+<option>Watchlist Trigger (Primary)</option>
+</select>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-technical-data text-technical-data text-on-surface-variant">Origin Checkpoint</label>
+<select class="bg-surface border border-outline-variant font-technical-data text-technical-data text-primary p-xs rounded-none focus:ring-1 focus:ring-primary focus:border-primary">
+<option>T4-GATE-A (North Terminal)</option>
+<option>T2-GATE-B (Intl Arrivals)</option>
+<option>SEC-ZONE-01 (Cargo)</option>
+</select>
+</div>
+</div>
+<div class="flex flex-col gap-xs mt-sm">
+<label class="font-technical-data text-technical-data text-on-surface-variant">Associated Case Reference [Optional]</label>
+<input class="bg-surface border border-outline-variant font-technical-data text-technical-data text-primary p-xs rounded-none focus:ring-1 focus:ring-primary focus:border-primary" placeholder="e.g. CAS-2023-881A" type="text"/>
+</div>
+</div>
+</div>
+<!-- Right Column: Summary & Action -->
+<div class="lg:col-span-4 flex flex-col gap-md">
+<div class="bg-surface-container border border-outline-variant flex flex-col h-full">
+<div class="bg-surface-container-high border-b border-outline-variant p-sm flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-primary">PRE-TRANSMISSION SUMMARY</span>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="summarize">summarize</span>
+</div>
+<div class="p-md flex-1 flex flex-col gap-sm font-technical-data text-technical-data">
+<div class="flex justify-between border-b border-outline-variant border-dashed pb-xs">
+<span class="text-on-surface-variant">Severity:</span>
+<span class="text-error font-bold">CRITICAL</span>
+</div>
+<div class="flex justify-between border-b border-outline-variant border-dashed pb-xs">
+<span class="text-on-surface-variant">Type:</span>
+<span class="text-primary truncate ml-md">Document Integrity Failure</span>
+</div>
+<div class="flex justify-between border-b border-outline-variant border-dashed pb-xs">
+<span class="text-on-surface-variant">Location:</span>
+<span class="text-primary">T4-GATE-A</span>
+</div>
+<div class="flex justify-between border-b border-outline-variant border-dashed pb-xs">
+<span class="text-on-surface-variant">Case Ref:</span>
+<span class="text-primary opacity-50">N/A</span>
+</div>
+<div class="mt-auto pt-md text-xs text-on-surface-variant opacity-75">
+                                    Warning: Transmitting a CRITICAL alert will trigger immediate lock-down protocols for specified sectors.
+                                </div>
+</div>
+<div class="p-sm bg-surface-container-lowest border-t border-outline-variant">
+<button class="w-full bg-error text-on-error font-headline-md text-headline-md py-sm px-md rounded-none border border-error hover:bg-error-alert transition-colors flex items-center justify-center gap-sm active:scale-[0.98]">
+<span class="material-symbols-outlined" data-icon="warning" data-weight="fill">warning</span>
+                                    ISSUE ALERT
+                                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Data Table: Active / Resolved -->
+<div class="bg-surface-container-lowest border border-outline-variant flex flex-col w-full mt-md">
+<div class="flex border-b border-outline-variant">
+<button class="px-md py-sm font-label-caps text-label-caps text-primary border-b-2 border-primary bg-surface-container-highest">ACTIVE ALERTS (3)</button>
+<button class="px-md py-sm font-label-caps text-label-caps text-on-surface-variant hover:bg-surface-container transition-colors">RESOLVED LOG</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high border-b border-outline-variant">
+<th class="p-sm font-technical-data text-technical-data text-on-surface-variant font-normal">TIMESTAMP</th>
+<th class="p-sm font-technical-data text-technical-data text-on-surface-variant font-normal">SEVERITY</th>
+<th class="p-sm font-technical-data text-technical-data text-on-surface-variant font-normal">INCIDENT TYPE</th>
+<th class="p-sm font-technical-data text-technical-data text-on-surface-variant font-normal">LOCATION</th>
+<th class="p-sm font-technical-data text-technical-data text-on-surface-variant font-normal text-right">ACTION</th>
+</tr>
+</thead>
+<tbody class="font-technical-data text-technical-data divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container transition-colors">
+<td class="p-sm text-primary">14:02:11Z</td>
+<td class="p-sm"><span class="bg-error-container text-on-error-container px-xs border border-error">CRITICAL</span></td>
+<td class="p-sm text-primary">Biometric Anomaly</td>
+<td class="p-sm text-on-surface-variant">SEC-ZONE-01</td>
+<td class="p-sm text-right"><button class="border border-outline-variant px-sm hover:bg-surface-container-high">VIEW</button></td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors bg-surface-container-lowest">
+<td class="p-sm text-primary">13:45:00Z</td>
+<td class="p-sm"><span class="bg-secondary-container text-primary px-xs border border-outline-variant">ELEVATED</span></td>
+<td class="p-sm text-primary">Watchlist Trigger</td>
+<td class="p-sm text-on-surface-variant">T2-GATE-B</td>
+<td class="p-sm text-right"><button class="border border-outline-variant px-sm hover:bg-surface-container-high">VIEW</button></td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="p-sm text-primary">11:15:44Z</td>
+<td class="p-sm"><span class="bg-surface-container-high text-on-surface-variant px-xs border border-outline-variant">ADVISORY</span></td>
+<td class="p-sm text-primary">Multiple Identity Match</td>
+<td class="p-sm text-on-surface-variant">T4-GATE-A</td>
+<td class="p-sm text-right"><button class="border border-outline-variant px-sm hover:bg-surface-container-high">VIEW</button></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

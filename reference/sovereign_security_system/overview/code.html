@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BorderShield AI - Identity &amp; Document Risk Screening</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700&amp;family=Hanken+Grotesk:wght@400;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed-variant": "#38485f",
+                      "inverse-primary": "#bec7d9",
+                      "on-tertiary-fixed": "#261a00",
+                      "on-error-container": "#93000a",
+                      "on-secondary": "#ffffff",
+                      "surface-dim": "#d9dadb",
+                      "outline-variant": "#c5c6cc",
+                      "tertiary-fixed": "#ffdfa0",
+                      "surface-container": "#edeeef",
+                      "surface-bright": "#f8f9fa",
+                      "on-surface": "#191c1d",
+                      "on-error": "#ffffff",
+                      "outline": "#75777c",
+                      "primary": "#000000",
+                      "inverse-surface": "#2e3132",
+                      "surface-container-high": "#e7e8e9",
+                      "on-surface-variant": "#45474c",
+                      "blueprint-grid": "rgba(196, 198, 207, 0.15)",
+                      "on-primary": "#ffffff",
+                      "surface-container-low": "#f3f4f5",
+                      "secondary-fixed-dim": "#b7c7e4",
+                      "surface-variant": "#e1e3e4",
+                      "surface-tint": "#565f6f",
+                      "on-background": "#191c1d",
+                      "on-tertiary-container": "#a87d00",
+                      "inverse-on-surface": "#f0f1f2",
+                      "primary-fixed-dim": "#bec7d9",
+                      "on-primary-fixed": "#131c2a",
+                      "background": "#f8f9fa",
+                      "tertiary-fixed-dim": "#fbbc01",
+                      "on-tertiary-fixed-variant": "#5c4300",
+                      "error-container": "#ffdad6",
+                      "on-secondary-fixed": "#0a1c32",
+                      "on-primary-fixed-variant": "#3e4756",
+                      "secondary-container": "#d0e1fe",
+                      "secondary-fixed": "#d4e3ff",
+                      "success-pulse": "#003366",
+                      "on-primary-container": "#7b8495",
+                      "surface-container-lowest": "#ffffff",
+                      "error-alert": "#ba1a1a",
+                      "tertiary": "#000000",
+                      "surface-container-highest": "#e1e3e4",
+                      "tertiary-container": "#261a00",
+                      "on-tertiary": "#ffffff",
+                      "secondary": "#4f5f78",
+                      "primary-container": "#131c2a",
+                      "on-secondary-container": "#53637d",
+                      "error": "#ba1a1a",
+                      "surface": "#f8f9fa",
+                      "primary-fixed": "#dae3f6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "sm": "8px",
+                      "xl": "48px",
+                      "md": "16px",
+                      "container-max": "1440px",
+                      "xs": "4px",
+                      "gutter": "24px",
+                      "sidebar-expanded": "260px",
+                      "rail-width": "72px",
+                      "lg": "24px"
+              },
+              "fontFamily": {
+                      "headline-lg": [
+                              "Bricolage Grotesque"
+                      ],
+                      "display-lg": [
+                              "Bricolage Grotesque"
+                      ],
+                      "label-caps": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-md": [
+                              "Bricolage Grotesque"
+                      ],
+                      "body-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "technical-data": [
+                              "JetBrains Mono"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "technical-data": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .blueprint-bg {
+            background-image: linear-gradient(var(--tw-colors-blueprint-grid) 1px, transparent 1px),
+                              linear-gradient(90deg, var(--tw-colors-blueprint-grid) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+      </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col md:flex-row antialiased">
+<!-- Mobile TopNav (Visible only on mobile, replacing SideNav top nav function) -->
+<nav class="md:hidden flex justify-between items-center px-lg h-md w-full bg-surface dark:bg-on-background border-b border-outline-variant fixed top-0 z-50">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-on-primary">
+            BorderShield AI
+        </div>
+<button class="text-on-surface-variant hover:bg-surface-container-high transition-colors p-sm rounded cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+</nav>
+<!-- Desktop SideNav -->
+<nav class="hidden md:flex flex-col h-screen fixed left-0 top-0 z-40 w-sidebar-expanded border-r border-outline-variant bg-surface-container-lowest dark:bg-inverse-surface">
+<div class="p-lg border-b border-outline-variant">
+<div class="font-headline-md text-headline-md font-black text-primary mb-xl">BorderShield AI</div>
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center border border-outline-variant overflow-hidden">
+<img alt="Agency Operator Avatar" class="object-cover w-full h-full" data-alt="A small, stylized avatar image representing a security operator. Minimalist, modern corporate style. High contrast black and white." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2A7vHWl87zP37p8BTB_SHeGAwG7vj8rIBx9GyuNY_rcVb5XNCK9pvEegJwoxOl-tHzcLqxQ6w-QM7t43_KQge-hQypdq8P-dCrWurDYjap7O2Hx8aB46qJVWd-fRrZRzjfWy5MhKrE5_p5GRh5Fa1VAQR0G_D-MXI7eyH8RIHujZUBhMYj4MQ71msjS8Na07-y0ZLnVZ52Z7nMApZpiERcn5NkOUzWAIlPtaouxo2zGoF2FF9EW6v"/>
+</div>
+<div>
+<div class="font-label-caps text-label-caps uppercase tracking-wider text-primary dark:text-primary-fixed">OPERATOR_042</div>
+<div class="font-technical-data text-technical-data text-on-surface-variant">Unit: Border Intelligence</div>
+</div>
+</div>
+<button class="mt-lg w-full bg-primary text-on-primary font-label-caps text-label-caps py-sm px-md rounded active:scale-[0.98] transition-transform flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="add">add</span> INITIATE SCREENING
+            </button>
+</div>
+<div class="flex-1 overflow-y-auto py-sm">
+<a class="flex items-center gap-md bg-surface-container-highest text-primary font-bold border-l-4 border-primary px-md py-sm hover:bg-surface-container transition-all duration-150 cursor-pointer active:opacity-80 font-label-caps text-label-caps uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span> Overview
+            </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 cursor-pointer active:opacity-80 font-label-caps text-label-caps uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span> Command Center
+            </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 cursor-pointer active:opacity-80 font-label-caps text-label-caps uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined" data-icon="person_search">person_search</span> New Screening
+            </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 cursor-pointer active:opacity-80 font-label-caps text-label-caps uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_late">assignment_late</span> Active Case
+            </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 cursor-pointer active:opacity-80 font-label-caps text-label-caps uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined" data-icon="travel_explore">travel_explore</span> Investigations
+            </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 cursor-pointer active:opacity-80 font-label-caps text-label-caps uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span> Audit Trail
+            </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 cursor-pointer active:opacity-80 font-label-caps text-label-caps uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined" data-icon="dns">dns</span> System Status
+            </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 cursor-pointer active:opacity-80 font-label-caps text-label-caps uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span> Issuer Registry
+            </a>
+<a class="flex items-center gap-md text-error-alert hover:text-error px-md py-sm hover:bg-surface-container transition-all duration-150 cursor-pointer active:opacity-80 font-label-caps text-label-caps uppercase tracking-wider mt-xl border-t border-outline-variant pt-md" href="#">
+<span class="material-symbols-outlined" data-icon="error_outline">error_outline</span> Emergency Alert
+            </a>
+</div>
+<div class="border-t border-outline-variant p-md">
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-sm py-xs hover:bg-surface-container transition-all duration-150 cursor-pointer active:opacity-80 font-label-caps text-label-caps uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span> System Settings
+            </a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-sm py-xs hover:bg-surface-container transition-all duration-150 cursor-pointer active:opacity-80 font-label-caps text-label-caps uppercase tracking-wider mt-sm" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span> Logout
+            </a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-sidebar-expanded pt-[64px] md:pt-0 min-h-screen relative blueprint-bg">
+<div class="max-w-container-max mx-auto px-lg md:px-xl py-xl md:py-[80px]">
+<!-- Hero Section -->
+<section class="mb-[120px]">
+<div class="max-w-3xl">
+<h1 class="font-display-lg text-display-lg font-bold text-primary mb-md uppercase tracking-tight">
+                        Identity &amp; Document<br/>Risk Screening
+                    </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-xl max-w-2xl border-l-4 border-outline-variant pl-md">
+                        Evidence-first screening using deterministic validation, digital forensics, and biometric comparison. High-stakes identity resolution for critical infrastructure.
+                    </p>
+<div class="flex gap-md">
+<button class="bg-primary text-on-primary font-label-caps text-label-caps uppercase tracking-wider py-md px-xl rounded hover:opacity-90 active:scale-[0.98] transition-all border border-primary">
+                            START NEW SCREENING
+                        </button>
+<button class="bg-transparent text-primary font-label-caps text-label-caps uppercase tracking-wider py-md px-xl rounded hover:bg-surface-container active:scale-[0.98] transition-all border border-outline-variant flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="description">description</span> VIEW DOCUMENTATION
+                        </button>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

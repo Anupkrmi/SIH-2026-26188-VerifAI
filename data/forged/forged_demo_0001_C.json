@@ -1,0 +1,15 @@
+{
+  "attack": "C",
+  "name": "screen_recapture",
+  "field": null,
+  "bbox": [
+    0,
+    0,
+    1000,
+    700
+  ],
+  "mrz_untouched": false,
+  "expected_detection_tier": "forensics only (no rules/crosszone violation) -- must route to AMBER, never RED",
+  "crypto_mode": "self",
+  "source_doc": "demo_0001"
+}

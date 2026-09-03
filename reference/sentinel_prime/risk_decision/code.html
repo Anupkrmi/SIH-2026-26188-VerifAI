@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BorderShield AI - Risk Decision</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&amp;family=Barlow+Condensed:wght@600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "background": "#f8f9ff",
+                        "primary": "#000000",
+                        "verification-green": "#166534",
+                        "on-primary": "#ffffff",
+                        "border-slate": "#CBD5E1",
+                        "inverse-surface": "#233144",
+                        "on-secondary-fixed-variant": "#004491",
+                        "surface-base": "#FDFCFB",
+                        "inverse-primary": "#b2c6f7",
+                        "tertiary-fixed": "#ffdbcd",
+                        "tertiary-container": "#360f00",
+                        "surface-dim": "#ccdbf3",
+                        "tertiary": "#000000",
+                        "secondary-fixed": "#d7e2ff",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "surface": "#f8f9ff",
+                        "on-tertiary": "#ffffff",
+                        "surface-variant": "#d5e3fc",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-primary-fixed": "#001a41",
+                        "on-tertiary-fixed-variant": "#6c3921",
+                        "primary-container": "#001a41",
+                        "surface-tint": "#4a5e88",
+                        "review-amber": "#92400E",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#001a40",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#f8f9ff",
+                        "on-tertiary-container": "#b47458",
+                        "on-secondary-container": "#003370",
+                        "surface-container": "#e6eeff",
+                        "outline": "#75777f",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "surface-container-low": "#eff4ff",
+                        "secondary": "#115cb9",
+                        "primary-fixed": "#d8e2ff",
+                        "outline-variant": "#c5c6cf",
+                        "secondary-fixed-dim": "#acc7ff",
+                        "surface-container-high": "#dce9ff",
+                        "on-tertiary-fixed": "#360f00",
+                        "on-surface": "#0d1c2e",
+                        "integrity-red": "#991B1B",
+                        "on-background": "#0d1c2e",
+                        "on-primary-fixed-variant": "#32466f",
+                        "surface-container-highest": "#d5e3fc",
+                        "secondary-container": "#659dfe",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#b2c6f7",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#6f84b0",
+                        "on-surface-variant": "#44474e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "margin-desktop": "32px",
+                        "spine-width": "4px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Barlow"],
+                        "headline-lg": ["Barlow Condensed"],
+                        "display-title": ["Barlow Condensed"],
+                        "data-mono": ["JetBrains Mono"],
+                        "label-caps": ["Barlow Condensed"],
+                        "headline-lg-mobile": ["Barlow Condensed"],
+                        "body-md": ["Barlow"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "display-title": ["40px", { "lineHeight": "48px", "letterSpacing": "0.02em", "fontWeight": "700" }],
+                        "data-mono": ["13px", { "lineHeight": "18px", "letterSpacing": "0.03em", "fontWeight": "500" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.06em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md flex flex-col md:flex-row overflow-hidden">
+<!-- SideNavBar (Desktop) -->
+<nav class="hidden md:flex bg-surface-container-lowest border-r border-border-slate w-[260px] h-screen flex-col overflow-y-auto">
+<div class="p-6 border-b border-border-slate">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-primary text-3xl">verified_user</span>
+<div>
+<h1 class="font-display-title text-display-title text-primary">BorderShield AI</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Vigilance Protocol v4.2</p>
+</div>
+</div>
+</div>
+<div class="flex-1 py-4">
+<ul class="space-y-1 px-3">
+<li><a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container transition-all duration-150 ease-in-out font-label-caps text-label-caps" href="#"><span class="material-symbols-outlined">dashboard</span>Overview</a></li>
+<li><a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container transition-all duration-150 ease-in-out font-label-caps text-label-caps" href="#"><span class="material-symbols-outlined">security_update_good</span>Command Center</a></li>
+<li><a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container transition-all duration-150 ease-in-out font-label-caps text-label-caps" href="#"><span class="material-symbols-outlined">person_add</span>New Screening</a></li>
+<li><a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-primary font-bold border-l-4 border-primary bg-surface-container-high transition-all duration-150 ease-in-out font-label-caps text-label-caps" href="#"><span class="material-symbols-outlined">analytics</span>Active Case</a></li>
+<li><a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container transition-all duration-150 ease-in-out font-label-caps text-label-caps" href="#"><span class="material-symbols-outlined">search_check</span>Investigations</a></li>
+</ul>
+</div>
+<div class="p-4 border-t border-border-slate">
+<button class="w-full bg-integrity-red text-white py-2 rounded-DEFAULT font-label-caps text-label-caps flex justify-center items-center gap-2 hover:bg-red-800 transition-colors">
+<span class="material-symbols-outlined text-sm">emergency</span> Emergency Alert
+            </button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col h-screen overflow-hidden relative">
+<!-- Verification Spine -->
+<div class="absolute left-0 top-0 bottom-0 w-spine-width bg-integrity-red z-10 md:left-0 md:relative"></div>
+<!-- TopAppBar -->
+<header class="bg-surface-bright flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 w-full border-b border-border-slate z-20">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="md:hidden font-label-caps text-label-caps tracking-widest text-primary">BorderShield AI</h1>
+<div class="hidden md:flex gap-6">
+<span class="font-data-mono text-data-mono text-primary font-bold">Case ID: B-9921-FX</span>
+<span class="font-data-mono text-data-mono text-on-surface-variant">System State: NOMINAL</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Canvas -->
+<main class="flex-1 overflow-y-auto p-margin-mobile md:p-margin-desktop bg-surface-base">
+<div class="max-w-6xl mx-auto space-y-6">
+<!-- Header / Assessment Summary -->
+<div class="bg-surface-container-lowest border border-border-slate rounded-DEFAULT p-6 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4">
+<span class="font-data-mono text-data-mono text-on-surface-variant bg-surface-container px-2 py-1 rounded-sm">B-9921-FX</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-6 md:font-headline-lg md:text-headline-lg font-headline-lg-mobile text-headline-lg-mobile">RISK ASSESSMENT DECISION</h2>
+<div class="flex flex-col md:flex-row gap-8 items-start md:items-center">
+<div class="text-center md:text-left flex-shrink-0">
+<div class="font-display-title text-[72px] leading-none font-bold text-integrity-red">87<span class="text-3xl text-on-surface-variant font-normal">/100</span></div>
+<div class="font-label-caps text-label-caps text-integrity-red tracking-widest mt-2 border border-integrity-red bg-red-50 inline-block px-3 py-1 rounded-sm">HIGH RISK BAND</div>
+</div>
+<div class="flex-1 w-full">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant mb-4">RECOMMENDATION</h3>
+<div class="bg-integrity-red text-white p-4 rounded-DEFAULT border border-integrity-red shadow-[0px_2px_0px_rgba(0,0,0,0.2)]">
+<span class="font-headline-lg text-headline-lg md:font-headline-lg md:text-headline-lg font-headline-lg-mobile text-headline-lg-mobile flex items-center gap-3">
+<span class="material-symbols-outlined text-3xl">warning</span>
+                                    SECONDARY INSPECTION RECOMMENDED
+                                </span>
+</div>
+</div>
+</div>
+<!-- Horizontal Risk Scale -->
+<div class="mt-8 pt-6 border-t border-border-slate">
+<div class="flex justify-between text-label-caps font-label-caps text-on-surface-variant mb-2">
+<span>LOW (0-30)</span>
+<span>MED (31-70)</span>
+<span>HIGH (71-90)</span>
+<span>CRITICAL (91-100)</span>
+</div>
+<div class="h-4 w-full bg-surface-container rounded-sm flex relative">
+<div class="h-full bg-verification-green w-[30%]"></div>
+<div class="h-full bg-review-amber w-[40%]"></div>
+<div class="h-full bg-integrity-red w-[20%] relative">
+<!-- Marker -->
+<div class="absolute right-[15%] top-1/2 -translate-y-1/2 w-1 h-6 bg-primary z-10 border border-white"></div>
+</div>
+<div class="h-full bg-primary w-[10%]"></div>
+</div>
+</div>
+</div>
+<!-- Main Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Decision Basis (Priority 1) -->
+<div class="lg:col-span-2 space-y-6">
+<div class="bg-surface-container-lowest border border-border-slate rounded-DEFAULT p-6 h-full">
+<h3 class="font-headline-lg text-headline-lg md:font-headline-lg md:text-headline-lg font-headline-lg-mobile text-headline-lg-mobile text-primary mb-4 border-b border-border-slate pb-2">DECISION BASIS</h3>
+<div class="space-y-4">
+<div class="p-4 bg-red-50 border border-integrity-red rounded-sm flex items-start gap-4">
+<span class="material-symbols-outlined text-integrity-red mt-1">error</span>
+<div>
+<h4 class="font-label-caps text-label-caps text-integrity-red mb-1">DECISIVE SIGNAL: BIOMETRIC ANOMALY</h4>
+<p class="font-data-mono text-data-mono text-primary">Facial geometry mismatch detected against historical records (Confidence: 94%). Cross-referencing database entry X-442.</p>
+</div>
+</div>
+<div class="p-4 bg-orange-50 border border-review-amber rounded-sm flex items-start gap-4">
+<span class="material-symbols-outlined text-review-amber mt-1">warning</span>
+<div>
+<h4 class="font-label-caps text-label-caps text-review-amber mb-1">SUPPORTING SIGNAL: DOCUMENT INTEGRITY</h4>
+<p class="font-data-mono text-data-mono text-primary">MRZ checksum failure on secondary identification document. Micro-printing inconsistencies noted in region 4.</p>
+</div>
+</div>
+<div class="p-4 border border-border-slate rounded-sm flex items-start gap-4 bg-surface-base">
+<span class="material-symbols-outlined text-on-surface-variant mt-1">history</span>
+<div>
+<h4 class="font-label-caps text-label-caps text-on-surface-variant mb-1">CONTEXTUAL SIGNAL: TRAVEL PATTERN</h4>
+<p class="font-data-mono text-data-mono text-primary">High-velocity travel across 4 distinct zones within 72 hours. Deviates significantly from established baseline.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar Stats -->
+<div class="space-y-6">
+<!-- Score Contributors -->
+<div class="bg-surface-container-lowest border border-border-slate rounded-DEFAULT p-6">
+<h3 class="font-label-caps text-label-caps text-primary mb-4">SCORE CONTRIBUTORS</h3>
+<table class="w-full text-left font-data-mono text-data-mono text-primary">
+<tbody>
+<tr class="border-b border-border-slate">
+<td class="py-2">Biometric Mismatch</td>
+<td class="py-2 text-right text-integrity-red font-bold">+35</td>
+</tr>
+<tr class="border-b border-border-slate">
+<td class="py-2">Cross-zone Mismatch</td>
+<td class="py-2 text-right text-review-amber font-bold">+25</td>
+</tr>
+<tr class="border-b border-border-slate">
+<td class="py-2">Document Anomaly</td>
+<td class="py-2 text-right text-review-amber font-bold">+15</td>
+</tr>
+<tr>
+<td class="py-2">Watchlist Proximity</td>
+<td class="py-2 text-right font-bold">+12</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Confidence Metrics -->
+<div class="bg-surface-container-lowest border border-border-slate rounded-DEFAULT p-6">
+<h3 class="font-label-caps text-label-caps text-primary mb-4">METRICS QUALITY</h3>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between font-data-mono text-data-mono text-primary mb-1">
+<span>System Confidence</span>
+<span>92%</span>
+</div>
+<div class="h-1 w-full bg-surface-container">
+<div class="h-full bg-verification-green w-[92%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-data-mono text-data-mono text-primary mb-1">
+<span>Data Quality</span>
+<span>88%</span>
+</div>
+<div class="h-1 w-full bg-surface-container">
+<div class="h-full bg-verification-green w-[88%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-data-mono text-data-mono text-primary mb-1">
+<span>Sensor Reliability</span>
+<span>99%</span>
+</div>
+<div class="h-1 w-full bg-surface-container">
+<div class="h-full bg-verification-green w-[99%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Bar -->
+<div class="bg-surface-container-lowest border border-border-slate rounded-DEFAULT p-4 flex flex-col md:flex-row justify-end gap-4 shadow-[0px_2px_0px_rgba(0,26,65,0.1)]">
+<button class="px-6 py-2 border border-border-slate rounded-DEFAULT font-label-caps text-label-caps text-primary hover:bg-surface-container transition-colors">
+                        REVIEW DETAILS
+                    </button>
+<button class="px-6 py-2 border border-border-slate rounded-DEFAULT font-label-caps text-label-caps text-primary hover:bg-surface-container transition-colors">
+                        RECAPTURE
+                    </button>
+<button class="px-6 py-2 bg-primary text-on-primary rounded-DEFAULT font-label-caps text-label-caps hover:bg-gray-800 transition-colors shadow-[0px_2px_0px_rgba(0,0,0,0.5)]">
+                        INITIATE SECONDARY INSPECTION
+                    </button>
+</div>
+</div>
+</main>
+</div>
+</body></html>

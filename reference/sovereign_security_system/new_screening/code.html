@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BorderShield AI - New Screening</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&amp;family=Hanken+Grotesk:wght@400;500;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed-variant": "#38485f",
+                      "inverse-primary": "#bec7d9",
+                      "on-tertiary-fixed": "#261a00",
+                      "on-error-container": "#93000a",
+                      "on-secondary": "#ffffff",
+                      "surface-dim": "#d9dadb",
+                      "outline-variant": "#c5c6cc",
+                      "tertiary-fixed": "#ffdfa0",
+                      "surface-container": "#edeeef",
+                      "surface-bright": "#f8f9fa",
+                      "on-surface": "#191c1d",
+                      "on-error": "#ffffff",
+                      "outline": "#75777c",
+                      "primary": "#000000",
+                      "inverse-surface": "#2e3132",
+                      "surface-container-high": "#e7e8e9",
+                      "on-surface-variant": "#45474c",
+                      "blueprint-grid": "rgba(196, 198, 207, 0.15)",
+                      "on-primary": "#ffffff",
+                      "surface-container-low": "#f3f4f5",
+                      "secondary-fixed-dim": "#b7c7e4",
+                      "surface-variant": "#e1e3e4",
+                      "surface-tint": "#565f6f",
+                      "on-background": "#191c1d",
+                      "on-tertiary-container": "#a87d00",
+                      "inverse-on-surface": "#f0f1f2",
+                      "primary-fixed-dim": "#bec7d9",
+                      "on-primary-fixed": "#131c2a",
+                      "background": "#f8f9fa",
+                      "tertiary-fixed-dim": "#fbbc01",
+                      "on-tertiary-fixed-variant": "#5c4300",
+                      "error-container": "#ffdad6",
+                      "on-secondary-fixed": "#0a1c32",
+                      "on-primary-fixed-variant": "#3e4756",
+                      "secondary-container": "#d0e1fe",
+                      "secondary-fixed": "#d4e3ff",
+                      "success-pulse": "#003366",
+                      "on-primary-container": "#7b8495",
+                      "surface-container-lowest": "#ffffff",
+                      "error-alert": "#ba1a1a",
+                      "tertiary": "#000000",
+                      "surface-container-highest": "#e1e3e4",
+                      "tertiary-container": "#261a00",
+                      "on-tertiary": "#ffffff",
+                      "secondary": "#4f5f78",
+                      "primary-container": "#131c2a",
+                      "on-secondary-container": "#53637d",
+                      "error": "#ba1a1a",
+                      "surface": "#f8f9fa",
+                      "primary-fixed": "#dae3f6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "sm": "8px",
+                      "xl": "48px",
+                      "md": "16px",
+                      "container-max": "1440px",
+                      "xs": "4px",
+                      "gutter": "24px",
+                      "sidebar-expanded": "260px",
+                      "rail-width": "72px",
+                      "lg": "24px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Bricolage Grotesque"],
+                      "display-lg": ["Bricolage Grotesque"],
+                      "label-caps": ["Hanken Grotesk"],
+                      "body-lg": ["Hanken Grotesk"],
+                      "headline-md": ["Bricolage Grotesque"],
+                      "body-md": ["Hanken Grotesk"],
+                      "technical-data": ["JetBrains Mono"]
+              },
+              "fontSize": {
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "technical-data": ["13px", {"lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "500"}]
+              }
+            },
+          }
+        }
+    </script>
+<style>
+        .blueprint-pattern {
+            background-image: 
+                linear-gradient(var(--tw-colors-outline-variant) 1px, transparent 1px),
+                linear-gradient(90deg, var(--tw-colors-outline-variant) 1px, transparent 1px);
+            background-size: 24px 24px;
+            background-color: var(--tw-colors-surface-container-lowest);
+            opacity: 0.4;
+        }
+        
+        .tech-dashed-border {
+            border: 1px dashed var(--tw-colors-outline);
+        }
+        
+        /* Node animation */
+        @keyframes pulse-border {
+            0% { border-color: var(--tw-colors-primary); }
+            50% { border-color: var(--tw-colors-outline-variant); }
+            100% { border-color: var(--tw-colors-primary); }
+        }
+        .active-node {
+            animation: pulse-border 2s infinite;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex w-full font-body-md">
+<!-- Mobile Top NavBar -->
+<div class="md:hidden flex flex-col w-full absolute top-0 z-50">
+<nav class="bg-surface dark:bg-on-background border-b border-outline-variant flex justify-between items-center px-lg h-[64px] w-full docked full-width top-0">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-on-primary">BorderShield AI</div>
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary dark:text-on-primary cursor-pointer active:opacity-80">settings</span>
+<span class="material-symbols-outlined text-primary dark:text-on-primary cursor-pointer active:opacity-80">help_outline</span>
+</div>
+</nav>
+<div class="flex bg-surface-container-highest px-sm overflow-x-auto border-b border-outline-variant">
+<div class="px-md py-sm whitespace-nowrap text-on-surface-variant font-label-caps text-label-caps uppercase tracking-wider">Overview</div>
+<div class="px-md py-sm whitespace-nowrap text-on-surface-variant font-label-caps text-label-caps uppercase tracking-wider">Command Center</div>
+<div class="px-md py-sm whitespace-nowrap text-primary font-bold border-b-2 border-primary pb-1 font-label-caps text-label-caps uppercase tracking-wider">New Screening</div>
+<div class="px-md py-sm whitespace-nowrap text-on-surface-variant font-label-caps text-label-caps uppercase tracking-wider">Active Case</div>
+</div>
+</div>
+<!-- Desktop SideNavBar -->
+<nav class="hidden md:flex flex-col h-screen w-sidebar-expanded border-r border-outline-variant bg-surface-container-lowest dark:bg-inverse-surface fixed left-0 top-0 z-40 shrink-0">
+<!-- Header -->
+<div class="p-lg border-b border-outline-variant">
+<div class="font-headline-md text-headline-md font-black text-primary dark:text-primary-fixed mb-sm">BorderShield AI</div>
+<div class="flex items-center gap-sm mt-md">
+<div class="w-[32px] h-[32px] bg-surface-container-high rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A small, stylized, geometric, high-contrast, black and white avatar representing a law enforcement or intelligence operator in a technical command center environment. Clear, minimalist, professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_ekbgUGdRxL-S79pSAd43c_2g9jiAJU8uKiNA6rVUs3fsF2_ttdTkWYtEIVh5qLhEBlSv83gXKmngukcTTFKAfyDCZ5vhVVBOY3ZJraFmu546uD7su9M73Ci26cbjP9Rw3pN988Zt6Kg6Ud7do8LHL7uC0YKQM-y5KgI7CWHQ-YWQFM9Bxg6hdIvHLUC5OtKznwZlsFgdHdclDFXPCh0SieREzTF7UfQvnXAU2Qkrg6AxdFZEEv2Z"/>
+</div>
+<div>
+<div class="font-label-caps text-label-caps uppercase tracking-wider text-primary dark:text-primary-fixed">OPERATOR_042</div>
+<div class="font-technical-data text-technical-data text-on-surface-variant text-[10px]">Unit: Border Intelligence</div>
+</div>
+</div>
+</div>
+<!-- Main Navigation -->
+<div class="flex-1 overflow-y-auto py-sm">
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Overview</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">security</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Command Center</span>
+</a>
+<a class="flex items-center gap-md bg-surface-container-highest text-primary font-bold border-l-4 border-primary px-md py-sm active:scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person_search</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">New Screening</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">assignment_late</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Active Case</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">travel_explore</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Investigations</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">history_edu</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Audit Trail</span>
+</a>
+<div class="h-px bg-outline-variant my-sm mx-md"></div>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">dns</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">System Status</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-on-surface px-md py-sm hover:bg-surface-container transition-all duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">verified_user</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Issuer Registry</span>
+</a>
+<a class="flex items-center gap-md text-error-alert hover:bg-error-container px-md py-sm transition-all duration-150 active:scale-[0.98] mt-sm mx-sm border border-error-alert bg-surface-container-lowest" href="#">
+<span class="material-symbols-outlined">error_outline</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Emergency Alert</span>
+</a>
+</div>
+<!-- Footer -->
+<div class="p-md border-t border-outline-variant bg-surface-container-lowest">
+<button class="w-full bg-primary text-on-primary font-label-caps text-label-caps uppercase tracking-wider py-md px-sm flex justify-center items-center gap-sm active:scale-[0.98] transition-transform rounded-none mb-md">
+<span class="material-symbols-outlined text-[16px]">add</span>
+                INITIATE SCREENING
+            </button>
+<div class="flex justify-between">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-colors p-sm hover:bg-surface-container">settings</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-colors p-sm hover:bg-surface-container">logout</span>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-sidebar-expanded pt-[100px] md:pt-0 w-full bg-background flex flex-col items-center">
+<div class="w-full max-w-container-max mx-auto px-md md:px-lg py-xl flex flex-col gap-lg">
+<!-- Page Header & Stepper -->
+<div class="flex flex-col gap-md mb-md">
+<div class="font-technical-data text-technical-data text-on-surface-variant uppercase">Case ID: <span class="text-primary font-bold">SCR-884-29B</span></div>
+<!-- Brutalist Stepper -->
+<div class="flex w-full border border-outline-variant bg-surface-container-lowest">
+<div class="flex-1 p-md bg-primary text-on-primary border-r border-outline-variant flex flex-col relative overflow-hidden">
+<span class="font-headline-lg text-headline-lg absolute -right-4 -bottom-4 opacity-10 leading-none">01</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider opacity-70">Step 01</span>
+<span class="font-headline-md text-headline-md mt-xs">DOCUMENT</span>
+</div>
+<div class="flex-1 p-md text-on-surface-variant border-r border-outline-variant flex flex-col relative overflow-hidden opacity-50 bg-surface-container-low">
+<span class="font-headline-lg text-headline-lg absolute -right-4 -bottom-4 opacity-10 leading-none text-primary">02</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Step 02</span>
+<span class="font-headline-md text-headline-md mt-xs">PERSON</span>
+</div>
+<div class="flex-1 p-md text-on-surface-variant flex flex-col relative overflow-hidden opacity-50 bg-surface-container-low">
+<span class="font-headline-lg text-headline-lg absolute -right-4 -bottom-4 opacity-10 leading-none text-primary">03</span>
+<span class="font-label-caps text-label-caps uppercase tracking-wider">Step 03</span>
+<span class="font-headline-md text-headline-md mt-xs">SCREEN</span>
+</div>
+</div>
+</div>
+<!-- Content Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Capture & Analysis (Span 8) -->
+<div class="lg:col-span-8 flex flex-col gap-md">
+<!-- Document Capture Zone -->
+<div class="border border-outline-variant bg-surface-container-lowest p-md flex flex-col relative">
+<div class="flex justify-between items-center mb-md border-b border-outline-variant pb-sm">
+<h2 class="font-label-caps text-label-caps uppercase tracking-wider text-primary flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">document_scanner</span>
+                                Optical Capture Zone
+                            </h2>
+<div class="font-technical-data text-technical-data text-on-surface-variant bg-surface px-sm border border-outline-variant">AWAITING_INPUT</div>
+</div>
+<!-- Dropzone -->
+<div class="w-full h-[400px] tech-dashed-border bg-surface-container-low relative overflow-hidden flex flex-col items-center justify-center cursor-pointer hover:bg-surface-container transition-colors group">
+<div class="absolute inset-0 blueprint-pattern pointer-events-none"></div>
+<!-- Scanner laser effect -->
+<div class="absolute top-1/2 left-0 w-full h-[2px] bg-success-pulse opacity-0 group-hover:opacity-50 blur-[2px] transition-opacity duration-700 pointer-events-none"></div>
+<span class="material-symbols-outlined text-display-lg text-on-surface-variant mb-md group-hover:text-primary transition-colors z-10">center_focus_strong</span>
+<div class="font-headline-md text-headline-md text-primary z-10">Place Document Here</div>
+<div class="font-technical-data text-technical-data text-on-surface-variant mt-xs z-10 text-center max-w-[300px]">Align MRZ within bounds. Ensure flat surface and even lighting.</div>
+<button class="mt-lg z-10 border border-primary bg-surface-container-lowest text-primary font-label-caps text-label-caps uppercase tracking-wider py-sm px-lg hover:bg-primary hover:text-on-primary transition-colors">
+                                ACTIVATE CAMERA
+                            </button>
+</div>
+</div>
+<!-- Capability Detection Strip -->
+<div class="border border-outline-variant bg-surface-container-lowest p-sm flex flex-col sm:flex-row items-center gap-sm">
+<div class="font-label-caps text-label-caps uppercase tracking-wider text-on-surface-variant shrink-0 px-sm border-r border-outline-variant">CAPABILITIES DETECTED:</div>
+<div class="flex flex-wrap gap-xs flex-1">
+<!-- Semantic States -->
+<div class="flex items-center gap-xs px-sm py-xs border border-primary bg-surface text-primary font-technical-data text-technical-data">
+<div class="w-[6px] h-[6px] bg-success-pulse rounded-full"></div>
+                                OCR_READY
+                            </div>
+<div class="flex items-center gap-xs px-sm py-xs border border-primary bg-surface text-primary font-technical-data text-technical-data">
+<div class="w-[6px] h-[6px] bg-success-pulse rounded-full"></div>
+                                MRZ_PARSER
+                            </div>
+<div class="flex items-center gap-xs px-sm py-xs border border-outline-variant bg-surface-container-low text-on-surface-variant font-technical-data text-technical-data opacity-60">
+<div class="w-[6px] h-[6px] bg-outline-variant rounded-full"></div>
+                                RFID_N/A
+                            </div>
+<div class="flex items-center gap-xs px-sm py-xs border border-tertiary bg-surface text-tertiary font-technical-data text-technical-data">
+<div class="w-[6px] h-[6px] bg-tertiary-fixed-dim rounded-full"></div>
+                                UV_REVIEW
+                            </div>
+</div>
+</div>
+</div>
+<!-- Right Column: Pipeline & Person (Span 4) -->
+<div class="lg:col-span-4 flex flex-col gap-md">
+<!-- Analysis Pipeline Visual -->
+<div class="border border-outline-variant bg-surface-container-lowest p-md flex flex-col flex-1">
+<h2 class="font-label-caps text-label-caps uppercase tracking-wider text-primary flex items-center gap-sm mb-lg border-b border-outline-variant pb-sm">
+<span class="material-symbols-outlined text-[18px]">account_tree</span>
+                            Analysis Pipeline
+                        </h2>
+<div class="flex flex-col gap-0 relative flex-1">
+<!-- Connecting Line -->
+<div class="absolute left-[15px] top-[16px] bottom-[16px] w-[2px] bg-outline-variant z-0"></div>
+<!-- Node 1 -->
+<div class="flex gap-md relative z-10 pb-lg">
+<div class="w-[32px] h-[32px] rounded-none border border-primary bg-primary text-on-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<div class="flex flex-col justify-center">
+<div class="font-technical-data text-technical-data text-primary font-bold">SYSTEM_READY</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant text-[10px]">Awaiting payload</div>
+</div>
+</div>
+<!-- Node 2 (Active) -->
+<div class="flex gap-md relative z-10 pb-lg">
+<div class="w-[32px] h-[32px] rounded-none border-2 border-primary bg-surface-container-lowest text-primary flex items-center justify-center shrink-0 active-node">
+<span class="material-symbols-outlined text-[16px] animate-spin">data_usage</span>
+</div>
+<div class="flex flex-col justify-center">
+<div class="font-technical-data text-technical-data text-primary">DOC_DETECTION</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant text-[10px]">Listening on port 8080...</div>
+</div>
+</div>
+<!-- Node 3 (Pending) -->
+<div class="flex gap-md relative z-10 pb-lg opacity-40">
+<div class="w-[32px] h-[32px] rounded-none border border-outline-variant bg-surface-container-low text-on-surface-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px]">list_alt</span>
+</div>
+<div class="flex flex-col justify-center">
+<div class="font-technical-data text-technical-data text-on-surface-variant">FIELD_EXTRACTION</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant text-[10px]">Pending MRZ alignment</div>
+</div>
+</div>
+<!-- Node 4 (Pending) -->
+<div class="flex gap-md relative z-10 opacity-40">
+<div class="w-[32px] h-[32px] rounded-none border border-outline-variant bg-surface-container-low text-on-surface-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px]">policy</span>
+</div>
+<div class="flex flex-col justify-center">
+<div class="font-technical-data text-technical-data text-on-surface-variant">RISK_ASSESSMENT</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant text-[10px]">Awaiting extraction data</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Optional Person Verification -->
+<div class="border border-outline-variant bg-surface-container-lowest p-md relative overflow-hidden">
+<div class="absolute top-0 right-0 bg-surface-container px-sm py-xs border-l border-b border-outline-variant font-technical-data text-technical-data text-[10px] text-on-surface-variant">OPTIONAL_MODULE</div>
+<h2 class="font-label-caps text-label-caps uppercase tracking-wider text-primary flex items-center gap-sm mb-md">
+<span class="material-symbols-outlined text-[18px]">face</span>
+                            Person Verification
+                        </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md text-sm">Capture biometric face data to cross-reference with document image.</p>
+<button class="w-full border border-outline-variant bg-surface hover:bg-surface-container-high text-primary font-label-caps text-label-caps uppercase tracking-wider py-sm px-md transition-colors flex justify-center items-center gap-sm">
+<span class="material-symbols-outlined text-[16px]">add_a_photo</span>
+                            INITIALIZE CAMERA
+                        </button>
+</div>
+</div>
+</div>
+<!-- Global Action Footer within Canvas -->
+<div class="w-full border-t border-outline-variant pt-md flex justify-end gap-sm mt-auto">
+<button class="border border-outline-variant bg-surface-container-lowest text-primary font-label-caps text-label-caps uppercase tracking-wider py-sm px-lg hover:bg-surface-container transition-colors">
+                    CANCEL
+                </button>
+<button class="bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps uppercase tracking-wider py-sm px-lg cursor-not-allowed opacity-50 flex items-center gap-sm">
+                    PROCEED TO PERSON
+                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</main>
+</body></html>

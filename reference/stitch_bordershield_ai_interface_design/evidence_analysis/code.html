@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BorderShield AI - Evidence Analysis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&amp;family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#c7c6c9",
+                        "on-primary-fixed-variant": "#464749",
+                        "surface-variant": "#2d363e",
+                        "on-error": "#690005",
+                        "on-background": "#dae3ee",
+                        "surface-dim": "#0b141c",
+                        "tertiary-fixed": "#ebe0dc",
+                        "on-surface": "#dae3ee",
+                        "surface-container-low": "#141c24",
+                        "on-primary-fixed": "#1b1c1e",
+                        "primary-fixed": "#e3e2e5",
+                        "on-tertiary": "#352f2d",
+                        "outline": "#909094",
+                        "inverse-surface": "#dae3ee",
+                        "secondary-fixed-dim": "#c2c7d0",
+                        "on-primary-container": "#7a7a7c",
+                        "on-tertiary-fixed": "#1f1b18",
+                        "on-secondary": "#2c3138",
+                        "on-primary": "#303033",
+                        "outline-variant": "#45474a",
+                        "surface-container-high": "#222b33",
+                        "tertiary": "#cec4c1",
+                        "secondary-container": "#42474f",
+                        "background": "#0b141c",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-container": "#b1b5bf",
+                        "secondary-fixed": "#dee2ec",
+                        "on-tertiary-container": "#807975",
+                        "secondary": "#c2c7d0",
+                        "on-surface-variant": "#c6c6ca",
+                        "surface": "#0b141c",
+                        "error": "#ffb4ab",
+                        "surface-tint": "#c7c6c9",
+                        "primary-container": "#0b0c0e",
+                        "error-container": "#93000a",
+                        "tertiary-fixed-dim": "#cec4c1",
+                        "surface-bright": "#313a43",
+                        "tertiary-container": "#0f0b09",
+                        "surface-container-highest": "#2d363e",
+                        "primary": "#c7c6c9",
+                        "inverse-primary": "#5e5e61",
+                        "surface-container": "#182028",
+                        "on-tertiary-fixed-variant": "#4c4543",
+                        "inverse-on-surface": "#29313a",
+                        "surface-container-lowest": "#060f16",
+                        "on-secondary-fixed-variant": "#42474f",
+                        "on-secondary-fixed": "#171c23"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "sidebar-width": "240px",
+                        "stack-lg": "32px",
+                        "margin-page": "24px",
+                        "gutter": "16px",
+                        "stack-md": "16px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "status-pill": ["Inter"],
+                        "headline-lg": ["IBM Plex Sans"],
+                        "body-lg": ["Inter"],
+                        "technical-data": ["JetBrains Mono"],
+                        "headline-md": ["IBM Plex Sans"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "status-pill": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "technical-data": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.06em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .cyber-grid {
+            background-image: 
+                linear-gradient(to right, rgba(69, 71, 74, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(69, 71, 74, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .scan-line {
+            width: 100%;
+            height: 2px;
+            background: rgba(199, 198, 201, 0.5);
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: scan 3s linear infinite;
+            box-shadow: 0 0 10px rgba(199, 198, 201, 0.8);
+        }
+        @keyframes scan {
+            0% { top: -10%; }
+            100% { top: 110%; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex overflow-hidden">
+<!-- SideNavBar -->
+<nav class="bg-surface-container-lowest dark:bg-surface-container-lowest text-primary dark:text-primary fixed left-0 top-0 h-full w-[240px] border-r border-outline-variant flex flex-col h-full py-stack-md z-20">
+<div class="px-margin-page mb-stack-lg">
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface">BorderShield AI</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant mt-1">Screening Console</p>
+</div>
+<button class="mx-margin-page mb-stack-lg bg-surface-variant border border-outline-variant text-on-surface font-body-md py-2 px-4 rounded flex items-center justify-center gap-2 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+            New Entry Scan
+        </button>
+<div class="flex-1 overflow-y-auto px-stack-sm">
+<ul class="space-y-1">
+<li>
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 flex items-center gap-3 px-3 py-2 rounded" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Command Dashboard</span>
+</a>
+</li>
+<li>
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 flex items-center gap-3 px-3 py-2 rounded" href="#">
+<span class="material-symbols-outlined" data-icon="person_search">person_search</span>
+<span class="font-body-md text-body-md">New Screening</span>
+</a>
+</li>
+<li>
+<a class="bg-secondary-container text-on-secondary-container font-semibold flex items-center gap-3 px-3 py-2 rounded" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_ind">assignment_ind</span>
+<span class="font-body-md text-body-md">Active Case</span>
+</a>
+</li>
+<li>
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 flex items-center gap-3 px-3 py-2 rounded" href="#">
+<span class="material-symbols-outlined" data-icon="biometric_viewer">qr_code_2</span>
+<span class="font-body-md text-body-md">Investigations</span>
+</a>
+</li>
+<li>
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 flex items-center gap-3 px-3 py-2 rounded" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-body-md text-body-md">Audit Trail</span>
+</a>
+</li>
+</ul>
+</div>
+<div class="px-stack-sm mt-auto">
+<ul class="space-y-1">
+<li>
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 flex items-center gap-3 px-3 py-2 rounded" href="#">
+<span class="material-symbols-outlined" data-icon="settings_heart">settings_heart</span>
+<span class="font-body-md text-body-md">System Health</span>
+</a>
+</li>
+<li>
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 flex items-center gap-3 px-3 py-2 rounded" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="ml-[240px] flex-1 flex flex-col h-screen overflow-hidden bg-background">
+<!-- TopAppBar -->
+<header class="bg-background dark:bg-background docked full-width top-0 border-b border-outline-variant flex justify-between items-center h-16 px-margin-page flex-shrink-0 z-10">
+<div class="flex items-center gap-4">
+<h2 class="font-headline-md text-headline-md text-primary font-bold">Evidence Analysis</h2>
+<div class="h-4 w-px bg-outline-variant mx-2"></div>
+<span class="font-technical-data text-technical-data text-on-surface-variant">CASE-ID: 994-Alpha-X</span>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-on-surface-variant hover:text-on-surface transition-colors flex items-center">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors flex items-center">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+</button>
+<div class="h-6 w-px bg-outline-variant"></div>
+<button class="font-label-caps text-label-caps text-error border border-error hover:bg-error/10 px-3 py-1 rounded transition-colors">
+                    End Shift
+                </button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant overflow-hidden">
+<img alt="Operator Profile" class="w-full h-full object-cover" data-alt="A futuristic, high-contrast portrait of a security operator in a dark tactical uniform, dimly lit with subtle neon blue highlights, against a pure black background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxAYLKvy7XUib3JfUgQi5atYV4_seS97zTKBaj1YOUBXnDskUBzg-kHmDqzJ1F5t07pAhFeDK4su0-JbZTr578fyFMZuY33HZKQt05nFhpSLTwBh3-UlqNFIZMfgEOsRfrXicStDSo7MNwdv_Lu1lcGfiAeEv3CxfILHM9gNkf-dBwltcmwjSxerUFCRUXuhz9KOeyWey-nbq76gQqJT1SCsGZ_t_ja93xXD8BauAzbvMjFbfpTIdm"/>
+</div>
+</div>
+</header>
+<!-- 3-Column Layout -->
+<main class="flex-1 p-margin-page grid grid-cols-12 gap-gutter overflow-hidden h-full">
+<!-- LEFT: Document Viewer (4 cols) -->
+<section class="col-span-4 bg-surface-container-low border border-outline-variant rounded flex flex-col overflow-hidden h-full">
+<div class="p-3 border-b border-outline-variant bg-surface-container flex justify-between items-center">
+<h3 class="font-label-caps text-label-caps text-on-surface tracking-wider">DOCUMENT EVIDENCE</h3>
+<div class="flex gap-2">
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-variant text-on-surface-variant"><span class="material-symbols-outlined text-[16px]">zoom_in</span></button>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-variant text-on-surface-variant"><span class="material-symbols-outlined text-[16px]">zoom_out</span></button>
+</div>
+</div>
+<div class="flex-1 p-4 relative cyber-grid flex items-center justify-center overflow-hidden">
+<div class="relative w-full max-w-sm aspect-[1.4/1] rounded shadow-lg overflow-hidden border border-outline-variant">
+<img alt="Scanned Passport" class="w-full h-full object-cover opacity-80" data-alt="A highly detailed synthetic macro photograph of a modern electronic passport identification page lying flat. The lighting is clinical and harsh, highlighting micro-printing and holographic security features. The overall tone is institutional and high-tech, set against a dark gray background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPMX1ni770BQDQMcBjtqWm3QEHGLUFx6FsrVcoIXtSoiv2SJ4yi12z3TjmMrV_fG5lIQq9fOVDLdEQXTWoFL-Mlb1HrDs7SnWf7I9oUz2xi-YveWaNasZuMNtPkIpqfKxNfJa974p74zBCRQ6UJUDeYBFulCHojRbEDVRK_hzuwd1YcxEniXtB8GDmy-5OJ9jFxuC-3Cri_aPBZDOUWjKkTWnm3Xm5x3_HWzEC3-VLQzi26WrREc3o"/>
+<!-- Highlighted Region (DOB) -->
+<div class="absolute top-[60%] left-[30%] w-[35%] h-[12%] border-2 border-error bg-error/20 z-10 animate-pulse"></div>
+<div class="absolute top-[60%] left-[30%] -translate-y-full mb-1">
+<span class="bg-error text-on-error font-technical-data text-[10px] px-1 py-0.5 rounded-sm">DOB ANOMALY</span>
+</div>
+<div class="scan-line"></div>
+</div>
+</div>
+</section>
+<!-- CENTER: Verification Ladder (4 cols) -->
+<section class="col-span-4 bg-surface-container-low border border-outline-variant rounded flex flex-col h-full overflow-hidden">
+<div class="p-3 border-b border-outline-variant bg-surface-container">
+<h3 class="font-label-caps text-label-caps text-on-surface tracking-wider">VERIFICATION LADDER</h3>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-4">
+<!-- Row 1 -->
+<div class="border border-outline-variant rounded bg-surface p-3 flex flex-col gap-2">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">document_scanner</span>
+<h4 class="font-body-md text-body-md font-semibold text-on-surface">Document Structure</h4>
+</div>
+<span class="font-status-pill text-status-pill text-primary bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-sm">Verified</span>
+</div>
+<div class="font-technical-data text-[11px] text-on-surface-variant pl-6">
+<p>&gt; Template: EUR-P-2023</p>
+<p>&gt; UV/IR Response: Nominal</p>
+</div>
+</div>
+<!-- Row 2 (Flagged) -->
+<div class="border border-error/50 rounded bg-error/5 p-3 flex flex-col gap-2 relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-error"></div>
+<div class="flex justify-between items-start pl-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-error text-[18px]">warning</span>
+<h4 class="font-body-md text-body-md font-semibold text-error">MRZ &amp; Rules</h4>
+</div>
+<span class="font-status-pill text-status-pill text-error bg-error/10 border border-error/20 px-2 py-0.5 rounded-sm">Flagged</span>
+</div>
+<div class="font-technical-data text-[11px] text-error/80 pl-8">
+<p>&gt; Checksum 2 (DOB): FAILED</p>
+<p>&gt; Expected: 7, Actual: 4</p>
+</div>
+</div>
+<!-- Row 3 -->
+<div class="border border-outline-variant rounded bg-surface p-3 flex flex-col gap-2">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">science</span>
+<h4 class="font-body-md text-body-md font-semibold text-on-surface">Forensic Analysis</h4>
+</div>
+<span class="font-status-pill text-status-pill text-primary bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-sm">Verified</span>
+</div>
+<div class="font-technical-data text-[11px] text-on-surface-variant pl-6">
+<p>&gt; Microprint: Intact</p>
+<p>&gt; OVI Shift: Confirmed</p>
+</div>
+</div>
+<!-- Row 4 -->
+<div class="border border-outline-variant rounded bg-surface p-3 flex flex-col gap-2">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">fingerprint</span>
+<h4 class="font-body-md text-body-md font-semibold text-on-surface">Biometric Verification</h4>
+</div>
+<span class="font-status-pill text-status-pill text-primary bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-sm">Verified</span>
+</div>
+<div class="font-technical-data text-[11px] text-on-surface-variant pl-6">
+<p>&gt; Live-to-Chip Match: 98.4%</p>
+</div>
+</div>
+<!-- Row 5 -->
+<div class="border border-outline-variant rounded bg-surface p-3 flex flex-col gap-2">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">lock</span>
+<h4 class="font-body-md text-body-md font-semibold text-on-surface">Cryptographic Integrity</h4>
+</div>
+<span class="font-status-pill text-status-pill text-primary bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-sm">Verified</span>
+</div>
+<div class="font-technical-data text-[11px] text-on-surface-variant pl-6">
+<p>&gt; Passive Authentication: OK</p>
+<p>&gt; Active Authentication: OK</p>
+</div>
+</div>
+</div>
+</section>
+<!-- RIGHT: Findings & Action (4 cols) -->
+<section class="col-span-4 flex flex-col h-full gap-4">
+<div class="flex-1 bg-surface-container-low border border-outline-variant rounded flex flex-col overflow-hidden">
+<div class="p-3 border-b border-outline-variant bg-surface-container">
+<h3 class="font-label-caps text-label-caps text-on-surface tracking-wider">DETECTED EVIDENCE</h3>
+</div>
+<div class="p-4 space-y-4 overflow-y-auto">
+<!-- Finding Card -->
+<div class="bg-surface border border-error rounded p-4 relative">
+<div class="absolute -top-2 -right-2 bg-error text-on-error w-5 h-5 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-[12px] font-bold">priority_high</span>
+</div>
+<h4 class="font-headline-md text-body-lg font-semibold text-error mb-2">Visual DOB conflicts with MRZ</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-3">The Date of Birth printed on the visual inspection zone (VIZ) does not match the encoded data in the Machine Readable Zone (MRZ) checksum.</p>
+<div class="bg-background border border-outline-variant rounded p-2 font-technical-data text-[11px] text-on-surface">
+<div class="flex justify-between border-b border-outline-variant pb-1 mb-1">
+<span class="text-on-surface-variant">VIZ Value:</span>
+<span>14 APR 1985</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">MRZ Value:</span>
+<span class="text-error">850411 (11 APR 1985)</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom CTA -->
+<button class="w-full bg-surface-variant hover:bg-surface-bright border border-outline-variant text-on-surface font-label-caps text-label-caps py-4 rounded transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">analytics</span>
+                    VIEW FULL RISK ASSESSMENT
+                </button>
+</section>
+</main>
+</div>
+</body></html>
