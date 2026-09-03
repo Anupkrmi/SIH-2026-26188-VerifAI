@@ -5,6 +5,9 @@ magic constant. Every module imports from here.
 """
 from pathlib import Path
 
+BASE_DIR = Path(__file__).resolve().parent
+from pathlib import Path
+
 # ---------------------------------------------------------------- paths ---
 ROOT = Path(__file__).resolve().parent
 
@@ -33,7 +36,7 @@ MODEL_FILES = {
 }
 
 FONTS = {
-    "mrz": r"C:\Windows\Fonts\OCRAEXT.TTF",   # OCR-A Extended: real MRZ-family font
+    "mrz": str(BASE_DIR / "fonts" / "OCRA.ttf"),   # OCR-A Extended: real MRZ-family font
     "sans": r"C:\Windows\Fonts\arial.ttf",
     "sans_bold": r"C:\Windows\Fonts\arialbd.ttf",
     "mono_bold": r"C:\Windows\Fonts\consolab.ttf",  # VIZ field values -- see core/fields.py

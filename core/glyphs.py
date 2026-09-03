@@ -11,8 +11,10 @@ from config import FONTS, MODEL_FILES
 from core.mrz import CHARSET
 from core.textgrid import get_templates as _get_templates
 
-CELL_W, CELL_H = 26, 40
-FONT_SIZE = 34
+from core.fields import MRZ_CELL_W, MRZ_CELL_H
+
+CELL_W, CELL_H = MRZ_CELL_W, MRZ_CELL_H
+FONT_SIZE = 30
 
 
 def get_templates():

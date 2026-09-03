@@ -51,6 +51,14 @@ def screen_document(image_path: str | Path, crypto_signal=None,
         csca_cert, _, _ = load_or_create_pki()
         crypto_signal = resolve_and_verify(image_path, csca_cert, policy=policy)
     line1, line2, _ = read_td3(gray, MRZ_BAND_BBOX)
+
+    print("MRZ LINE 1:", repr(line1))
+    print("MRZ LINE 2:", repr(line2))
+    print(
+        "MRZ LINE 2 INDEXED:",
+        " ".join(f"{i:02d}:{c}" for i, c in enumerate(line2))
+    )
+
     fields = decode_fields(line1, line2)
 
     signals = []
