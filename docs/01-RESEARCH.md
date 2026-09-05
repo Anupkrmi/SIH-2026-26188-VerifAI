@@ -33,7 +33,7 @@ This is the single most important research finding and the backbone of our pitch
 Organised by Hochschule Darmstadt (da/sec), Facephi, Incode, IDVC. Source: [arXiv:2607.15734](https://arxiv.org/html/2607.15734v1)
 
 | Track | Best team | EER | BPCER10 | BPCER100 |
-|---|---|---|---|---|
+|-------|-----------|-----|---------|-----------|
 | Track 1 | Incode | **8.42%** | 6.01% | — |
 | Track 2 (open-set) | Incode | **26.52%** | 56.53% | 75.06% |
 
