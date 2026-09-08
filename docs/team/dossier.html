@@ -233,13 +233,13 @@ td.num{font-family:var(--font-mono); font-variant-numeric:tabular-nums; color:va
             </tr>
             <tr>
               <td><b style="color:var(--text);">Document authenticity</b></td>
-              <td>Was this document genuinely issued by the government in the first place?</td>
-              <td><span class="pill" style="color:var(--text-3);border-color:var(--line);background:var(--surface-low);">NO</span> — needs an issuer registry we cannot access</td>
+              <td>Was this document genuinely issued by the claimed authority, and is that credential still standing (not revoked, stolen, or expired)?</td>
+              <td><span class="pill" style="color:var(--amber);border-color:var(--amber-line);background:var(--amber-bg);">PARTIALLY</span> — against a synthetic demo registry, not a real government connection</td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div class="note"><strong>Why this matters more than anything else in Q&amp;A:</strong> when a judge asks "so can it tell me if this passport is real?", they are asking the third question. The honest answer is: <em>"We can tell you the document is internally consistent and has not been tampered with. We cannot tell you it was genuinely issued — no system can, without a connection to the issuing authority's own records, which no one outside government has."</em> Say that clearly and you sound like you understand the problem. Claim otherwise and one follow-up question exposes it.</div>
+      <div class="note"><strong>Why this matters more than anything else in Q&amp;A:</strong> when a judge asks "so can it tell me if this passport is real?", they are asking the third question. The honest answer changed with the Issuer Registry, and the new honest answer is: <em>"We built the actual mechanism — every screening looks the document up against an issuer registry and checks status (active/revoked/stolen/expired) and whether the identity fields agree. It runs end-to-end, live, on this build. What we do NOT have is a connection to the real government registry — Passport Seva, DigiLocker, whatever the actual issuing authority runs — because no one outside government can get that access. Our registry is synthetic demo data, clearly labelled as such everywhere it appears. The architecture is a plug-in adapter specifically so a real registry connection could replace ours without changing anything else."</em> Say that clearly — mechanism proven, data synthetic, architecture ready — and you sound like you understand exactly where the line is. Claim the registry is real and one follow-up question exposes it.</div>
       <div class="ok"><strong>This is also why our app says "No adverse signals", never "genuine".</strong> On a real uploaded document our score of 0 means "nothing we measured counted against it" — it is deliberately <em>not</em> a claim that the document is authentic. The screen shows both halves side by side: what we established, and what we could not.</div>
     </section>
 

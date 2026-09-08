@@ -128,7 +128,7 @@ h2.section-title::after{content:""; flex:1; height:1px; background:var(--line-so
   <p class="lede">Two things live here, in order. First: what each screen actually is and shows — read this so you genuinely understand the product, not just a script. Second: the exact live run-through — what to click, what to say, timed. For the deeper "why" behind any of this (crypto, scoring, hard questions), that's the companion Dossier — this document stays focused on the app itself.</p>
 
   <div class="meta-strip">
-    <div class="meta-cell"><div class="l">Total runtime</div><div class="v">~6–7 min</div></div>
+    <div class="meta-cell"><div class="l">Total runtime</div><div class="v">~7–8 min</div></div>
     <div class="meta-cell"><div class="l">Live URL</div><div class="v"><a href="https://sih-2026-bordershield-gtdxv2ktbsd5ekfyh2qm58.streamlit.app/" target="_blank" rel="noopener">streamlit.app ↗</a></div></div>
     <div class="meta-cell"><div class="l">Backup</div><div class="v">localhost:8501</div></div>
     <div class="meta-cell"><div class="l">Companion doc</div><div class="v">The Dossier</div></div>
@@ -168,10 +168,11 @@ h2.section-title::after{content:""; flex:1; height:1px; background:var(--line-so
         <div class="purpose"><b>What it's for:</b> the operational hub — proof the system is live, plus one-click demo attacks so you can show every kind of forgery without needing real fake documents on hand.</div>
         <div class="shows">What's on it</div>
         <ul>
-          <li>Four live status readouts (are the AI models loaded, is the signing certificate ready, is the logbook intact, how many cases so far)</li>
-          <li>Six scenario cards — a genuine document plus five different forgery attempts, each one real and runnable with a click</li>
+          <li>Five live status readouts (AI models, signing certificate, <b>issuer registry</b>, logbook, how many cases so far)</li>
+          <li>Thirteen scenario cards — a genuine document, five pixel-level forgery attempts, and seven registry-only scenarios where nothing about the document itself is forged and only the issuer registry disagrees, runnable with a click</li>
+          <li>A registry-tampering demo button, separate from the scenario cards — hand-edits a scratch copy of the registry and shows the signature catching it, never touching the real one</li>
           <li>A table of the most recent cases actually run this session</li>
-          <li><b>The screen says it plainly:</b> "six controlled experiments, not six travellers" — and that the test documents are synthetic while the pipeline processing them is the real one. If a judge asks whether these are real cases, the answer is already on screen.</li>
+          <li><b>The screen says it plainly:</b> "thirteen controlled experiments, not thirteen travellers" — and that the test documents are synthetic while the pipeline processing them is the real one. If a judge asks whether these are real cases, the answer is already on screen.</li>
         </ul>
       </div>
     </div>
@@ -198,7 +199,9 @@ h2.section-title::after{content:""; flex:1; height:1px; background:var(--line-so
         <ul>
           <li>The verdict at the top — risk score, band, and which check actually decided it</li>
           <li>The document image itself, with any suspicious regions boxed</li>
-          <li>All four checks shown as a chain, marking exactly which one "decided here"</li>
+          <li>All six checks shown as a chain — crypto, document rules, <b>issuer registry</b>, forensics, biometrics, <b>identity continuity</b> — marking exactly which one "decided here"</li>
+          <li><b>Issuer registry and identity continuity panels</b>, always shown, not just when something's wrong — a clean case reads "Status: ACTIVE, every field MATCH" / "0 linked identities, CLEAR", the same honest confirmation a clean forensic or biometric check gets</li>
+          <li>A <b>"Why is this required?"</b> disclosure on findings that have one — a sourced explanation (ICAO Doc 9303 at the Part level, or our own policy file), never an invented citation</li>
           <li><b>Each check shows two separate lines</b> — "Checks:" (the question that layer always asks, same every time) and "This case:" (what it actually found here). This is worth pointing out: most tools blur those together, which is how "here's what we look for" gets misread as "here's what we found."</li>
           <li>Specific findings — e.g. "printed date and machine-readable date don't match" — with the actual mismatched values shown</li>
           <li>Technical wording is kept but tucked behind a <b>"Technical detail"</b> toggle, so the plain answer comes first</li>
@@ -214,9 +217,9 @@ h2.section-title::after{content:""; flex:1; height:1px; background:var(--line-so
         <div class="shows">What's on it</div>
         <ul>
           <li>A scrolling list of every past case, each with its own cryptographic fingerprint</li>
-          <li>A live "is the chain intact?" indicator</li>
-          <li>Two demo buttons: hand-edit a past record, then re-check the chain and watch it catch the edit</li>
-          <li><b>A "what this proves" box</b> stating both halves honestly — it catches edits to stored records, and it does <b>not</b> prove any document is authentic. Volunteer this; don't wait to be asked.</li>
+          <li><b>Two</b> live indicators now: "is the chain intact?" (catches edits to existing records) and "no truncation detected" (catches someone deleting the newest record(s) outright — a signed checkpoint, not just the hash chain)</li>
+          <li>Three demo buttons: hand-edit a past record, delete the newest record outright, or reset clean — each pairs with a re-check that shows exactly what it catches</li>
+          <li><b>A "what this proves" box</b> stating both halves honestly — it catches edits AND deletions of stored records, and it does <b>not</b> prove any document is authentic. Volunteer this; don't wait to be asked.</li>
         </ul>
       </div>
     </div>
@@ -232,6 +235,7 @@ h2.section-title::after{content:""; flex:1; height:1px; background:var(--line-so
           <li>The demo signing certificate's real fingerprint</li>
           <li>The live rule weights and risk bands, read straight from the config file</li>
           <li>The real, current count of automated tests, collected on the spot</li>
+          <li><b>The full issuer registry, every row</b> — not a mockup table, the actual database every screening is checked against. If a judge asks "prove there's really a database", this is the screen.</li>
         </ul>
       </div>
     </div>
@@ -286,8 +290,20 @@ h2.section-title::after{content:""; flex:1; height:1px; background:var(--line-so
       </div>
     </div>
 
-    <div class="step" style="--tc:#c2410c;">
+    <div class="step" style="--tc:#166534;">
       <div class="node">5</div>
+      <div>
+        <div class="time">~50s</div>
+        <div class="screen">Command Center → Case File</div>
+        <div class="title">The USP moment — a document that looks perfect and still fails</div>
+        <div class="action"><b>Click</b> the <b>Perfect document, revoked</b> card → Run scenario</div>
+        <p class="say"><span class="tag">Say</span>"Every pixel check just passed — MRZ, printed fields, the signature, all clean. This is where 'we added a database' stops being a punchline." <em>Point at the Issuer Provenance row: FAIL, "DECIDED HERE."</em></p>
+        <p class="say"><span class="tag">Say</span>"The issuing authority's own record says this credential was revoked after it was printed. No amount of looking at the document itself could ever tell you that — you have to ask the issuer."</p>
+      </div>
+    </div>
+
+    <div class="step" style="--tc:#c2410c;">
+      <div class="node">6</div>
       <div>
         <div class="time">~60s</div>
         <div class="screen">Command Center → Case File</div>
@@ -299,7 +315,7 @@ h2.section-title::after{content:""; flex:1; height:1px; background:var(--line-so
     </div>
 
     <div class="step" style="--tc:#4f5f78;">
-      <div class="node">6</div>
+      <div class="node">7</div>
       <div>
         <div class="time">~40s</div>
         <div class="screen">New Screening</div>
@@ -310,35 +326,35 @@ h2.section-title::after{content:""; flex:1; height:1px; background:var(--line-so
     </div>
 
     <div class="step" style="--tc:#000000;">
-      <div class="node">7</div>
+      <div class="node">8</div>
       <div>
         <div class="time">~50s</div>
         <div class="screen">Audit Trail</div>
         <div class="title">Show the tamper-proof logbook working</div>
         <div class="action"><b>Click</b> sidebar → <b>Audit trail</b> → <b>Simulate tampering</b> → <b>Re-verify chain</b></div>
-        <p class="say"><span class="tag">Say</span>"Watch what happens when we hand-edit a past record." <em>Point at exactly which record it names as broken.</em></p>
+        <p class="say"><span class="tag">Say</span>"Watch what happens when we hand-edit a past record." <em>Point at exactly which record it names as broken.</em> "And it's not just edits — delete the newest record outright and the signed checkpoint catches that too, which a plain hash chain can't."</p>
       </div>
     </div>
 
     <div class="step" style="--tc:#4f5f78;">
-      <div class="node">8</div>
+      <div class="node">9</div>
       <div>
         <div class="time">~30s</div>
         <div class="screen">System Status</div>
         <div class="title">For the technical judge in the room</div>
         <div class="action"><b>Click</b> sidebar → <b>System status</b></div>
-        <p class="say"><span class="tag">Say</span>"Everything on this page is live — including our real, current test count, not a number typed onto a slide."</p>
+        <p class="say"><span class="tag">Say</span>"Everything on this page is live — including our real, current test count, not a number typed onto a slide, and the actual issuer registry table, not a mockup."</p>
       </div>
     </div>
 
     <div class="step" style="--tc:#92400e;">
-      <div class="node">9</div>
+      <div class="node">10</div>
       <div>
         <div class="time">~30s</div>
         <div class="screen">Overview → the honesty section</div>
         <div class="title">Close by volunteering the limits, then hand off</div>
         <div class="action"><b>Click</b> sidebar → <b>Overview</b>, scroll down</div>
-        <p class="say"><span class="tag">Say</span>"Three things we want you to know before you ask: our demo document is made up, our signing authority is our own for this demo, and our logbook has one known gap we're upfront about. We'd rather tell you than have you find it. Happy to take questions."</p>
+        <p class="say"><span class="tag">Say</span>"Three things we want you to know before you ask: our demo document is made up, our signing authority is our own for this demo, and our issuer registry is a synthetic stand-in — not Passport Seva, not DigiLocker, not any real government system. We'd rather tell you than have you find it. Happy to take questions."</p>
       </div>
     </div>
 
