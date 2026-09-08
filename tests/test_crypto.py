@@ -13,7 +13,7 @@ from config import PATHS
 from core.crypto import ledger
 from core.crypto.manifest import sign_document, verify_document
 from core.crypto.pki import generate_csca, generate_dsc, verify_chain
-from core.types import Severity
+from core.types import Band, Severity
 
 GENUINE = PATHS["documents"] / "demo_0001.png"
 ATTACK_A = PATHS["forged"] / "forged_demo_0001_A.png"
@@ -136,6 +136,138 @@ def test_ledger_append_refuses_to_extend_a_corrupted_chain(tmp_path: Path):
     path.write_text('{"case_id": "case_000", "not valid json\n')
     with pytest.raises(ValueError):
         ledger.append({"case_id": "case_001"}, path=path)
+
+
+def test_append_signs_a_checkpoint_that_verify_no_truncation_trusts(tmp_path: Path):
+    path = tmp_path / "ledger.jsonl"
+    for i in range(3):
+        ledger.append({"case_id": f"case_{i:03d}", "band": "LOW"}, path=path)
+    ok, detail = ledger.verify_no_truncation(path)
+    assert ok
+    assert detail["expected_count"] == 3
+    assert detail["actual_count"] == 3
+
+
+def test_verify_no_truncation_passes_with_no_checkpoint_on_file(tmp_path: Path):
+    """A ledger that's never been appended to (or predates this feature)
+    has nothing to compare against -- that's a different claim from
+    'verified untruncated', but it must not read as a failure."""
+    ok, detail = ledger.verify_no_truncation(tmp_path / "does_not_exist.jsonl")
+    assert ok
+    assert "no checkpoint" in detail["reason"]
+
+
+def test_verify_no_truncation_catches_a_deleted_newest_record(tmp_path: Path):
+    """The exact gap verify_chain() cannot see: dropping the last line
+    leaves a perfectly self-consistent SHORTER chain -- only the signed
+    checkpoint from before the deletion knows it used to be longer."""
+    path = tmp_path / "ledger.jsonl"
+    for i in range(5):
+        ledger.append({"case_id": f"case_{i:03d}", "band": "LOW"}, path=path)
+
+    lines = path.read_text(encoding="utf-8").splitlines()
+    path.write_text("\n".join(lines[:-1]) + "\n", encoding="utf-8")
+
+    chain_ok, broken_at = ledger.verify_chain(path)
+    assert chain_ok  # confirms the actual gap: the chain alone sees nothing wrong
+    assert broken_at is None
+
+    ok, detail = ledger.verify_no_truncation(path)
+    assert ok is False
+    assert "TRUNCATION" in detail["reason"]
+    assert detail["expected_count"] == 5
+    assert detail["actual_count"] == 4
+
+
+def test_verify_no_truncation_catches_a_same_length_tail_swap(tmp_path: Path):
+    """A stronger attack than plain deletion: delete the newest record and
+    hand-craft a DIFFERENT one with a validly-chained hash in its place.
+    verify_chain() alone is fooled -- the replacement is internally
+    consistent -- but the checkpoint's tail_hash still names the ORIGINAL
+    record's fingerprint, not the replacement's, so the count matches but
+    the tail doesn't."""
+    path = tmp_path / "ledger.jsonl"
+    for i in range(3):
+        ledger.append({"case_id": f"case_{i:03d}", "band": "LOW"}, path=path)
+
+    lines = path.read_text(encoding="utf-8").splitlines()
+    prev_record = json.loads(lines[-2])
+    fake = {"case_id": "case_FAKE", "band": "LOW"}
+    fake_prev = prev_record["this_hash"]
+    fake_this = ledger._record_hash(fake_prev, fake)
+    lines[-1] = json.dumps({**fake, "prev_hash": fake_prev, "this_hash": fake_this}, sort_keys=True)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+    chain_ok, broken_at = ledger.verify_chain(path)
+    assert chain_ok  # the hand-crafted replacement is internally valid
+    assert broken_at is None
+
+    ok, detail = ledger.verify_no_truncation(path)
+    assert ok is False
+    assert detail["actual_count"] == detail["expected_count"] == 3
+
+
+def test_a_fresh_append_after_the_ledger_file_is_gone_does_not_false_flag(tmp_path: Path):
+    """Mirrors ui/actions.py::reset_ledger(), which deletes both the
+    ledger AND its checkpoint together specifically to avoid this: a
+    leftover checkpoint from before a legitimate reset would read the new,
+    genuinely-shorter ledger as truncated."""
+    path = tmp_path / "ledger.jsonl"
+    for i in range(4):
+        ledger.append({"case_id": f"case_{i:03d}", "band": "LOW"}, path=path)
+
+    path.unlink()
+    path.with_suffix(".checkpoint.json").unlink()
+
+    ledger.append({"case_id": "case_new_000", "band": "LOW"}, path=path)
+    ok, detail = ledger.verify_no_truncation(path)
+    assert ok
+    assert detail["expected_count"] == 1
+
+
+def test_ensure_corpus_signed_heals_a_sidecar_signed_by_a_different_machine(tmp_path: Path, monkeypatch):
+    """The actual portability bug this exists to catch: a .sod.json signed
+    by a DIFFERENT machine's PKI is present-but-foreign on disk, not
+    absent -- a naive "does the file exist" check would wrongly treat it
+    as already signed. Confirmed to actually force CRITICAL on the
+    untouched genuine document (the real symptom) before the fix, and
+    LOW again after. Fully isolated: copies the genuine document into a
+    scratch documents/ dir and points PATHS at throwaway pki/forged dirs,
+    so this can never touch the real committed corpus or data/pki/."""
+    import shutil
+
+    from config import PATHS
+    from core.pipeline import screen_document
+    from synth.sign import corpus_needs_signing, ensure_corpus_signed
+
+    scratch_documents = tmp_path / "documents"
+    scratch_documents.mkdir()
+    scratch_forged = tmp_path / "forged"
+    scratch_forged.mkdir()
+    real_documents = PATHS["documents"]
+    shutil.copy(real_documents / "demo_0001.png", scratch_documents / "demo_0001.png")
+    shutil.copy(real_documents / "demo_0001.json", scratch_documents / "demo_0001.json")
+
+    monkeypatch.setitem(PATHS, "documents", scratch_documents)
+    monkeypatch.setitem(PATHS, "forged", scratch_forged)
+
+    # PKI "A" -- the machine that originally signs this scratch corpus.
+    monkeypatch.setitem(PATHS, "pki", tmp_path / "pki_a")
+    assert corpus_needs_signing() is True
+    ensure_corpus_signed()
+    assert corpus_needs_signing() is False
+
+    # PKI "B" -- a different machine, its own unrelated freshly-generated
+    # keys. The sidecar PKI A signed is still on disk: present, foreign.
+    monkeypatch.setitem(PATHS, "pki", tmp_path / "pki_b")
+    assert corpus_needs_signing() is True
+    verdict, _ = screen_document(scratch_documents / "demo_0001.png")
+    assert verdict.band == Band.CRITICAL, "confirms the bug: an untouched genuine document forced CRITICAL"
+
+    ensure_corpus_signed()
+    assert corpus_needs_signing() is False
+    verdict, _ = screen_document(scratch_documents / "demo_0001.png")
+    assert verdict.band == Band.LOW, "confirms the fix: re-signed with PKI B, genuine clears again"
 
 
 def test_ledger_never_stores_pii_by_construction():
