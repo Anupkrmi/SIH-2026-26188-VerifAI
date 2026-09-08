@@ -11,13 +11,25 @@ distinction (see its module docstring for the full reasoning):
     at inspection time it gets checked against its source document's
     signature instead, simulating an attacker substituting a photo on a
     presented record they claim was already issued.
+
+Several .sod.json sidecars are committed to git for local-dev
+convenience, but data/pki/ -- the keys that signed them -- is gitignored
+and core/crypto/pki.py::generate_csca has no seed, so it mints a genuinely
+different, unrelated CSCA on every machine that doesn't already have one.
+A fresh clone or a fresh Streamlit Cloud container therefore has
+committed sidecars signed by a CSCA it never generated: signature_chain
+correctly fails, and the crypto tier (decisive both ways) forces
+CRITICAL -- including for the untouched genuine document. See
+ensure_corpus_signed(), called once at app startup (app.py), which
+detects exactly this and re-signs everything with whatever PKI actually
+exists on the machine that's running.
 """
 from __future__ import annotations
 
 import json
 
 from config import PATHS
-from core.crypto.manifest import sign_document, write_sod
+from core.crypto.manifest import load_sod, sign_document, verify_document, write_sod
 from core.crypto.pki import load_or_create_pki
 
 
@@ -47,6 +59,36 @@ def sign_all() -> None:
         else:
             print(f"[impersonation] {png_path.name} left unsigned -- "
                   f"verified at inspection time against {meta['source_doc']}.sod.json")
+
+
+def corpus_needs_signing() -> bool:
+    """True if the genuine document's sidecar is missing, OR present but
+    doesn't actually verify against THIS machine's PKI -- the second half
+    is what a plain "does the file exist" check would miss (see module
+    docstring). One representative document is enough: sign_all() re-signs
+    the whole corpus in one pass, so there's no scenario where the genuine
+    document verifies but an attack's sidecar doesn't."""
+    genuine = PATHS["documents"] / "demo_0001.png"
+    sod_path = genuine.with_suffix(".sod.json")
+    if not sod_path.exists():
+        return True
+    from core.types import Severity
+    csca_cert, _, _ = load_or_create_pki()
+    try:
+        signal = verify_document(genuine, load_sod(sod_path), csca_cert)
+    except Exception:
+        return True
+    return signal.severity != Severity.PASS
+
+
+def ensure_corpus_signed() -> None:
+    """Call once at app startup. Re-signs every document with whatever
+    demo PKI exists on this machine (created if needed) only if the
+    existing sidecars don't actually verify here -- a no-op on a machine
+    that's already consistent, which is every subsequent run on the same
+    machine."""
+    if corpus_needs_signing():
+        sign_all()
 
 
 if __name__ == "__main__":
