@@ -5,9 +5,6 @@ magic constant. Every module imports from here.
 """
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent
-from pathlib import Path
-
 # ---------------------------------------------------------------- paths ---
 ROOT = Path(__file__).resolve().parent
 
@@ -19,6 +16,9 @@ PATHS = {
     "documents": ROOT / "data" / "documents",       # generated genuine docs
     "forged": ROOT / "data" / "forged",             # generated attacks
     "pki": ROOT / "data" / "pki",                   # demo signing authority
+    "registry": ROOT / "data" / "registry",         # synthetic issuer registry (core/issuer/)
+    "registry_db": ROOT / "data" / "registry" / "registry.db",
+    "registry_manifest": ROOT / "data" / "registry" / "manifest.json",  # gitignored -- signed lazily per machine
     "results": ROOT / "results",
     "cases": ROOT / "results" / "cases",
     "core": ROOT / "core",
@@ -36,7 +36,7 @@ MODEL_FILES = {
 }
 
 FONTS = {
-    "mrz": str(BASE_DIR / "fonts" / "OCRA.ttf"),   # OCR-A Extended: real MRZ-family font
+    "mrz": r"C:\Windows\Fonts\OCRAEXT.TTF",   # OCR-A Extended: real MRZ-family font
     "sans": r"C:\Windows\Fonts\arial.ttf",
     "sans_bold": r"C:\Windows\Fonts\arialbd.ttf",
     "mono_bold": r"C:\Windows\Fonts\consolab.ttf",  # VIZ field values -- see core/fields.py
