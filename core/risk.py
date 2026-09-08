@@ -36,7 +36,7 @@ from __future__ import annotations
 from core.rules.engine import load_policy
 from core.types import Band, Severity, Signal, Tier, Verdict
 
-_DECISIVE_TIERS = {Tier.RULES}  # crypto handled separately via crypto_valid; forensics/biometric are advisory-only by omission from this set
+_DECISIVE_TIERS = {Tier.RULES, Tier.ISSUER}  # crypto handled separately via crypto_valid; forensics/biometric are advisory-only by omission from this set
 
 
 def _band_for_score(score: int, policy: dict) -> tuple[Band, str]:

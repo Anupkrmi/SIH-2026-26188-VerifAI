@@ -14,6 +14,9 @@ import cv2
 from core import crosszone
 from core.fields import MRZ_BAND_BBOX, PORTRAIT_BBOX
 from core.forensics import ela, noise, photo_region, recapture
+from core.issuer.compare import compare_to_document
+from core.issuer.linkage import check_identity_linkage
+from core.issuer.registry import get_default_registry
 from core.mrz import decode_fields, mrz_signals, read_td3
 from core.rules import engine as rules_engine
 from core.rules.engine import load_policy
@@ -23,7 +26,7 @@ from core.types import Case, Severity, Verdict
 
 def screen_document(image_path: str | Path, crypto_signal=None,
                      extra_signals: list | None = None, run_forensics: bool = True,
-                     auto_crypto: bool = True) -> tuple[Verdict, dict]:
+                     auto_crypto: bool = True, run_issuer_check: bool = True) -> tuple[Verdict, dict]:
     """crypto_signal: an optional core.types.Signal from
     core.crypto.manifest.verify_document (Tier.CRYPTO), for a caller that
     has already resolved which record to check against. If not supplied
@@ -51,20 +54,29 @@ def screen_document(image_path: str | Path, crypto_signal=None,
         csca_cert, _, _ = load_or_create_pki()
         crypto_signal = resolve_and_verify(image_path, csca_cert, policy=policy)
     line1, line2, _ = read_td3(gray, MRZ_BAND_BBOX)
-
-    print("MRZ LINE 1:", repr(line1))
-    print("MRZ LINE 2:", repr(line2))
-    print(
-        "MRZ LINE 2 INDEXED:",
-        " ".join(f"{i:02d}:{c}" for i, c in enumerate(line2))
-    )
-
     fields = decode_fields(line1, line2)
 
     signals = []
     signals += mrz_signals(line2, policy=policy)
     signals += crosszone.compare(gray, MRZ_BAND_BBOX, policy=policy)
     signals += rules_engine.evaluate(fields, policy=policy)
+    if run_issuer_check:
+        # Tier.ISSUER: independent of MRZ self-consistency (crosszone/
+        # rules above) -- this asks whether the CLAIMED issuing authority's
+        # own record agrees, not just whether the document agrees with
+        # itself. See core/issuer/compare.py and core/risk.py's
+        # _DECISIVE_TIERS for why REVOKED/STOLEN/mismatch are decisive.
+        registry = get_default_registry()
+        registry_record = registry.lookup(fields.passport_number)
+        signals.append(compare_to_document(fields, registry_record, policy=policy))
+        # Tier.IDENTITY: a SEPARATE question from the above -- not "does
+        # this document's own record check out" but "has this biometric
+        # identity been issued more than one credential". Advisory only
+        # (see core/issuer/linkage.py); None when there's no registry
+        # record to check linkage against at all.
+        linkage_signal = check_identity_linkage(registry_record, registry, policy=policy)
+        if linkage_signal is not None:
+            signals.append(linkage_signal)
     if run_forensics:
         # Tier.FORENSICS is advisory-only by construction in core/risk.py --
         # including a currently-non-discriminating signal (noise.py on this

@@ -10,6 +10,20 @@ risk_weights:
   face_mismatch: 25
   capture_anomaly: 15
   expired_document: 10
+  # Issuer Registry (core/issuer/) -- REVOKED/STOLEN/field-mismatch are
+  # decisive (Tier.ISSUER is in core/risk.py's _DECISIVE_TIERS, same as
+  # RULES), so the weight sets the raw_score/bar proportions, not whether
+  # CRITICAL is forced. EXPIRED reuses expired_document above; NOT_FOUND
+  # carries no weight at all -- see core/issuer/compare.py.
+  issuer_revoked: 30
+  issuer_stolen: 30
+  issuer_mismatch: 25
+  # Identity Continuity (core/issuer/linkage.py) -- Tier.IDENTITY is NOT in
+  # core/risk.py's _DECISIVE_TIERS, so this is advisory-only by construction
+  # (same as forensics/biometric): raises the band, capped at HIGH, never
+  # forces CRITICAL on its own. A shared portrait cluster is evidence to
+  # look closer, never proof of the same person.
+  identity_linkage: 55
 
 risk_bands:
   # [min, max, band, recommended_action] -- action text is never an
@@ -69,3 +83,4 @@ rules:
     weight_key: expired_document
     min_months_remaining: 6
     message: "Less than {min_months_remaining} months of validity remain"
+    

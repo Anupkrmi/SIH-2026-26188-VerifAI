@@ -18,8 +18,10 @@ class Tier(str, Enum):
     rules that keep a lower tier from ever outranking a higher one."""
     CRYPTO = "crypto"           # T0 -- decisive both ways
     RULES = "rules"             # T1 -- decisive against, never a clearance
+    ISSUER = "issuer"           # T1 -- decisive against, never a clearance
     FORENSICS = "forensics"     # T2 -- advisory only
     BIOMETRIC = "biometric"     # T2 -- advisory only
+    IDENTITY = "identity"       # T2 -- advisory only; cross-registry linkage, never certainty
 
 
 class Severity(str, Enum):
