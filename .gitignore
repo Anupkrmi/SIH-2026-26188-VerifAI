@@ -18,6 +18,15 @@ data/*
 !data/documents/**
 !data/forged/
 !data/forged/**
+# data/registry/registry.db is synthetic data, committed like documents/
+# above. data/registry/manifest.json is NOT: it's an ECDSA signature tied
+# to whichever demo PKI key generated it (data/pki/, gitignored, one
+# random keypair per machine) -- see core/issuer/integrity.py's docstring
+# for why a manifest signed on one machine would fail verification on
+# another. It's regenerated lazily, per machine, same as data/pki/ itself.
+!data/registry/
+data/registry/*
+!data/registry/registry.db
 models/*
 !models/*.onnx
 !models/*.npz
