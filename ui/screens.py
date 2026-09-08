@@ -5,10 +5,11 @@ it never reaches into st.session_state or the filesystem itself.
 """
 from __future__ import annotations
 
+from core.knowledge.standards import lookup as standards_lookup
 from core.risk import traffic_light
 from core.types import Tier, Verdict
 
-_TIER_ORDER = [Tier.CRYPTO, Tier.RULES, Tier.FORENSICS, Tier.BIOMETRIC]
+_TIER_ORDER = [Tier.CRYPTO, Tier.RULES, Tier.ISSUER, Tier.FORENSICS, Tier.BIOMETRIC, Tier.IDENTITY]
 
 
 def crypto_note(verdict: Verdict) -> str | None:
@@ -31,8 +32,8 @@ _LIGHT_PILL_TEXT = {"GREEN": "CLEARED", "AMBER": "REVIEW", "RED": "CRITICAL"}
 
 def sidebar_brand_html() -> str:
     return ("<div class='bsx-sidebar-brand'>"
-            "<div class='name'>VerifAI</div>"
-            "<div class='sub bsx-hero-subtitle'>AI-Assisted Identity & Document Screening</div>"
+            "<div class='name'>BorderShield AI</div>"
+            "<div class='sub'>Screening console</div>"
             "</div>")
 
 
@@ -76,8 +77,7 @@ def hero_html() -> str:
     return """
     <div class="bsx-hero bsx-ticks">
       <div class="bsx-hero-eyebrow">PS 26188 &middot; Ministry of Home Affairs &middot; Sashastra Seema Bal</div>
-      <h1 class="bsx-hero-title">Verif<span class="dim">AI</span></h1>
-      <div class="bsx-hero-subtitle">AI-Assisted Identity &amp; Document Screening</div>
+      <h1 class="bsx-hero-title">BorderShield<span class="dim"> AI</span></h1>
       <p class="bsx-hero-thesis">Everyone else builds a classifier.<br>
         We build a <em>trust hierarchy</em>.</p>
       <p class="bsx-hero-lede">A screening console for border checkpoints. It reads an identity
@@ -106,12 +106,20 @@ def trust_ladder_html() -> str:
         ("T1", "Deterministic structure", "Decisive against only", "var(--primary)",
          "ICAO check digits, cross-zone consistency between the printed fields and the MRZ, and "
          "versioned YAML rules. It can condemn a document; it cannot clear one."),
+        ("T1", "Issuer provenance", "Decisive against only", "var(--primary)",
+         "Looks the document up in the issuing authority's own registry (synthetic/demo — see "
+         "core/issuer/). REVOKED, STOLEN, or a registry field that disagrees with the presented "
+         "document all condemn it on their own, the same way a broken rule does."),
         ("T2", "Forensic analysis", "Advisory — capped at HIGH", "var(--amber)",
          "Portrait-region statistics, noise residual and recapture signatures. Raises a document "
          "for a human to look at. Never reaches CRITICAL alone."),
         ("T2", "Biometric match", "Advisory — capped at HIGH", "var(--amber)",
          "1:1 face comparison against the document portrait, behind a quality gate. A bad capture "
          "returns REVIEW with no similarity score at all."),
+        ("T2", "Identity continuity", "Advisory — capped at HIGH", "var(--amber)",
+         "Checks the issuer registry for another credential sharing this one's biometric reference "
+         "(synthetic/demo — see core/issuer/linkage.py). Raises a possible linkage for review; "
+         "never asserts the two are the same person on its own."),
     ]
     rows = "".join(
         f"<div class='bsx-ladder-row' style='--tc:{colour};'>"
@@ -134,8 +142,8 @@ def honesty_html() -> str:
          "The <b>trust anchor is ours</b>, not a government's. This is not ICAO Passive Authentication "
          "and not the PKD."),
         ("Hash chain, not blockchain", "The audit trail is an append-only hash-chained file. Real "
-         "tamper-evidence for in-place edits, with a <b>documented limitation</b> against "
-         "tail-truncation."),
+         "tamper-evidence for in-place edits, plus a <b>signed checkpoint</b> that separately catches "
+         "someone deleting the newest record(s) and stopping — see the Audit Trail screen."),
     ]
     return ("<div class='bsx-honesty'>" + "".join(
         f"<div class='bsx-honesty-item'><div class='k'>{k}</div><div class='v'>{v}</div></div>"
@@ -207,20 +215,15 @@ def status_grid_html(cards: list[str]) -> str:
 
 def scenario_card_head_html(scenario_id: str, layer: str, title: str, description: str) -> str:
     """The markup portion of an attack-wall scenario card: id chip, the
-    real Trust Ladder tier that catches it, title, description. Layer tags
-    use the same .bsx-pill component as the rest of the console for
-    visual consistency across screens."""
-    pill_cls = "green"
-    if "RULES" in layer or "DOB" in title.upper():
-        pill_cls = "red"
-    elif "FORENSICS" in layer or "BIOMETRIC" in layer:
-        pill_cls = "amber"
-    elif "CRYPTO" in layer and "FORENSICS" not in layer:
-        pill_cls = "green"
-
+    real Trust Ladder tier that catches it, title, description. The
+    card's action is a real st.button rendered separately in the same
+    st.container (see ui/pages.py) -- raw HTML from one st.markdown call
+    cannot parent a Streamlit widget, so the rich description and the
+    clickable action are two elements sharing one bordered container
+    rather than one HTML block trying to be both."""
     return (f"<div class='bsx-scenario-head'>"
             f"<span class='bsx-scenario-id'>{scenario_id}</span>"
-            f"<span class='bsx-pill {pill_cls} bsx-scenario-layer'>{layer}</span></div>"
+            f"<span class='bsx-scenario-layer'>{layer}</span></div>"
             f"<div class='bsx-scenario-title'>{title}</div>"
             f"<div class='bsx-scenario-desc'>{description}</div>")
 
@@ -245,36 +248,21 @@ def audit_record_card_html(record: dict, index: int, is_head: bool = False) -> s
     1-based position in read order -- the ledger itself has no separate
     record-number field), the real timestamp, a title/body built from the
     actual screening result, and the real prev/this hash pair the chain
-    is built from. Left border is color-coded by the actual risk band,
-    and risk band renders as a colored pill inline in the body."""
-    from core.types import Band
+    is built from. Nothing here is a fabricated event description."""
     case_id = record.get("case_id", "?")
-    band_str = str(record.get("band", "UNKNOWN"))
+    band = record.get("band", "?")
     score = record.get("score", "?")
-    finding = record.get("finding", "No findings").rstrip()
-    if finding and not finding.endswith((".", "!", "?", ";", "—", "&mdash;")):
-        finding += "."
-
+    finding = record.get("finding", "No findings")
     ts = record.get("timestamp", "--")
     prev_hash = record.get("prev_hash", "")
     this_hash = record.get("this_hash", "")
     document = record.get("document", "UTO Passport")
     title = f"Case {case_id} screened &mdash; {document}"
-
-    try:
-        light = traffic_light(Band(band_str))
-    except (ValueError, KeyError, AttributeError):
-        light = "AMBER"
-
-    cls = _LIGHT_CLASS.get(light, "amber")
-    band_pill = f"<span class='bsx-pill {cls}'>{band_str}</span>"
-    body = f"{finding} Risk band: {band_pill} ({score}/100)."
-
-    latest_badge = "<span class='bsx-status-pill ok' style='margin-left:0.5rem;'>Latest</span>" if is_head else ""
-
+    body = f"{finding} Risk band: <b>{band}</b> ({score}/100)."
+    head_cls = " head" if is_head else ""
     return f"""
-    <div class="bsx-audit-card" style="--card-border:var(--{cls});">
-      <div class="top"><span class="rec">RECORD #{index:04d}{latest_badge}</span><span>{ts}</span></div>
+    <div class="bsx-audit-card{head_cls}">
+      <div class="top"><span class="rec">RECORD #{index:04d}</span><span>{ts}</span></div>
       <div class="title">{title}</div>
       <div class="body">{body}</div>
       <div class="hashes">
@@ -329,23 +317,54 @@ def pipeline_log_html(verdict: Verdict) -> str:
     return f"<div class='bsx-pipeline-log'>{''.join(lines)}</div>"
 
 
+_REGISTRY_STATUS_PILL = {"ACTIVE": "green", "REVOKED": "red", "STOLEN": "red",
+                          "EXPIRED": "amber", "INVALID": "red"}
+
+
+def registry_records_table_html(records: list) -> str:
+    """The actual contents of the Synthetic Issuer Registry, one row per
+    record -- every column core/issuer/models.py::RegistryRecord defines
+    that's meaningful to show an officer/reviewer. `records` is
+    list[RegistryRecord] from core.issuer.registry.all_records()."""
+    if not records:
+        return ("<p style='color:var(--text-3);font-family:var(--font-mono);font-size:0.85rem;'>"
+                 "Registry not generated yet -- run `python -m synth.registry`.</p>")
+    rows = []
+    for r in records:
+        cls = _REGISTRY_STATUS_PILL.get(r.status.value, "")
+        rows.append(
+            "<tr>"
+            f"<td class='case-id'>{r.registry_record_id}</td>"
+            f"<td>{r.document_number}</td>"
+            f"<td>{r.document_type.replace('_', ' ').title()}</td>"
+            f"<td>{r.name}</td>"
+            f"<td>{r.person_id}</td>"
+            f"<td>{r.date_of_birth}</td>"
+            f"<td><span class='bsx-pill {cls}'>{r.status.value}</span></td>"
+            f"<td style='color:var(--text-3);'>{r.revocation_reason or '—'}</td>"
+            f"<td style='color:var(--text-3);'>{r.portrait_reference or '—'}</td>"
+            "</tr>"
+        )
+    return (
+        "<table class='bsx-table'><thead><tr>"
+        "<th>Record</th><th>Document #</th><th>Type</th><th>Name</th><th>Person</th><th>DOB</th>"
+        "<th>Status</th><th>Reason</th><th>Portrait cluster</th>"
+        "</tr></thead><tbody>" + "".join(rows) + "</tbody></table>"
+    )
+
+
 def recent_cases_table_html(records: list[dict], limit: int = 8) -> str:
     if not records:
         return ("<p style='color:var(--text-3);font-family:var(--font-mono);font-size:0.85rem;'>"
                  "No cases screened yet.</p>")
-    from core.types import Band
     rows = []
     for r in reversed(records[-limit:]):
-        band_str = str(r.get("band", "?"))
-        try:
-            light = traffic_light(Band(band_str))
-        except (ValueError, KeyError, AttributeError):
-            light = "AMBER"
-        cls = _LIGHT_CLASS.get(light, "amber")
+        band = r.get("band", "?")
+        light = {"LOW": "GREEN", "MEDIUM": "AMBER", "HIGH": "AMBER", "CRITICAL": "RED"}.get(band, "AMBER")
+        cls = _LIGHT_CLASS[light]
         score = r.get("score", 0)
         ts = r.get("timestamp", "")
         time_txt = ts[11:19] + " UTC" if len(ts) >= 19 else "--"
-        pill_txt = _LIGHT_PILL_TEXT.get(light, band_str)
         rows.append(
             "<tr class='case-row' style='--row-accent:var(--" + cls + ");'>"
             f"<td class='case-id'>{r.get('case_id', '?')}</td>"
@@ -353,11 +372,11 @@ def recent_cases_table_html(records: list[dict], limit: int = 8) -> str:
             "<td>"
             f"<div class='bsx-risk-bar-track'><div class='bsx-risk-bar-fill' "
             f"style='width:{score}%;background:var(--{cls});'></div></div>"
-            f"<span style='font-size:0.68rem;color:var(--text-3);'>{score}% {band_str}</span>"
+            f"<span style='font-size:0.68rem;color:var(--text-3);'>{score}% {band}</span>"
             "</td>"
             f"<td>{r.get('finding', 'No findings')}</td>"
             f"<td style='color:var(--text-3);'>{time_txt}</td>"
-            f"<td><span class='bsx-pill {cls}'>{pill_txt}</span></td>"
+            f"<td><span class='bsx-pill {cls}'>{_LIGHT_PILL_TEXT[light]}</span></td>"
             "</tr>"
         )
     return (
@@ -370,17 +389,22 @@ def recent_cases_table_html(records: list[dict], limit: int = 8) -> str:
 _TIER_SEQ_LABEL = {
     Tier.CRYPTO: "Cryptographic Integrity",
     Tier.RULES: "Document Structure & Rules",
+    Tier.ISSUER: "Issuer Provenance",
     Tier.FORENSICS: "Forensic Analysis",
     Tier.BIOMETRIC: "Biometric Verification",
+    Tier.IDENTITY: "Identity Continuity",
 }
 
 
-_TIER_CODE = {Tier.CRYPTO: "T0", Tier.RULES: "T1", Tier.FORENSICS: "T2", Tier.BIOMETRIC: "T2"}
+_TIER_CODE = {Tier.CRYPTO: "T0", Tier.RULES: "T1", Tier.ISSUER: "T1",
+              Tier.FORENSICS: "T2", Tier.BIOMETRIC: "T2", Tier.IDENTITY: "T2"}
 _TIER_ROLE = {
     Tier.CRYPTO: "Decisive both ways",
     Tier.RULES: "Decisive against only",
+    Tier.ISSUER: "Decisive against only",
     Tier.FORENSICS: "Advisory — capped at HIGH",
     Tier.BIOMETRIC: "Advisory — capped at HIGH",
+    Tier.IDENTITY: "Advisory — capped at HIGH",
 }
 
 # The plain-English question each tier answers. CONSTANT per tier -- this
@@ -394,8 +418,10 @@ _TIER_ROLE = {
 _TIER_QUESTION = {
     Tier.CRYPTO: "Was the signed document data changed after it was signed?",
     Tier.RULES: "Do the document's own values agree with each other?",
+    Tier.ISSUER: "Does the issuing authority's own registry confirm this document, and agree with it?",
     Tier.FORENSICS: "Does the image show signs of editing, printing or screen recapture?",
     Tier.BIOMETRIC: "Does the presented person match the portrait on the document?",
+    Tier.IDENTITY: "Does this credential's biometric reference also appear on another registry record?",
 }
 
 # Technical wording that is correct but unreadable at an inspection desk,
@@ -472,6 +498,98 @@ def verification_sequence_html(verdict: Verdict) -> str:
     return f"<div class='bsx-spine'>{''.join(rows)}</div>"
 
 
+def registry_tamper_result_html(result: dict) -> str:
+    """Before/after integrity read-out for actions.simulate_registry_tampering().
+    Same status-pill vocabulary as the rest of the console (VALID/COMPROMISED),
+    not a separate visual language for one demo button."""
+    before_cls, before_txt = ("ok", "VALID") if result["before_ok"] else ("bad", "COMPROMISED")
+    after_cls, after_txt = ("ok", "VALID") if result["after_ok"] else ("bad", "COMPROMISED")
+    target = result["target_record"]
+    reason = result["after_detail"].get("reason", "")
+    tampered = result["after_detail"].get("tampered_record_ids")
+    detail_line = reason + (f" (record: {', '.join(tampered)})" if tampered else "")
+    return (
+        "<div class='bsx-datalist'>"
+        f"<div class='bsx-datarow'><span class='bsx-field-name'>Before tampering</span>"
+        f"<span class='bsx-status-pill {before_cls}'><span class='dot'></span>{before_txt}</span></div>"
+        f"<div class='bsx-datarow'><span class='bsx-field-name'>After {target} REVOKED&rarr;ACTIVE "
+        f"(hand-edited, unsigned)</span>"
+        f"<span class='bsx-status-pill {after_cls}'><span class='dot'></span>{after_txt}</span></div>"
+        "</div>"
+        f"<p style='color:var(--text-3);font-size:0.85rem;margin-top:0.6rem;'>{detail_line}</p>"
+    )
+
+
+def issuer_provenance_html(verdict: Verdict) -> str:
+    """Registry field-by-field evidence, shown unconditionally -- unlike
+    finding_cards_html (FAILs only), a clean MATCH on every field is
+    exactly the "strongest clearance" evidence an officer wants to see for
+    the common case, not just the exceptional one. Reads compare_to_document's
+    own detail dict (core/issuer/compare.py) -- never a second, parallel
+    description that could drift from what the signal actually found."""
+    signal = next((s for s in verdict.signals if s.tier == Tier.ISSUER), None)
+    if signal is None:
+        return ""
+    detail = signal.detail
+    status = detail.get("status", "?")
+    if status == "NOT_FOUND":
+        return (
+            "<div class='bsx-datalist'>"
+            "<div class='bsx-datarow'><span class='bsx-field-name'>Registry record</span>"
+            "<span class='bsx-field-value'>NOT FOUND</span></div></div>"
+            "<p style='color:var(--text-3);font-size:0.85rem;margin-top:0.6rem;'>Issuance could not be "
+            "established from the configured registry. This is not evidence the document is fake -- it "
+            "means the registry has no opinion either way.</p>"
+        )
+    rows = [
+        "<div class='bsx-datarow'><span class='bsx-field-name'>Registry record</span>"
+        "<span class='bsx-field-value'>FOUND</span></div>",
+        f"<div class='bsx-datarow'><span class='bsx-field-name'>Status</span>"
+        f"<span class='bsx-field-value'>{status}</span></div>",
+    ]
+    for field_name, ok in detail.get("fields", {}).items():
+        label = field_name.replace("_", " ").title()
+        cls = "" if ok else " style='color:var(--red);font-weight:600;'"
+        rows.append(f"<div class='bsx-datarow'><span class='bsx-field-name'>{label}</span>"
+                     f"<span class='bsx-field-value'{cls}>{'MATCH' if ok else 'MISMATCH'}</span></div>")
+    if detail.get("revocation_reason"):
+        rows.append(f"<div class='bsx-datarow'><span class='bsx-field-name'>Reason</span>"
+                     f"<span class='bsx-field-value'>{detail['revocation_reason']}</span></div>")
+    return f"<div class='bsx-datalist'>{''.join(rows)}</div>"
+
+
+def identity_continuity_html(verdict: Verdict) -> str:
+    """Shown unconditionally, same reasoning as issuer_provenance_html:
+    "0 linked identities, CLEAR" is exactly what an officer wants to see
+    confirmed for the common case, not just the exceptional one."""
+    signal = next((s for s in verdict.signals if s.tier == Tier.IDENTITY), None)
+    if signal is None:
+        return ("<p style='color:var(--text-3);font-size:0.85rem;'>Not applicable — no issuer "
+                "registry record was found for this document to check linkage against.</p>")
+    linked = signal.detail.get("linked", [])
+    if not linked:
+        return (
+            "<div class='bsx-datalist'><div class='bsx-datarow'>"
+            "<span class='bsx-field-name'>Linked identities</span>"
+            "<span class='bsx-field-value'>0</span></div></div>"
+            "<p style='color:var(--text-3);font-size:0.85rem;margin-top:0.6rem;'><b>Status: CLEAR.</b> "
+            "No other registry record shares this credential's biometric reference.</p>"
+        )
+    rows = "".join(
+        f"<div class='bsx-datarow'><span class='bsx-field-name'>{l['name']}</span>"
+        f"<span class='bsx-field-value'>{l['document_number']} &middot; {l['person_id']}</span></div>"
+        for l in linked
+    )
+    return (
+        f"<div class='bsx-datalist'>"
+        f"<div class='bsx-datarow'><span class='bsx-field-name'>Linked identities</span>"
+        f"<span class='bsx-field-value'>{len(linked)}</span></div>{rows}</div>"
+        f"<p style='color:var(--red);font-size:0.85rem;font-weight:600;margin-top:0.6rem;'>"
+        f"Possible identity linkage detected — recommend secondary inspection. This is evidence "
+        f"to look closer, not proof the credentials belong to the same person.</p>"
+    )
+
+
 def finding_heading(check: str) -> str:
     if check.startswith("crosszone_"):
         return f"Visual field ≠ MRZ: {check[len('crosszone_'):].replace('_', ' ')}"
@@ -489,6 +607,18 @@ def finding_heading(check: str) -> str:
         return "Looks like a photo of a screen or printout"
     if check == "face_verification":
         return "Face does not match the document portrait"
+    if check == "issuer_status_revoked":
+        return "Issuer registry record is revoked"
+    if check == "issuer_status_stolen":
+        return "Issuer registry record is marked stolen"
+    if check == "issuer_status_invalid":
+        return "Issuer registry record is invalid"
+    if check == "issuer_status_expired":
+        return "Issuer registry record has expired"
+    if check == "issuer_field_mismatch":
+        return "Document disagrees with the issuer registry record"
+    if check == "identity_linkage":
+        return "Possible identity linkage detected"
     return check.replace("_", " ").title()
 
 
@@ -529,6 +659,29 @@ def finding_cards_html(verdict: Verdict) -> str:
                 f"<div class='bsx-compare-cell bad'><div class='k'>SIMILARITY</div>{s.detail['similarity']:.3f}</div>"
                 f"<div class='bsx-compare-cell'><div class='k'>THRESHOLD</div>{s.detail['threshold']:.3f}</div>"
                 "</div>"
+            )
+        elif s.check.startswith("issuer_") and "fields" in s.detail:
+            cells = "".join(
+                f"<div class='bsx-compare-cell{'' if ok else ' bad'}'>"
+                f"<div class='k'>{name.replace('_', ' ').upper()}</div>{'MATCH' if ok else 'MISMATCH'}</div>"
+                for name, ok in s.detail["fields"].items()
+            )
+            body += f"<div class='bsx-compare-grid'>{cells}</div>"
+        elif s.check == "identity_linkage" and s.detail.get("linked"):
+            cells = "".join(
+                f"<div class='bsx-compare-cell bad'><div class='k'>{l['name']}</div>"
+                f"{l['document_number']} &middot; {l['person_id']}</div>"
+                for l in s.detail["linked"]
+            )
+            body += f"<div class='bsx-compare-grid'>{cells}</div>"
+        standard = standards_lookup(s.check)
+        if standard:
+            body += (
+                f"<details class='bsx-tech'><summary>Why is this required?</summary>"
+                f"<p>{standard['rule']}</p>"
+                f"<p style='color:var(--text-3);font-size:0.8rem;margin-top:0.4rem;'>"
+                f"<b>Source:</b> {standard['source']}<br><b>Note:</b> {standard['note']}</p>"
+                f"</details>"
             )
         cards.append(
             f"<div class='bsx-finding'><div class='bsx-finding-head'>{heading}</div>"
@@ -605,13 +758,9 @@ def verdict_hero_html(verdict: Verdict, risk_bands: list | None = None) -> str:
     The scale rail below places the score against the REAL policy.yaml
     cutoffs, never illustrative ones.
     """
-    from core.types import Band, Severity
-    try:
-        band_enum = verdict.band if isinstance(verdict.band, Band) else Band(str(verdict.band))
-        light = traffic_light(band_enum)
-    except (ValueError, KeyError, AttributeError):
-        light = "AMBER"
-    cls = _LIGHT_CLASS.get(light, "amber")
+    from core.types import Severity
+    light = traffic_light(verdict.band)
+    cls = _LIGHT_CLASS[light]
     fails = [s for s in verdict.signals if s.severity == Severity.FAIL]
 
     # The crypto_override case deliberately says LESS here than it used to:
@@ -703,6 +852,8 @@ _REALDOC_QUESTION = {
     "Forensic Analysis": "Does the image show signs of editing, printing or screen recapture?",
     "Biometric Verification": "Does the presented person match the portrait on the document?",
     "Cryptographic Integrity": "Was the signed document data changed after it was signed?",
+    "Cross-Document Consistency": "Does a field this document carries agree with the same field on a "
+                                    "second, independently uploaded document?",
 }
 
 # Why a REVIEW is a REVIEW. Without this the officer sees a bare "REVIEW"

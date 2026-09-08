@@ -430,7 +430,7 @@ section[data-testid="stSidebar"] .stButton > button p { font-family: inherit !im
    composition instead of four interchangeable tiles. Fixed columns need
    an explicit mobile stack since they lose auto-fit's intrinsic reflow --
    see the 640px override below. */
-.bsx-status-grid { display:grid; grid-template-columns: 1fr 1fr 1fr 1.6fr; gap: 1px;
+.bsx-status-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(196px, 1fr)); gap: 1px;
   background: var(--line); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
 .bsx-status-card { background: var(--surface-lowest); padding: 1.2rem 1.3rem;
   animation: bsx-rise var(--dur) var(--ease-out) backwards; }
@@ -461,34 +461,53 @@ section[data-testid="stSidebar"] .stButton > button p { font-family: inherit !im
    uppercase button standing in for a card. See ui/screens.py
    scenario_card_head_html for why the button is split from the markup.
 
-   Laid out via st.columns(6) in ui/pages.py, not a CSS grid parent: a
-   plain st.container() -- with or without key= -- does not emit the
-   stVerticalBlockBorderWrapper testid in this Streamlit version (checked
-   directly against the running app: zero instances anywhere), so there
-   is no single wrapping element these six containers could share a grid
-   parent through. Each card is self-sufficient instead -- its own
-   border, radius and background declared directly on the .st-key-scn_*
-   selector -- rather than depending on Streamlit's border argument or a
-   shared grid ancestor that doesn't exist. */
+   Laid out via st.columns(4) in chunks of 4 (13 cards, 4+4+4+1) in
+   ui/pages.py, not a CSS grid parent: a plain st.container() -- with or
+   without key= -- does not emit the stVerticalBlockBorderWrapper testid
+   in this Streamlit version (checked directly against the running app:
+   zero instances anywhere), so there is no single wrapping element these
+   containers could share a grid parent through. Each card is
+   self-sufficient instead -- its own border, radius and background
+   declared directly on the .st-key-scn_* selector -- rather than
+   depending on Streamlit's border argument or a shared grid ancestor
+   that doesn't exist.
+
+   13 keys now, not the original 6: the 7 registry/identity scenarios
+   (revoked/mismatch/linked/stolen/unregistered/expired_reg/invalid)
+   added after this block was first written were never added to it, so
+   they rendered as plain unstyled boxes with default Streamlit buttons
+   next to 6 fully-designed cards -- caught reading this file in full for
+   the premium pass, not from a screenshot. Every rule below now lists
+   all 13; nothing about the pattern itself changed. */
 .st-key-scn_genuine, .st-key-scn_dob, .st-key-scn_photo, .st-key-scn_recapture,
-.st-key-scn_face, .st-key-scn_sig {
+.st-key-scn_face, .st-key-scn_sig, .st-key-scn_revoked, .st-key-scn_mismatch,
+.st-key-scn_linked, .st-key-scn_stolen, .st-key-scn_unregistered,
+.st-key-scn_expired_reg, .st-key-scn_invalid {
   background: var(--surface-lowest) !important; border: 1px solid var(--line) !important;
   border-radius: var(--radius-lg) !important; padding: 1.1rem 1.2rem 0.9rem 1.2rem !important;
   transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out),
               border-left-width var(--dur-fast) var(--ease-out);
   animation: bsx-rise var(--dur) var(--ease-out) backwards;
 }
-/* entrance stagger -- these six were firing simultaneously (no delay), the
-   one motion gap this pass found: every other card grid in the app
-   staggers, this one didn't. Explicit per-selector delay, not nth-child:
-   each card is its own uniquely-keyed .st-key-scn_* class (see the
-   comment above), not siblings a structural selector can index. */
+/* entrance stagger -- explicit per-selector delay, not nth-child: each
+   card is its own uniquely-keyed .st-key-scn_* class (see comment
+   above), not siblings a structural selector can index. Capped at 200ms
+   (repeating the last few delays) rather than counting out to 480ms for
+   13 cards -- a stagger that long reads as sluggish, not premium; see
+   the module docstring's own 275ms finding for page-level nav. */
 .st-key-scn_genuine { animation-delay: 0ms; }
 .st-key-scn_dob { animation-delay: 40ms; }
 .st-key-scn_photo { animation-delay: 80ms; }
 .st-key-scn_recapture { animation-delay: 120ms; }
 .st-key-scn_face { animation-delay: 160ms; }
 .st-key-scn_sig { animation-delay: 200ms; }
+.st-key-scn_revoked { animation-delay: 0ms; }
+.st-key-scn_mismatch { animation-delay: 40ms; }
+.st-key-scn_linked { animation-delay: 80ms; }
+.st-key-scn_stolen { animation-delay: 120ms; }
+.st-key-scn_unregistered { animation-delay: 160ms; }
+.st-key-scn_expired_reg { animation-delay: 200ms; }
+.st-key-scn_invalid { animation-delay: 200ms; }
 /* Stacked, NOT a space-between row. These six cards sit in st.columns(6),
    so each is ~200px wide; a side-by-side numeral + layer badge overflowed
    the card outright once the numeral grew to 1.6rem -- "T0 CRYPTO / T2
@@ -521,8 +540,10 @@ section[data-testid="stSidebar"] .stButton > button p { font-family: inherit !im
    resolves against auto-height intermediate wrappers and collapses back
    to content height -- so the whole chain
    stColumn > stVerticalBlock > stLayoutWrapper > card needs stretching.
-   Scoped by :has(.st-key-scn_genuine) to the scenario row only, so no
-   other st.columns layout in the app is affected.
+   Scoped by :has(.st-key-scn_genuine) to the scenario rows -- every card
+   row shares this one genuine card as an anchor, so one selector covers
+   all three st.columns(4) chunks in ui/pages.py without needing a rule
+   per row. No other st.columns layout in the app is affected.
 
    The column itself must NOT get height:100%: the row's height is
    content-derived, so a percentage resolves against auto and collapses --
@@ -537,7 +558,9 @@ div[data-testid="stHorizontalBlock"]:has(.st-key-scn_genuine) div[data-testid="s
   height: 100%;
 }
 .st-key-scn_genuine, .st-key-scn_dob, .st-key-scn_photo, .st-key-scn_recapture,
-.st-key-scn_face, .st-key-scn_sig {
+.st-key-scn_face, .st-key-scn_sig, .st-key-scn_revoked, .st-key-scn_mismatch,
+.st-key-scn_linked, .st-key-scn_stolen, .st-key-scn_unregistered,
+.st-key-scn_expired_reg, .st-key-scn_invalid {
   height: 100%; display: flex !important; flex-direction: column !important;
 }
 /* margin-top:auto has to sit on the card's DIRECT flex child, and that is
@@ -549,7 +572,14 @@ div[data-testid="stHorizontalBlock"]:has(.st-key-scn_genuine) div[data-testid="s
 .st-key-scn_photo > [data-testid="stElementContainer"]:has(.stButton),
 .st-key-scn_recapture > [data-testid="stElementContainer"]:has(.stButton),
 .st-key-scn_face > [data-testid="stElementContainer"]:has(.stButton),
-.st-key-scn_sig > [data-testid="stElementContainer"]:has(.stButton) {
+.st-key-scn_sig > [data-testid="stElementContainer"]:has(.stButton),
+.st-key-scn_revoked > [data-testid="stElementContainer"]:has(.stButton),
+.st-key-scn_mismatch > [data-testid="stElementContainer"]:has(.stButton),
+.st-key-scn_linked > [data-testid="stElementContainer"]:has(.stButton),
+.st-key-scn_stolen > [data-testid="stElementContainer"]:has(.stButton),
+.st-key-scn_unregistered > [data-testid="stElementContainer"]:has(.stButton),
+.st-key-scn_expired_reg > [data-testid="stElementContainer"]:has(.stButton),
+.st-key-scn_invalid > [data-testid="stElementContainer"]:has(.stButton) {
   margin-top: auto !important;
 }
 /* Descendant selectors, not .stButton > button: a disabled button with a
@@ -562,7 +592,11 @@ div[data-testid="stHorizontalBlock"]:has(.st-key-scn_genuine) div[data-testid="s
    styles between an enabled and the disabled card, not by inspection. */
 .st-key-scn_genuine .stButton button, .st-key-scn_dob .stButton button,
 .st-key-scn_photo .stButton button, .st-key-scn_recapture .stButton button,
-.st-key-scn_face .stButton button, .st-key-scn_sig .stButton button {
+.st-key-scn_face .stButton button, .st-key-scn_sig .stButton button,
+.st-key-scn_revoked .stButton button, .st-key-scn_mismatch .stButton button,
+.st-key-scn_linked .stButton button, .st-key-scn_stolen .stButton button,
+.st-key-scn_unregistered .stButton button, .st-key-scn_expired_reg .stButton button,
+.st-key-scn_invalid .stButton button {
   width: 100% !important; background: transparent !important; color: var(--text-2) !important;
   border: none !important; border-top: 1px solid var(--line-soft) !important; border-radius: 0 !important;
   font-family: var(--font-mono) !important; font-weight: 600 !important; font-size: 0.78rem !important;
@@ -575,21 +609,37 @@ div[data-testid="stHorizontalBlock"]:has(.st-key-scn_genuine) div[data-testid="s
 .st-key-scn_face .stButton button:disabled, .st-key-scn_sig .stButton button:disabled {
   color: var(--text-3) !important; opacity: 1 !important;
 }
+/* Colour grouping follows the same TIER logic the original 6 already
+   established (checked against the rules immediately below, not chosen
+   fresh): amber for T0/T1 -- structural/mathematical attacks a rule or
+   the issuer registry catches; red for T2 -- forensic/biometric/identity
+   attacks, the visually-adjacent tier. All 7 new issuer-registry
+   scenarios are T1 ISSUER except Linked Identity, which is T2 IDENTITY. */
 @media (hover: hover) and (pointer: fine) {
-  .st-key-scn_dob:hover, .st-key-scn_photo:hover, .st-key-scn_sig:hover {
+  .st-key-scn_dob:hover, .st-key-scn_photo:hover, .st-key-scn_sig:hover,
+  .st-key-scn_revoked:hover, .st-key-scn_mismatch:hover, .st-key-scn_stolen:hover,
+  .st-key-scn_unregistered:hover, .st-key-scn_expired_reg:hover, .st-key-scn_invalid:hover {
     background: var(--amber-bg) !important; border-color: var(--amber) !important; border-left-width: 4px !important; }
   .st-key-scn_dob:hover .bsx-scenario-layer, .st-key-scn_photo:hover .bsx-scenario-layer,
-  .st-key-scn_sig:hover .bsx-scenario-layer { color: var(--amber); border-color: var(--amber-line); }
-  .st-key-scn_recapture:hover, .st-key-scn_face:hover {
+  .st-key-scn_sig:hover .bsx-scenario-layer, .st-key-scn_revoked:hover .bsx-scenario-layer,
+  .st-key-scn_mismatch:hover .bsx-scenario-layer, .st-key-scn_stolen:hover .bsx-scenario-layer,
+  .st-key-scn_unregistered:hover .bsx-scenario-layer, .st-key-scn_expired_reg:hover .bsx-scenario-layer,
+  .st-key-scn_invalid:hover .bsx-scenario-layer { color: var(--amber); border-color: var(--amber-line); }
+  .st-key-scn_recapture:hover, .st-key-scn_face:hover, .st-key-scn_linked:hover {
     background: var(--red-bg) !important; border-color: var(--red) !important; border-left-width: 4px !important; }
-  .st-key-scn_recapture:hover .bsx-scenario-layer, .st-key-scn_face:hover .bsx-scenario-layer {
+  .st-key-scn_recapture:hover .bsx-scenario-layer, .st-key-scn_face:hover .bsx-scenario-layer,
+  .st-key-scn_linked:hover .bsx-scenario-layer {
     color: var(--red); border-color: var(--red-line); }
   .st-key-scn_genuine:hover {
     background: var(--green-bg) !important; border-color: var(--green) !important; border-left-width: 4px !important; }
   .st-key-scn_genuine:hover .bsx-scenario-layer { color: var(--green); border-color: var(--green-line); }
   .st-key-scn_genuine .stButton button:hover, .st-key-scn_dob .stButton button:hover,
   .st-key-scn_photo .stButton button:hover, .st-key-scn_recapture .stButton button:hover,
-  .st-key-scn_face .stButton button:hover, .st-key-scn_sig .stButton button:hover {
+  .st-key-scn_face .stButton button:hover, .st-key-scn_sig .stButton button:hover,
+  .st-key-scn_revoked .stButton button:hover, .st-key-scn_mismatch .stButton button:hover,
+  .st-key-scn_linked .stButton button:hover, .st-key-scn_stolen .stButton button:hover,
+  .st-key-scn_unregistered .stButton button:hover, .st-key-scn_expired_reg .stButton button:hover,
+  .st-key-scn_invalid .stButton button:hover {
     color: var(--text) !important; }
 }
 
@@ -676,11 +726,8 @@ button[kind="primary"]:hover { opacity: 0.85; }
   animation: bsx-fade var(--dur) var(--ease-out) 150ms backwards; }
 .bsx-scale-marker::after { content:""; position:absolute; left:50%; top:-5px; transform:translateX(-50%);
   border-left:4px solid transparent; border-right:4px solid transparent; border-top:5px solid currentColor; }
-.bsx-scale-labels { display: grid; grid-template-columns: repeat(4, 1fr); font-family: var(--font-mono); font-size: 0.77rem;
-  color: var(--text-3); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.4rem; }
-.bsx-scale-labels span { text-align: center; }
-.bsx-scale-labels span:first-child { text-align: left; }
-.bsx-scale-labels span:last-child { text-align: right; }
+.bsx-scale-labels { display:flex; justify-content:space-between; font-family: var(--font-mono); font-size: 0.77rem;
+  color: var(--text-3); letter-spacing: 0.08em; text-transform: uppercase; }
 .bsx-scale-labels .on { color: var(--text); font-weight: 600; }
 
 /* ---- the Trust Ladder spine: the project's thesis, drawn. Tiers
@@ -905,7 +952,7 @@ button[kind="primary"]:hover { opacity: 0.85; }
 .bsx-pill.red   { color: var(--on-red-container); border-color: var(--red-line);   background: var(--red-bg); }
 
 /* ============ AUDIT: hash-chained record cards ======================= */
-.bsx-audit-card { border: 1px solid var(--line); border-left: 4px solid var(--card-border, var(--line)); border-radius: var(--radius-lg);
+.bsx-audit-card { border: 1px solid var(--line); border-radius: var(--radius-lg);
   background: var(--surface-lowest); padding: 1.1rem 1.3rem 1.2rem 1.3rem; margin-bottom: 0.9rem;
   animation: bsx-rise var(--dur-fast) var(--ease-out) backwards; }
 .bsx-audit-card:nth-child(1) { animation-delay: 0ms; }
@@ -913,6 +960,7 @@ button[kind="primary"]:hover { opacity: 0.85; }
 .bsx-audit-card:nth-child(3) { animation-delay: 60ms; }
 .bsx-audit-card:nth-child(4) { animation-delay: 90ms; }
 .bsx-audit-card:nth-child(n+5) { animation-delay: 120ms; }
+.bsx-audit-card.head { border-color: var(--primary); }
 .bsx-audit-card .top { display:flex; justify-content:space-between; align-items:baseline; gap: 0.8rem;
   font-family: var(--font-mono); font-size: 0.76rem; color: var(--text-3); letter-spacing: 0.06em;
   padding-bottom: 0.6rem; border-bottom: 1px solid var(--line-soft); margin-bottom: 0.6rem; }
@@ -920,11 +968,11 @@ button[kind="primary"]:hover { opacity: 0.85; }
 .bsx-audit-card .title { font-family: var(--font-head); font-weight: 700; font-size: 1.05rem;
   color: var(--text); letter-spacing: -0.01em; margin-bottom: 0.35rem; }
 .bsx-audit-card .body { font-size: 0.92rem; color: var(--text-2); line-height: 1.55; margin-bottom: 0.8rem; }
-.bsx-audit-card .hashes { display: grid; gap: 0.5rem; background: var(--surface-low);
-  border: 1px solid var(--line-soft); border-radius: var(--radius-sm); padding: 0.6rem 0.75rem; }
-.bsx-audit-card .hrow { display: flex; flex-direction: column; gap: 0.15rem; font-family: var(--font-mono); font-size: 0.78rem; }
-.bsx-audit-card .hrow .k { color: var(--text-3); letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.7rem; font-weight: 600; width: auto; }
-.bsx-audit-card .hrow .v { color: var(--text-2); word-break: break-all; font-size: 0.78rem; }
+.bsx-audit-card .hashes { display: grid; gap: 0.4rem; background: var(--surface-low);
+  border: 1px solid var(--line-soft); border-radius: var(--radius-sm); padding: 0.55rem 0.7rem; }
+.bsx-audit-card .hrow { display: flex; gap: 0.6rem; font-family: var(--font-mono); font-size: 0.78rem; }
+.bsx-audit-card .hrow .k { color: var(--text-3); letter-spacing: 0.06em; text-transform: uppercase; flex-shrink: 0; width: 5.5rem; }
+.bsx-audit-card .hrow .v { color: var(--text-2); word-break: break-all; }
 
 /* ---- misc ---- */
 .bsx-crypto-note { border: 1px solid var(--line); border-left: 4px solid var(--primary);
@@ -949,8 +997,6 @@ button[kind="primary"]:hover { opacity: 0.85; }
   color: var(--text); margin: 0; padding: 0; text-wrap: balance;
   animation: bsx-rise var(--dur) var(--ease-out) 40ms backwards; }
 .bsx-hero-title .dim { color: var(--text-3); }
-.bsx-hero-subtitle { font-family: var(--font-mono); font-size: 0.85rem; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--text-3); margin-top: 0.5rem; }
 .bsx-hero-thesis { font-family: var(--font-head); font-weight: 600;
   font-size: clamp(1.3rem, 2.3vw, 1.95rem); line-height: 1.28; letter-spacing: -0.02em;
   color: var(--text-2); max-width: 34ch; margin: 2rem 0 0 0; text-wrap: balance;
@@ -1005,6 +1051,37 @@ button[kind="primary"]:hover { opacity: 0.85; }
 /* wide content never scrolls the page body sideways */
 .bsx-scroll-x { overflow-x: auto; }
 [data-testid="stImage"] img { border-radius: var(--radius); }
+
+/* st.download_button renders under its own stDownloadButton wrapper, not
+   .stButton -- the existing button rules above (scoped to .stButton)
+   never reached it, so every export button rendered in Streamlit's raw
+   default red-on-white regardless of theme. Same restrained language as
+   the rest of the console: bordered, mono, uppercase, no colour until
+   hover -- an export action is a convenience, not the page's one CTA. */
+.stDownloadButton > button {
+  width: 100%; background: var(--surface-lowest) !important; color: var(--text-2) !important;
+  border: 1px solid var(--line) !important; border-radius: var(--radius) !important;
+  font-family: var(--font-mono) !important; font-weight: 600 !important; font-size: 0.82rem !important;
+  letter-spacing: 0.1em; text-transform: uppercase; padding: 0.7rem 1rem !important;
+  box-shadow: none; transition: border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.stDownloadButton > button p { font-family: inherit !important; font-weight: inherit !important; letter-spacing: inherit; }
+@media (hover: hover) and (pointer: fine) {
+  .stDownloadButton > button:hover:not(:disabled) { border-color: var(--primary) !important; color: var(--text) !important; }
+}
+.stDownloadButton > button:disabled { opacity: 0.45; }
+
+/* Same gap for st.text_input -- unstyled, it rendered as a plain browser
+   input against every other bordered, tokenised surface in the console. */
+.stTextInput > div > div > input {
+  background: var(--surface-lowest) !important; color: var(--text) !important;
+  border: 1px solid var(--line) !important; border-radius: var(--radius) !important;
+  font-family: var(--font-body) !important; font-size: 0.92rem !important;
+  padding: 0.55rem 0.85rem !important; box-shadow: none !important;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+.stTextInput > div > div > input:focus { border-color: var(--primary) !important; }
+.stTextInput > div > div > input::placeholder { color: var(--text-3); opacity: 1; }
 </style>
 """
 

@@ -31,6 +31,17 @@ ATTACKS = {
     "A": PATHS["forged"] / "forged_demo_0001_A.png",
     "B": PATHS["forged"] / "forged_demo_0001_B.png",
     "C": PATHS["forged"] / "forged_demo_0001_C.png",
+    # Issuer-registry scenarios (synth/registry_scenarios.py): a clean,
+    # self-consistent document -- MRZ/VIZ/crosszone/crypto all pass -- that
+    # only the registry lookup catches. Different failure class from A/B/C,
+    # deliberately: no pixel is forged here at all.
+    "REVOKED": PATHS["documents"] / "demo_revoked_0002.png",
+    "MISMATCH": PATHS["documents"] / "demo_mismatch_0001.png",
+    "LINKED": PATHS["documents"] / "demo_linked_0006.png",
+    "STOLEN": PATHS["documents"] / "demo_stolen_0003.png",
+    "UNREGISTERED": PATHS["documents"] / "demo_unregistered_0099.png",
+    "EXPIRED": PATHS["documents"] / "demo_expired_0004.png",
+    "INVALID": PATHS["documents"] / "demo_invalid_0011.png",
 }
 
 _DOCUMENT_LABEL = {
@@ -39,6 +50,13 @@ _DOCUMENT_LABEL = {
     "B": "UTO Passport — Portrait replaced",
     "C": "UTO Passport — Screen recapture",
     "SIG": "UTO Passport — Signature tampered",
+    "REVOKED": "UTO Passport — Revoked in issuer registry",
+    "MISMATCH": "UTO Passport — Registry identity mismatch",
+    "LINKED": "UTO Passport — Linked to another identity",
+    "STOLEN": "UTO Passport — Reported stolen",
+    "UNREGISTERED": "UTO Passport — Unregistered document number",
+    "EXPIRED": "UTO Passport — Registry record expired",
+    "INVALID": "UTO Passport — Registry record invalid",
 }
 
 
@@ -121,10 +139,32 @@ def break_signature_attack() -> tuple:
 def reset_ledger() -> None:
     path_l = PATHS["results"] / "ledger.jsonl"
     path_l.unlink(missing_ok=True)
+    # The truncation checkpoint (core/crypto/ledger.py) attests to a record
+    # count -- leaving a stale one behind after a legitimate reset would
+    # read the fresh, empty ledger as truncated (0 records where the old
+    # checkpoint expected many).
+    path_l.with_suffix(".checkpoint.json").unlink(missing_ok=True)
     for key in ("last_verdict", "last_ctx"):
         st.session_state.pop(key, None)
     st.session_state.active_path = GENUINE
     st.session_state.active_label = None
+
+
+def simulate_truncation() -> bool:
+    """Deletes the newest ledger record WITHOUT touching the checkpoint --
+    demonstrates exactly the gap verify_chain() alone can't see (see
+    core/crypto/ledger.py's module docstring): the shortened file is still
+    perfectly self-consistent, so only comparing it against the signed
+    checkpoint from before the deletion catches it. Returns False if
+    there's nothing to truncate."""
+    records = ledger.read_all()
+    if len(records) < 1:
+        return False
+    path_l = PATHS["results"] / "ledger.jsonl"
+    lines = path_l.read_text(encoding="utf-8").splitlines()
+    remainder = lines[:-1]
+    path_l.write_text("\n".join(remainder) + ("\n" if remainder else ""), encoding="utf-8")
+    return True
 
 
 def simulate_tamper() -> bool:
@@ -200,6 +240,95 @@ def pki_public_info() -> dict | None:
         "dsc_fingerprint": dsc_cert.fingerprint(hashes.SHA256()).hex(),
         "csca_fingerprint": csca_cert.fingerprint(hashes.SHA256()).hex(),
     }
+
+
+def simulate_registry_tampering() -> dict:
+    """Copies the real registry to a throwaway scratch file, hand-edits one
+    record's status in place (REVOKED -> ACTIVE, erasing a revocation)
+    WITHOUT recomputing its fingerprint, then checks integrity before and
+    after -- exactly the attack core/issuer/registry.py::verify_integrity()
+    exists to catch. Never touches the real, committed
+    data/registry/registry.db: the scratch copy is regenerated fresh on
+    every call and deleted before returning, so unlike the ledger demo
+    there is nothing to reset."""
+    import shutil
+    import sqlite3
+
+    from core.issuer.registry import SyntheticIssuerRegistry
+
+    scratch_dir = PATHS["results"] / "_scratch"
+    scratch_dir.mkdir(parents=True, exist_ok=True)
+    scratch_db = scratch_dir / "registry_tamper_demo.db"
+    scratch_manifest = scratch_dir / "registry_tamper_demo.manifest.json"
+    scratch_manifest.unlink(missing_ok=True)
+    shutil.copyfile(PATHS["registry_db"], scratch_db)
+
+    scratch = SyntheticIssuerRegistry(scratch_db, scratch_manifest)
+    target_id = "REG-0002"  # the seeded REVOKED record (synth/registry.py)
+    before_ok, before_detail = scratch.verify_integrity()
+
+    conn = sqlite3.connect(scratch_db)
+    conn.execute("UPDATE records SET status = 'ACTIVE' WHERE registry_record_id = ?", (target_id,))
+    conn.commit()
+    conn.close()
+    after_ok, after_detail = scratch.verify_integrity()
+
+    scratch_db.unlink(missing_ok=True)
+    scratch_manifest.unlink(missing_ok=True)
+    return {
+        "target_record": target_id,
+        "before_ok": before_ok, "before_detail": before_detail,
+        "after_ok": after_ok, "after_detail": after_detail,
+    }
+
+
+def case_report_json(case_id: str, path, verdict, fields) -> str:
+    """Serializes one case's full evidence trail to indented JSON for
+    download -- every Signal (tier/check/severity/weight/message/detail),
+    not a summary, so the exported file carries the same evidence the
+    screen does. Read-only: never writes to disk itself, Streamlit's
+    download_button hands the bytes straight to the browser."""
+    report = {
+        "case_id": case_id,
+        "document": Path(path).name,
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
+        "verdict": {
+            "score": verdict.score, "band": verdict.band.value, "action": verdict.action,
+            "crypto_override": verdict.crypto_override,
+        },
+        "extracted_identity": {
+            "document_number": fields.passport_number, "nationality": fields.nationality,
+            "expiry": str(fields.date_of_expiry),
+        },
+        "signals": [
+            {"tier": s.tier.value, "check": s.check, "severity": s.severity.value,
+             "weight": s.weight, "message": s.message, "detail": s.detail}
+            for s in verdict.signals
+        ],
+    }
+    return json.dumps(report, indent=2, default=str)
+
+
+def ledger_export_json(records: list[dict]) -> str:
+    """The ledger's records, exactly as stored (including prev_hash/
+    this_hash), so an offline recipient can independently recompute
+    core/crypto/ledger.py's own hash chain over the export -- not a
+    reformatted summary."""
+    return json.dumps({"records": records, "genesis_hash": ledger.GENESIS_HASH}, indent=2, default=str)
+
+
+def registry_status() -> dict | None:
+    """Issuer Registry status for Command Center -- record counts by
+    status plus a live integrity check (which may lazily sign the manifest
+    the first time it's called, same as pki_public_info's PKI does; see
+    core/issuer/registry.py::ensure_signed). Returns None if the registry
+    database itself hasn't been generated yet (`python -m synth.registry`)."""
+    from core.issuer.registry import get_default_registry
+    registry = get_default_registry()
+    if not registry.db_path.exists():
+        return None
+    ok, detail = registry.verify_integrity()
+    return {"stats": registry.stats(), "integrity_valid": ok, "integrity_detail": detail}
 
 
 @lru_cache(maxsize=1)
