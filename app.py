@@ -1,4 +1,4 @@
-"""VerifAI -- Streamlit console entry point.
+"""BorderShield AI -- Streamlit console entry point.
 
 Five screens (Command Dashboard, New Screening, Evidence Analysis, Risk
 Decision, Investigation), navigated via a fixed sidebar, matching the
@@ -17,13 +17,23 @@ import streamlit as st
 from ui import actions, pages, screens
 from ui.style import inject
 
-st.set_page_config(page_title="VerifAI", page_icon="\U0001f6e1️", layout="wide")
+st.set_page_config(page_title="BorderShield AI", page_icon="\U0001f6e1️", layout="wide")
 inject()
 
 if not actions.GENUINE.exists():
     st.error("No documents found. Run `python -m synth.passport`, `python -m synth.forge`, "
              "and `python -m synth.sign` first.")
     st.stop()
+
+# Self-heals a fresh clone / fresh Streamlit Cloud container: committed
+# .sod.json sidecars were signed on whichever machine generated them, and
+# data/pki/ (the keys) is gitignored and per-machine -- see
+# synth/sign.py::ensure_corpus_signed for what this actually detects and
+# why. Guarded so it only runs once per session, not on every rerun.
+if "corpus_signed_checked" not in st.session_state:
+    from synth.sign import ensure_corpus_signed
+    ensure_corpus_signed()
+    st.session_state.corpus_signed_checked = True
 
 if "page" not in st.session_state:
     st.session_state.page = "overview"
