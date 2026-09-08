@@ -7,8 +7,8 @@ base = "light"
 # form focus rings, etc. Keep in sync if the :root tokens ever change.
 
 primaryColor = "#000000"            # --primary
-backgroundColor = "#8cc1f5"         # --bg
-secondaryBackgroundColor = "#8fc2f5"  # --surface
+backgroundColor = "#e6e9ec"         # --bg
+secondaryBackgroundColor = "#e8ebee"  # --surface
 textColor = "#191c1d"               # --text
 font = "sans serif"
 
